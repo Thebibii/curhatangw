@@ -1,29 +1,8 @@
-import {
-  ClerkProvider,
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  SignOutButton,
-  UserButton,
-} from "@clerk/nextjs";
+import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
-
-function Header() {
-  return (
-    <header
-      style={{ display: "flex", justifyContent: "space-between", padding: 20 }}
-    >
-      <h1>My App</h1>
-      <SignedIn>
-        <UserButton />
-      </SignedIn>
-      <SignedOut>
-        <SignOutButton />
-        <SignInButton />
-      </SignedOut>
-    </header>
-  );
-}
+import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
+import { extractRouterConfig } from "uploadthing/server";
+import { ourFileRouter } from "./api/uploadthing/core";
 
 export default function RootLayout({
   children,
@@ -34,7 +13,15 @@ export default function RootLayout({
     <html lang="en">
       <body>
         <ClerkProvider>
-          <Header />
+          <NextSSRPlugin
+            /**
+             * The `extractRouterConfig` will extract **only** the route configs
+             * from the router to prevent additional information from being
+             * leaked to the client. The data passed to the client is the same
+             * as if you were to fetch `/api/uploadthing` directly.
+             */
+            routerConfig={extractRouterConfig(ourFileRouter)}
+          />
           {children}
         </ClerkProvider>
       </body>

@@ -1,6 +1,27 @@
-import { clerkMiddleware } from "@clerk/nextjs/server";
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 
-export default clerkMiddleware();
+const isProtectedRoute = createRouteMatcher(["/uploadthing(.*)", "/"]);
+
+export default clerkMiddleware(
+  async (auth, req) => {
+    const url = req.nextUrl;
+
+    // Redirect "/" to "/uploadthing"
+
+    // Protect routes if they match the protected paths
+    if (isProtectedRoute(req)) {
+      if (url.pathname === "/") {
+        return NextResponse.redirect(new URL("/uploadthing", req.url));
+      }
+      await auth.protect();
+    }
+
+    // Allow other requests to proceed
+    return NextResponse.next();
+  },
+  { afterSignUpUrl: "/uploadthing", afterSignInUrl: "/uploadthing" }
+);
 
 export const config = {
   matcher: [
