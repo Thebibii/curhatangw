@@ -66,7 +66,7 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter>
         <SignedIn>
-          <SignOutButton />
+          <SignOutButton redirectUrl="/" />
         </SignedIn>
       </SidebarFooter>
     </Sidebar>
