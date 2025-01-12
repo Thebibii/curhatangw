@@ -5,20 +5,15 @@ const isProtectedRoute = createRouteMatcher(["/uploadthing(.*)", "/"]);
 
 export default clerkMiddleware(
   async (auth, req) => {
-    const url = req.nextUrl;
-
-    // Redirect "/" to "/uploadthing"
-
-    // Protect routes if they match the protected paths
+    /* const url = req.nextUrl; */
     if (isProtectedRoute(req)) {
-      if (url.pathname === "/") {
+      /* if (url.pathname === "/") {
         return NextResponse.redirect(new URL("/uploadthing", req.url));
-      }
+      } */
       await auth.protect();
     }
 
-    // Allow other requests to proceed
-    return NextResponse.next();
+    /*     return NextResponse.next(); */
   },
   { afterSignUpUrl: "/uploadthing", afterSignInUrl: "/uploadthing" }
 );
