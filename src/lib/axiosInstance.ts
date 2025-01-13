@@ -3,9 +3,9 @@ import axios from "axios";
 const isProduction = process.env.NODE_ENV === "production";
 
 export const axiosInstance = axios.create({
-  baseURL: "http://localhost:3000/api", // URL untuk lingkungan development
-  /* baseURL: isProduction
-    ? "https://clerk-wine.vercel.app/api" // URL untuk lingkungan production
-    : "http://localhost:3000/api", */ // URL untuk lingkungan development
+  // URL untuk lingkungan development
+  baseURL: isProduction
+    ? "https://clerk-wine.vercel.app/api"
+    : "http://localhost:3000/api",
   withCredentials: true,
 });
