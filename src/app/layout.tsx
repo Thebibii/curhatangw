@@ -13,7 +13,7 @@ export default function RootLayout({
 }) {
   return (
     <ReactQueryClientProvider>
-      <html lang="en" suppressHydrationWarning>
+      <html lang="en">
         <body>
           <ClerkProvider>
             <NextSSRPlugin

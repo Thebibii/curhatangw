@@ -22,24 +22,18 @@ export async function POST(request: NextRequest) {
     if (!user_id) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
-    const { title, content } = await request.json();
+    const { title, content, image } = await request.json();
+    if (!image) {
+      return new NextResponse("Image URL is required.", { status: 400 });
+    }
     const post = await prisma.post.create({
-      data: { title, content, user_id },
+      data: { title, content, image, user_id },
     });
     return NextResponse.json({ success: true, post });
   } catch (error: any) {
     return NextResponse.json(
-      { success: false, error: error.message },
+      { success: false, error: error.message, code: error.code },
       { status: 400 }
     );
   }
 }
-
-/* export async function POST(request: NextRequest) {
-  try {
-    const data = await request.json();
-    return NextResponse.json({ success: true, data });
-  } catch (error) {
-    return NextResponse.json({ success: false }, { status: 400 });
-  }
-} */

@@ -9,6 +9,7 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { useGetPostByUserId } from "@/stores/posts/useGetPostByUserId";
+import Image from "next/image";
 export default function PostTable() {
   const { data } = useGetPostByUserId();
   return (
@@ -25,6 +26,14 @@ export default function PostTable() {
           <TableRow key={post.id}>
             <TableCell>{post.title}</TableCell>
             <TableCell>{post.content}</TableCell>
+            <TableCell>
+              <Image
+                src={post.image}
+                width={100}
+                height={100}
+                alt="post image"
+              />
+            </TableCell>
           </TableRow>
         ))}
       </TableBody>

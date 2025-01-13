@@ -28,6 +28,7 @@ model Post {
   id        Int      @id @default(autoincrement())
   title     String
   content   String
+  image     String?
   User      User @relation(fields: [user_id], references: [clerkUserId])
   user_id   String
 }
