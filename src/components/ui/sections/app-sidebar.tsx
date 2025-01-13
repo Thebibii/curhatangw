@@ -11,7 +11,8 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/components/ui/sidebar";
-import { SignedIn, SignOutButton } from "@clerk/nextjs";
+import { SignedIn, SignOutButton, useClerk } from "@clerk/nextjs";
+import { Button } from "../button";
 
 // Menu items.
 const items = [
@@ -43,6 +44,7 @@ const items = [
 ];
 
 export function AppSidebar() {
+  const { signOut } = useClerk();
   return (
     <Sidebar>
       <SidebarContent>
@@ -66,7 +68,12 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter>
         <SignedIn>
-          <SignOutButton signOutOptions={{ redirectUrl: "/" }} />
+          <Button
+            className="w-fit mx-auto"
+            onClick={() => signOut({ redirectUrl: "/sign-in" })}
+          >
+            Log out
+          </Button>
         </SignedIn>
       </SidebarFooter>
     </Sidebar>
