@@ -127,7 +127,7 @@ export default function PostForm() {
           name="image"
           render={() => (
             <FormItem className="mx-auto md:w-full">
-              <FormLabel>
+              <FormLabel htmlFor="image">
                 <h2 className="text-xl font-semibold tracking-tight">
                   Upload your image
                 </h2>
