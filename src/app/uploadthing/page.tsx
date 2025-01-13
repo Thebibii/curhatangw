@@ -3,11 +3,9 @@ import PostTable from "@/components/ui/uploadthing/post-table";
 
 export default function Page() {
   return (
-    <main className="flex min-h-screen justify-between p-24 gap-x-8">
-      <div className="flex flex-col items-center justify-between">
+    <main className=" min-h-screen w-full  justify-between p-24 ">
+      <div className="flex flex-col md:flex-row w-full gap-x-8 ">
         <PostForm />
-      </div>
-      <div>
         <PostTable />
       </div>
     </main>

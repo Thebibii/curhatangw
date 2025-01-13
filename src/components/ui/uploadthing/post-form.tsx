@@ -35,6 +35,7 @@ export default function PostForm() {
   const { mutate } = useCreatePost({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["getPostByUserId.post"] });
+      form.reset();
       toast({
         title: "Post created!",
         description: "We've created your post for you.",
@@ -50,7 +51,7 @@ export default function PostForm() {
     <Form {...form}>
       <form
         onSubmit={form.handleSubmit(handleSubmit)}
-        className="space-y-8"
+        className="flex-shrink"
         suppressContentEditableWarning
       >
         <FormField
