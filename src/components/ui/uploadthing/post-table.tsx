@@ -28,6 +28,7 @@ export default function PostTable() {
             <TableCell>{post.content}</TableCell>
             <TableCell>
               <Image
+                loading="lazy"
                 src={post.image}
                 width={100}
                 height={100}
