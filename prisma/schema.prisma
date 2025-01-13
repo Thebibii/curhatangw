@@ -21,4 +21,13 @@ model User {
   updatedAt       DateTime     @updatedAt
   clerkUserId     String?      @unique
   email           String       @unique
+  Post            Post[]
+}
+
+model Post {
+  id        Int      @id @default(autoincrement())
+  title     String
+  content   String
+  User      User @relation(fields: [user_id], references: [clerkUserId])
+  user_id   String
 }

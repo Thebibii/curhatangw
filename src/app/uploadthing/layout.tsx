@@ -1,3 +1,4 @@
+"use client";
 import { AppSidebar } from "@/components/ui/sections/app-sidebar";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
 import { PropsWithChildren } from "react";
