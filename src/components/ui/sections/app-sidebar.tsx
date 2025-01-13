@@ -66,7 +66,7 @@ export function AppSidebar() {
       </SidebarContent>
       <SidebarFooter>
         <SignedIn>
-          <SignOutButton redirectUrl="/" />
+          <SignOutButton signOutOptions={{ redirectUrl: "/" }} />
         </SignedIn>
       </SidebarFooter>
     </Sidebar>
