@@ -8,10 +8,10 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useGetPostByUserId } from "@/stores/posts/useGetPost";
+import { useGetPost } from "@/stores/posts/useGetPost";
 import Image from "next/image";
 export default function PostTable() {
-  const { data } = useGetPostByUserId();
+  const { data } = useGetPost();
   return (
     <Table>
       <TableCaption>A list of your recent posts.</TableCaption>
