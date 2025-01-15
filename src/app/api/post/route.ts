@@ -1,4 +1,11 @@
-import { NextRequest, NextResponse } from "next/server";
+import { getPosts } from "@/actions/post.action";
+import { NextResponse } from "next/server";
+
+export async function GET() {
+  const posts = await getPosts();
+  return NextResponse.json(posts);
+}
+/* import { NextRequest, NextResponse } from "next/server";
 
 import prisma from "@/lib/prisma";
 import { auth } from "@clerk/nextjs/server";
@@ -10,24 +17,24 @@ export async function GET() {
   }
   const posts = await prisma.post.findMany({
     where: {
-      user_id,
+      clerkId,
     },
   });
   return NextResponse.json(posts);
 }
 
 export async function POST(request: NextRequest) {
-  const { userId: user_id } = await auth();
+  const { userId: clerkId } = await auth();
   try {
-    if (!user_id) {
+    if (!clerkId) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
-    const { title, content, image } = await request.json();
+    const { content, image } = await request.json();
     if (!image) {
       return new NextResponse("Image URL is required.", { status: 400 });
     }
     const post = await prisma.post.create({
-      data: { title, content, image, user_id },
+      data: { content, image, clerkId },
     });
     return NextResponse.json({ success: true, post });
   } catch (error: any) {
@@ -37,3 +44,4 @@ export async function POST(request: NextRequest) {
     );
   }
 }
+ */

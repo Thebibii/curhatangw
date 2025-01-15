@@ -8,8 +8,8 @@ export async function POST(req: Request) {
     // Parse the Clerk Webhook event
     const evt = (await req.json()) as WebhookEvent;
 
-    const { id: clerkUserId } = evt.data;
-    if (!clerkUserId)
+    const { id: clerkId } = evt.data;
+    if (!clerkId)
       return NextResponse.json(
         { error: "No user ID provided" },
         { status: 400 }
@@ -19,8 +19,14 @@ export async function POST(req: Request) {
     let user = null;
     switch (evt.type) {
       case "user.created": {
-        const { email_addresses = [] } = evt.data;
-        const email = email_addresses?.[0]?.email_address ?? "";
+        const {
+          email_addresses = [],
+          username,
+          image_url,
+          first_name,
+          last_name,
+        } = evt.data;
+        const email = email_addresses?.[0]?.email_address;
 
         if (!email)
           return NextResponse.json(
@@ -30,15 +36,21 @@ export async function POST(req: Request) {
 
         user = await prisma.user.upsert({
           where: {
-            clerkUserId,
+            clerkId,
           },
           update: {
-            clerkUserId,
+            clerkId,
             email,
+            username: username ?? email,
+            image: image_url,
+            name: `${first_name || ""} ${last_name || ""}`,
           },
           create: {
-            clerkUserId,
+            clerkId,
             email,
+            username: username ?? email,
+            image: image_url,
+            name: `${first_name || ""} ${last_name || ""}`,
           },
         });
         break;
@@ -46,7 +58,7 @@ export async function POST(req: Request) {
       case "user.deleted": {
         user = await prisma.user.delete({
           where: {
-            clerkUserId,
+            clerkId,
           },
         });
         break;

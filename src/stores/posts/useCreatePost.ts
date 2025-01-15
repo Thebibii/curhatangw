@@ -2,8 +2,7 @@ import { axiosInstance } from "@/lib/axiosInstance";
 import { useMutation } from "@tanstack/react-query";
 
 type CreatePostInput = {
-  title: string;
-  content: string;
+  content: string | null;
   image: string | null;
 };
 
@@ -13,7 +12,7 @@ export const useCreatePost = ({ onSuccess }: any) => {
     mutationFn: async (body: CreatePostInput) => {
       console.log(body);
 
-      const postResponse = await axiosInstance.post("/post", body);
+      const postResponse = await axiosInstance.post("/post/create", body);
 
       return postResponse;
     },

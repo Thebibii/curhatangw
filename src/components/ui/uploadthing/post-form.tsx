@@ -28,7 +28,9 @@ const formSchema = z.object({
   content: z
     .string()
     .min(2, { message: "Content must be at least 2 characters." }),
-  image: z.instanceof(File),
+  image: z.custom<File>((file) => file instanceof File, {
+    message: "You must upload an image.",
+  }),
 });
 export default function PostForm() {
   const [file, setFile] = useState<File | null>(null);
@@ -40,7 +42,7 @@ export default function PostForm() {
     defaultValues: {
       title: "",
       content: "",
-      image: new File([""], "file.png", { type: "image/png" }),
+      image: undefined,
     },
   });
   const queryClient = useQueryClient();
@@ -61,20 +63,16 @@ export default function PostForm() {
   async function onSubmit(values: z.infer<typeof formSchema>) {
     const { title, content } = values;
     if (!file) {
-      console.log(file);
-
       return;
     }
 
     const uploadResponse = await uploadFiles("imageUploader", {
       files: [file],
     });
-    console.log(typeof uploadResponse[0].url);
-
     mutate({ title, content, image: uploadResponse[0].url || "" });
 
     const formData = new FormData();
-    formData.append("image", file);
+    form.setValue("image", file, { shouldDirty: true });
   }
   const fileChangeHandler = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -91,7 +89,11 @@ export default function PostForm() {
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="flex-shrink">
+      <form
+        onSubmit={form.handleSubmit(onSubmit)}
+        className="flex-shrink"
+        encType="multipart/form-data"
+      >
         <FormField
           control={form.control}
           name="title"
@@ -125,13 +127,9 @@ export default function PostForm() {
         <FormField
           control={form.control}
           name="image"
-          render={() => (
+          render={({ field }) => (
             <FormItem className="mx-auto md:w-full">
-              <FormLabel htmlFor="image">
-                <h2 className="text-xl font-semibold tracking-tight">
-                  Upload your image
-                </h2>
-              </FormLabel>
+              <FormLabel htmlFor="image">Upload your image</FormLabel>
               <FormControl className="bg-center bg-contain w-56 h-40 ">
                 <div
                   className="mx-auto flex cursor-pointer flex-col items-center justify-center gap-y-2 rounded-lg border border-foreground p-8 shadow-sm shadow-foreground relative"
@@ -146,7 +144,7 @@ export default function PostForm() {
                       } transition-all inline-flex items-center group-hover:flex justify-center"`}
                     >
                       <Button
-                        variant="destructive"
+                        variant="noShadow"
                         onClick={() => {
                           setFile(null);
                           setFilePreview("");
@@ -158,6 +156,7 @@ export default function PostForm() {
                   )}
                   <Input
                     type="file"
+                    accept="image/*"
                     onChange={fileChangeHandler}
                     className="hidden"
                     id="image"
@@ -176,7 +175,9 @@ export default function PostForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Submit</Button>
+        <Button type="submit" variant="neutral">
+          Submit
+        </Button>
       </form>
     </Form>
   );

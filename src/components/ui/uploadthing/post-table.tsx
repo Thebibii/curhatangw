@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useGetPostByUserId } from "@/stores/posts/useGetPostByUserId";
+import { useGetPostByUserId } from "@/stores/posts/useGetPost";
 import Image from "next/image";
 export default function PostTable() {
   const { data } = useGetPostByUserId();

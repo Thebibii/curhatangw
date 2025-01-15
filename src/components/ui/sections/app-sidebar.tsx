@@ -70,7 +70,7 @@ export function AppSidebar() {
         <SignedIn>
           <Button
             className="w-fit mx-auto"
-            onClick={() => signOut({ redirectUrl: "/sign-in" })}
+            onClick={() => signOut({ redirectUrl: "/" })}
           >
             Log out
           </Button>
