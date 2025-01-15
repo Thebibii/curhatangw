@@ -68,7 +68,7 @@ export default function AvatarChange() {
           {filePreview && (
             <div className="absolute inset-0 bg-black/80 hidden transition-all flex items-center group-hover:flex justify-center">
               <Button
-                variant="destructive"
+                variant="neutral"
                 onClick={() => {
                   setFile(null);
                   setFilePreview("");
