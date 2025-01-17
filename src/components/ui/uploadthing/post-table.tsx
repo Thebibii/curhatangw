@@ -8,7 +8,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { useGetPost } from "@/stores/posts/useGetPost";
+import { useGetPost } from "@/hooks/reactQuery/posts/useGetPost";
 import Image from "next/image";
 export default function PostTable() {
   const { data } = useGetPost();

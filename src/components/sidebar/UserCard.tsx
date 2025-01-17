@@ -1,15 +1,15 @@
 "use client";
-import { Card, CardContent } from "./ui/card";
+import { Card, CardContent } from "../ui/card";
 
 import Link from "next/link";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Separator } from "./ui/separator";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
+import { Separator } from "../ui/separator";
 import { LinkIcon, MapPinIcon } from "lucide-react";
-import { useUserByClerkId } from "@/stores/user/userGetById";
-import { Skeleton } from "./ui/skeleton";
-import LoadingState from "./LoadingState";
+import { useUserByClerkId } from "@/hooks/reactQuery/user/userGetById";
+import { Skeleton } from "../ui/skeleton";
+import LoadingState from "../LoadingState";
 
-export default function CardUser() {
+export default function UserCard() {
   const { data } = useUserByClerkId();
   return (
     <Card className="bg-bw">

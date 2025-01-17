@@ -3,7 +3,7 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { toast } from "@/hooks/use-toast";
-import { useCreatePost } from "@/stores/posts/useCreatePost";
+import { useCreatePost } from "@/hooks/reactQuery/posts/useCreatePost";
 import { Button } from "@/components/ui/button";
 import {
   Form,

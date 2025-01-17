@@ -22,7 +22,7 @@ import {
   SendIcon,
 } from "lucide-react";
 import { Textarea } from "./ui/textarea";
-import { useGetPost } from "@/stores/posts/useGetPost";
+import { useGetPost } from "@/hooks/reactQuery/posts/useGetPost";
 import LoadingState from "./LoadingState";
 import { Skeleton } from "./ui/skeleton";
 

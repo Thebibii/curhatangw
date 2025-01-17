@@ -1,11 +1,13 @@
-"use client";
-import { SignedIn, SignedOut, SignIn, useClerk } from "@clerk/nextjs";
+import {
+  SignedIn,
+  SignedOut,
+  SignInButton,
+  SignOutButton,
+} from "@clerk/nextjs";
 import Link from "next/link";
 import { Button } from "./ui/button";
-import { Sign } from "crypto";
 
-function Navbar() {
-  const { signOut } = useClerk();
+async function Navbar() {
   /* if (user) await syncUser(); // POST */
 
   return (
@@ -22,20 +24,14 @@ function Navbar() {
           </div>
 
           <SignedIn>
-            <Button
-              variant="neutral"
-              onClick={() => signOut({ redirectUrl: "/" })}
-            >
-              Logout
-            </Button>
+            <SignOutButton>
+              <Button variant="neutral">Logout</Button>
+            </SignOutButton>
           </SignedIn>
           <SignedOut>
-            <Button
-              variant="neutral"
-              onClick={() => SignIn({ redirectUrl: "/" })}
-            >
-              Logout
-            </Button>
+            <SignInButton mode="modal">
+              <Button variant="neutral">Login</Button>
+            </SignInButton>
           </SignedOut>
           {/* <DesktopNavbar />
           <MobileNavbar /> */}

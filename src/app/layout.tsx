@@ -6,7 +6,7 @@ import { ourFileRouter } from "./api/uploadthing/core";
 import { Toaster } from "@/components/ui/toaster";
 import { ReactQueryClientProvider } from "@/lib/react-query";
 import Navbar from "@/components/Navbar";
-import Sidebar from "@/components/Sidebar";
+import Sidebar from "@/components/sidebar/Sidebar";
 
 export default function RootLayout({
   children,

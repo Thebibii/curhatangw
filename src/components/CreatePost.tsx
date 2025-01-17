@@ -8,7 +8,7 @@ import { Textarea } from "./ui/textarea";
 import { ImageIcon, Loader2Icon, SendIcon } from "lucide-react";
 import { Button } from "./ui/button";
 import { toast } from "@/hooks/use-toast";
-import { useCreatePost } from "@/stores/posts/useCreatePost";
+import { useCreatePost } from "@/hooks/reactQuery/posts/useCreatePost";
 import { on } from "events";
 import { useQueryClient } from "@tanstack/react-query";
 // import { createPost } from "@/actions/post.action";
@@ -22,7 +22,7 @@ function CreatePost() {
   const [isPosting, setIsPosting] = useState(false);
   const [showImageUpload, setShowImageUpload] = useState(false);
 
-  const { mutate } = useCreatePost({
+  const { mutate, isPending } = useCreatePost({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["get.post"] });
       // reset the form
@@ -31,7 +31,9 @@ function CreatePost() {
       setShowImageUpload(false);
 
       toast({
+        title: "Notification",
         description: "Post created successfully",
+        duration: 2000,
       });
     },
   });
@@ -97,11 +99,15 @@ function CreatePost() {
               </Button>
             </div>
             <Button
-              className="flex items-center"
+              className={`"flex items-center" ${
+                isPending && "opacity-50 animate-pulse cursor-not-allowed"
+              }`}
               onClick={handleSubmit}
-              disabled={(!content.trim() && !imageUrl) || isPosting}
+              variant="neutral"
+              // disabled={(!content.trim() && !imageUrl) || isPosting}
+              disabled={isPending}
             >
-              {isPosting ? (
+              {isPending ? (
                 <>
                   <Loader2Icon className="size-4 mr-2 animate-spin" />
                   Posting...
