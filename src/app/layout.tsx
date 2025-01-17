@@ -14,10 +14,10 @@ export default function RootLayout({
   children: React.ReactNode;
 }) {
   return (
-    <ReactQueryClientProvider>
-      <ClerkProvider>
-        <html lang="en" suppressHydrationWarning>
-          <body>
+    <html lang="en" suppressHydrationWarning>
+      <body>
+        <ReactQueryClientProvider>
+          <ClerkProvider>
             <NextSSRPlugin
               /**
                * The `extractRouterConfig` will extract **only** the route configs
@@ -43,9 +43,9 @@ export default function RootLayout({
               </main>
             </div>
             <Toaster />
-          </body>
-        </html>
-      </ClerkProvider>
-    </ReactQueryClientProvider>
+          </ClerkProvider>
+        </ReactQueryClientProvider>
+      </body>
+    </html>
   );
 }
