@@ -1,4 +1,4 @@
-import { axiosInstance } from "@/lib/axiosInstance";
+import { axiosInstance } from "@/lib/env";
 import { useQuery } from "@tanstack/react-query";
 
 export const useUserByClerkId = () => {
