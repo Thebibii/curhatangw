@@ -100,12 +100,12 @@ function CreatePost() {
             </div>
             <Button
               className={`"flex items-center" ${
-                isPending && "opacity-50 animate-pulse cursor-not-allowed"
+                isPending && "opacity-50 animate-pulse "
               }`}
               onClick={handleSubmit}
               variant="neutral"
               // disabled={(!content.trim() && !imageUrl) || isPosting}
-              disabled={isPending}
+              disabled={isPending || (!content.trim() && !imageUrl)}
             >
               {isPending ? (
                 <>

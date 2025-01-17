@@ -4,6 +4,8 @@ import prisma from "@/lib/prisma";
 import { auth, currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 
+const userCache = new Map<string, string>();
+
 export async function syncUser() {
   try {
     const { userId } = await auth();
@@ -54,7 +56,7 @@ export async function getUserByClerkId(clerkId: string) {
 }
 
 export async function getDbUserId() {
-  const { userId: clerkId } = await auth();
+  /* const { userId: clerkId } = await auth();
   if (!clerkId) return null;
 
   const user = await prisma.user.findUnique({
@@ -65,6 +67,21 @@ export async function getDbUserId() {
 
   if (!user) throw new Error("User not found");
 
+  return user.id; */
+  const { userId: clerkId } = await auth();
+  if (!clerkId) return null;
+
+  if (userCache.has(clerkId)) {
+    return userCache.get(clerkId);
+  }
+
+  const user = await prisma.user.findUnique({
+    where: { clerkId },
+  });
+
+  if (!user) throw new Error("User not found");
+
+  userCache.set(clerkId, user.id); // Simpan userId di cache
   return user.id;
 }
 
