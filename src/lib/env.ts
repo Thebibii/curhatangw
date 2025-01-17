@@ -1,12 +1,12 @@
-/* import axios from "axios";
+import axios from "axios";
 
-const isProduction = process.env.NODE_ENV === "production";
+const isProductionAxios = process.env.NODE_ENV === "production";
 
 export const axiosInstance = axios.create({
-  baseURL: isProduction
+  baseURL: isProductionAxios
     ? "https://clerk-wine.vercel.app/api"
     : "http://localhost:3000/api",
-}); */
+});
 
 const isProduction = process.env.NODE_ENV === "production";
 
