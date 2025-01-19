@@ -10,7 +10,7 @@ export const useCreatePost = ({ onSuccess }: any) => {
   return useMutation({
     mutationKey: ["create.post"],
     mutationFn: async (body: CreatePostInput) => {
-      const postResponse = await axiosInstance.post("/post/create", body);
+      const postResponse = await axiosInstance.post("/post", body);
 
       return postResponse;
     },

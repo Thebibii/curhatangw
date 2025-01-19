@@ -1,5 +1,5 @@
 import CreatePost from "@/components/CreatePost";
-import PostCard from "@/components/PostCard";
+import PostCard from "@/components/post/PostCard";
 import { currentUser } from "@clerk/nextjs/server";
 import Image from "next/image";
 import Link from "next/link";

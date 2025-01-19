@@ -19,7 +19,6 @@ export const useGetPost = () => {
     queryFn: async () => {
       const res = await fetch(`${baseURL}/post`);
       const data = await res.json();
-      console.log(data);
 
       return data;
     },

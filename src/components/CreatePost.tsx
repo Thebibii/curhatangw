@@ -33,7 +33,7 @@ function CreatePost() {
       toast({
         title: "Notification",
         description: "Post created successfully",
-        duration: 2000,
+        duration: 1500,
       });
     },
   });
