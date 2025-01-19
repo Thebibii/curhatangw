@@ -1,5 +1,5 @@
 "use server";
-import prisma from "@/lib/prisma";
+import prisma from "@/lib/db/prisma";
 import { getDbUserId } from "./user.action";
 
 export async function createPost(content: string, image: string) {

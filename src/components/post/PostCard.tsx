@@ -9,9 +9,14 @@ import { Skeleton } from "../ui/skeleton";
 import { AvatarFallback } from "@radix-ui/react-avatar";
 import { formatDistanceToNow } from "date-fns";
 import Footer from "./Footer";
+import { useUserContext } from "@/contexts/UserContext";
+import { DeleteAlertDialog } from "../DeleteAlertDialog";
+import { useState } from "react";
 
 function PostCard() {
   const { data, isLoading } = useGetPost();
+  const { user } = useUserContext();
+  const [isDeleting, setIsDeleting] = useState(false);
 
   /* const handleLike = async () => {
     if (isLiking) return;
@@ -28,19 +33,19 @@ function PostCard() {
     }
   }; */
 
-  /* const handleDeletePost = async () => {
+  const handleDeletePost = async () => {
     if (isDeleting) return;
     try {
       setIsDeleting(true);
-      const result = await deletePost(post.id);
+      /*  const result = await deletePost(post.id);
       if (result.success) toast.success("Post deleted successfully");
-      else throw new Error(result.error);
+      else throw new Error(result.error); */
     } catch (error) {
-      toast.error("Failed to delete post");
+      console.log(error);
     } finally {
       setIsDeleting(false);
     }
-  }; */
+  };
 
   return (
     <LoadingState
@@ -81,12 +86,12 @@ function PostCard() {
                       </div>
                     </div>
                     {/* Check if current user is the post author */}
-                    {/* {dbUserId === post.author.id && (
+                    {user?.data?.id === post.author.id && (
                       <DeleteAlertDialog
                         isDeleting={isDeleting}
                         onDelete={handleDeletePost}
                       />
-                    )} */}
+                    )}
                   </div>
                   <p className="mt-2 text-sm text-foreground break-words">
                     {post.content}

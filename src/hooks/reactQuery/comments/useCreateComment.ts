@@ -1,4 +1,4 @@
-import { baseURL } from "@/lib/env";
+import { baseURL } from "@/lib/db/env";
 import { useMutation } from "@tanstack/react-query";
 
 export const useCreateComment = ({ onSuccess }: any) => {

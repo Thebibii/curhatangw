@@ -1,4 +1,4 @@
-import { axiosInstance } from "@/lib/env";
+import { axiosInstance } from "@/lib/db/env";
 import { useMutation } from "@tanstack/react-query";
 
 type CreatePostInput = {

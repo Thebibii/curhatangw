@@ -1,5 +1,5 @@
 "use client";
-import { LogInIcon, MessageCircleIcon, SendIcon } from "lucide-react";
+import { LogInIcon, MessageCircleIcon, Scroll, SendIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import { Avatar, AvatarImage } from "../ui/avatar";
@@ -11,6 +11,7 @@ import { toast } from "@/hooks/use-toast";
 import { useGetCommentByPost } from "@/hooks/reactQuery/comments/useGetComments";
 import LoadingState from "../LoadingState";
 import { Skeleton } from "../ui/skeleton";
+import { ScrollArea } from "../ui/scroll-area";
 
 export default function Footer({ postId, count_comment }: any) {
   const { user } = useUser();
@@ -19,7 +20,6 @@ export default function Footer({ postId, count_comment }: any) {
   const [newComment, setNewComment] = useState("");
   const [isCommenting, setIsCommenting] = useState(false);
   const [isLiking, setIsLiking] = useState(false);
-  const [isDeleting, setIsDeleting] = useState(false);
 
   const {
     data: comments,
@@ -112,37 +112,49 @@ export default function Footer({ postId, count_comment }: any) {
       </div>
 
       {showComments && (
-        <div className="space-y-4 pt-4 border-t">
-          <div className="space-y-4">
-            <LoadingState
-              data={isLoading === false}
-              loadingFallback={<Skeleton className="w-full h-5" />}
-            >
-              {/* DISPLAY COMMENTS */}
-              {comments?.data?.map((comment: any) => (
-                <div key={comment.id} className="flex space-x-3">
-                  <Avatar className="size-8 flex-shrink-0">
-                    <AvatarImage src={comment.author.image ?? "/avatar.png"} />
-                  </Avatar>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                      <span className="font-medium text-sm">
-                        {comment.author.name}
-                      </span>
-                      <span className="text-sm text-muted-foreground">
-                        @{comment.author.username}
-                      </span>
-                      <span className="text-sm text-muted-foreground">·</span>
-                      <span className="text-sm text-muted-foreground">
-                        {formatDistanceToNow(new Date(comment.createdAt))} ago
-                      </span>
+        <div className="space-y-4 pt-4 border-t ">
+          <ScrollArea
+            className={comments?.data?.length > 5 ? "h-72" : "h-full"}
+          >
+            <div className="space-y-4 pr-3">
+              <LoadingState
+                data={isLoading === false}
+                loadingFallback={<Skeleton className="w-full h-5" />}
+              >
+                {/* DISPLAY COMMENTS */}
+                {comments?.data?.map((comment: any) => (
+                  <div key={comment.id} className="flex space-x-3 ">
+                    <Avatar className="size-8 flex-shrink-0">
+                      <AvatarImage
+                        src={comment.author.image ?? "/avatar.png"}
+                      />
+                    </Avatar>
+                    <div className="flex-1 min-w-0">
+                      <div className="flex flex-wrap justify-between items-center  gap-y-1">
+                        <div className="flex gap-x-2">
+                          <span className="font-medium text-sm ">
+                            {comment.author.name}
+                          </span>
+                          <span className="text-sm text-muted-foreground">
+                            @{comment.author.username}
+                          </span>
+                        </div>
+                        <div className="gap-x-2 flex ">
+                          <span className="text-sm text-muted-foreground">
+                            ·
+                          </span>
+                          <span className="text-sm text-muted-foreground font-medium">
+                            {formatDistanceToNow(new Date(comment.createdAt))}
+                          </span>
+                        </div>
+                      </div>
+                      <p className="text-sm break-words">{comment.content}</p>
                     </div>
-                    <p className="text-sm break-words">{comment.content}</p>
                   </div>
-                </div>
-              ))}
-            </LoadingState>
-          </div>
+                ))}
+              </LoadingState>
+            </div>
+          </ScrollArea>
 
           {user ? (
             <div className="flex space-x-3">

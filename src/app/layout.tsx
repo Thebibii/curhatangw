@@ -7,6 +7,7 @@ import { Toaster } from "@/components/ui/toaster";
 import { ReactQueryClientProvider } from "@/lib/react-query";
 import Navbar from "@/components/Navbar";
 import Sidebar from "@/components/sidebar/Sidebar";
+import { UserProvider } from "@/contexts/UserContext";
 
 export default function RootLayout({
   children,
@@ -27,21 +28,23 @@ export default function RootLayout({
                */
               routerConfig={extractRouterConfig(ourFileRouter)}
             />
-            <div className="min-h-screen">
-              <Navbar />
+            <UserProvider>
+              <div className="min-h-screen">
+                <Navbar />
 
-              <main className="py-8">
-                {/* container to center the content */}
-                <div className="max-w-7xl mx-auto px-4">
-                  <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                    <div className="hidden lg:block lg:col-span-3">
-                      <Sidebar />
+                <main className="py-8">
+                  {/* container to center the content */}
+                  <div className="max-w-7xl mx-auto px-4">
+                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                      <div className="hidden lg:block lg:col-span-3">
+                        <Sidebar />
+                      </div>
+                      <div className="lg:col-span-9">{children}</div>
                     </div>
-                    <div className="lg:col-span-9">{children}</div>
                   </div>
-                </div>
-              </main>
-            </div>
+                </main>
+              </div>
+            </UserProvider>
             <Toaster />
           </ClerkProvider>
         </ReactQueryClientProvider>

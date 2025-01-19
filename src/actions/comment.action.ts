@@ -1,5 +1,5 @@
 "use server";
-import prisma from "@/lib/prisma";
+import prisma from "@/lib/db/prisma";
 import { getDbUserId } from "./user.action";
 
 export async function createComment(postId: string, content: string) {
@@ -42,7 +42,7 @@ export async function createComment(postId: string, content: string) {
     return [newComment];
   });
 
-  return { success: true, comment };
+  return comment;
 }
 
 export async function getComments(postId: string) {

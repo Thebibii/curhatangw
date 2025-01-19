@@ -8,9 +8,11 @@ import { LinkIcon, MapPinIcon } from "lucide-react";
 import { useUserByClerkId } from "@/hooks/reactQuery/user/userGetById";
 import { Skeleton } from "../ui/skeleton";
 import LoadingState from "../LoadingState";
+import { useUserContext } from "@/contexts/UserContext";
 
 export default function UserCard() {
-  const { data } = useUserByClerkId();
+  const { user: data } = useUserContext();
+
   return (
     <Card className="bg-bw">
       <CardContent className="pt-6">
@@ -21,7 +23,7 @@ export default function UserCard() {
           >
             <Avatar className="w-20 h-20 border-2 ">
               <AvatarImage src={data?.data?.image} />
-              <AvatarFallback>SC</AvatarFallback>
+              <AvatarFallback>{data?.data?.name[0]}</AvatarFallback>
             </Avatar>
 
             <div className="mt-4 space-y-1 flex flex-col items-center">
