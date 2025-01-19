@@ -5,12 +5,12 @@ export const useGetCommentByPost = ({ postId }: any) => {
   return useQuery({
     queryKey: ["get.comment", postId],
     queryFn: async () => {
-      const res = await fetch(`${baseURL}/comment/${postId}`);
+      const res = await fetch(`${baseURL}/comment/post/${postId}`);
 
       const data = await res.json();
-      console.log(data);
 
       return data;
     },
+    enabled: false,
   });
 };

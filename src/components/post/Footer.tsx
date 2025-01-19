@@ -11,11 +11,9 @@ import { toast } from "@/hooks/use-toast";
 import { useGetCommentByPost } from "@/hooks/reactQuery/comments/useGetComments";
 import LoadingState from "../LoadingState";
 import { Skeleton } from "../ui/skeleton";
-import { useQueryClient } from "@tanstack/react-query";
 
 export default function Footer({ postId, count_comment }: any) {
   const { user } = useUser();
-  const queryClient = useQueryClient();
 
   const [showComments, setShowComments] = useState(false);
   const [newComment, setNewComment] = useState("");
@@ -23,14 +21,19 @@ export default function Footer({ postId, count_comment }: any) {
   const [isLiking, setIsLiking] = useState(false);
   const [isDeleting, setIsDeleting] = useState(false);
 
-  const { data: comments, isLoading } = useGetCommentByPost({ postId });
+  const {
+    data: comments,
+    isLoading,
+    refetch,
+  } = useGetCommentByPost({ postId });
 
   const { mutate, isPending } = useCreateComment({
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["get.comment", postId] });
+      refetch();
       toast({
         title: "Comment created",
         description: "Your comment has been created successfully",
+        duration: 1500,
       });
       setNewComment("");
     },
@@ -49,6 +52,13 @@ export default function Footer({ postId, count_comment }: any) {
       console.error("Failed to create comment:", error);
     } finally {
       setIsCommenting(false);
+    }
+  };
+
+  const handleToggleComments = async () => {
+    setShowComments((prev) => !prev);
+    if (!showComments) {
+      await refetch();
     }
   };
 
@@ -90,26 +100,26 @@ export default function Footer({ postId, count_comment }: any) {
           variant="neutral"
           size="sm"
           className="text-muted-foreground gap-2 hover:text-blue-500"
-          onClick={() => setShowComments((prev) => !prev)}
+          onClick={handleToggleComments}
         >
           <MessageCircleIcon
             className={`size-5 ${
               showComments ? "fill-blue-500 text-blue-500" : ""
             }`}
           />
-          <span>{count_comment}</span>
+          <span>{comments?.data?.length ?? count_comment}</span>
         </Button>
       </div>
 
       {showComments && (
-        <LoadingState
-          data={comments?.data}
-          loadingFallback={<Skeleton className="w-fit" />}
-        >
-          <div className="space-y-4 pt-4 border-t">
-            <div className="space-y-4">
+        <div className="space-y-4 pt-4 border-t">
+          <div className="space-y-4">
+            <LoadingState
+              data={isLoading === false}
+              loadingFallback={<Skeleton className="w-full h-5" />}
+            >
               {/* DISPLAY COMMENTS */}
-              {comments.data.map((comment: any) => (
+              {comments?.data?.map((comment: any) => (
                 <div key={comment.id} className="flex space-x-3">
                   <Avatar className="size-8 flex-shrink-0">
                     <AvatarImage src={comment.author.image ?? "/avatar.png"} />
@@ -131,51 +141,51 @@ export default function Footer({ postId, count_comment }: any) {
                   </div>
                 </div>
               ))}
-            </div>
+            </LoadingState>
+          </div>
 
-            {user ? (
-              <div className="flex space-x-3">
-                <Avatar className="size-8 flex-shrink-0">
-                  <AvatarImage src={user?.imageUrl || "/avatar.png"} />
-                </Avatar>
-                <div className="flex-1">
-                  <Textarea
-                    placeholder="Write a comment..."
-                    value={newComment}
-                    onChange={(e) => setNewComment(e.target.value)}
-                    className="min-h-[80px] resize-none"
-                  />
-                  <div className="flex justify-end mt-2">
-                    <Button
-                      size="sm"
-                      onClick={handleAddComment}
-                      className="flex items-center gap-2"
-                      disabled={isPending || !newComment.trim() || isCommenting}
-                    >
-                      {isPending ? (
-                        "Posting..."
-                      ) : (
-                        <>
-                          <SendIcon className="size-4" />
-                          Comment
-                        </>
-                      )}
-                    </Button>
-                  </div>
+          {user ? (
+            <div className="flex space-x-3">
+              <Avatar className="size-8 flex-shrink-0">
+                <AvatarImage src={user?.imageUrl || "/avatar.png"} />
+              </Avatar>
+              <div className="flex-1">
+                <Textarea
+                  placeholder="Write a comment..."
+                  value={newComment}
+                  onChange={(e) => setNewComment(e.target.value)}
+                  className="min-h-[80px] resize-none"
+                />
+                <div className="flex justify-end mt-2">
+                  <Button
+                    size="sm"
+                    onClick={handleAddComment}
+                    className="flex items-center gap-2"
+                    disabled={isPending || !newComment.trim() || isCommenting}
+                  >
+                    {isPending ? (
+                      "Posting..."
+                    ) : (
+                      <>
+                        <SendIcon className="size-4" />
+                        Comment
+                      </>
+                    )}
+                  </Button>
                 </div>
               </div>
-            ) : (
-              <div className="flex justify-center p-4 border rounded-lg bg-muted/50">
-                <SignInButton mode="modal">
-                  <Button variant="neutral" className="gap-2">
-                    <LogInIcon className="size-4" />
-                    Sign in to comment
-                  </Button>
-                </SignInButton>
-              </div>
-            )}
-          </div>
-        </LoadingState>
+            </div>
+          ) : (
+            <div className="flex justify-center p-4 border rounded-lg bg-muted/50">
+              <SignInButton mode="modal">
+                <Button variant="neutral" className="gap-2">
+                  <LogInIcon className="size-4" />
+                  Sign in to comment
+                </Button>
+              </SignInButton>
+            </div>
+          )}
+        </div>
       )}
     </>
   );
