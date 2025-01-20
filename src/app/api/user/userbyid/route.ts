@@ -10,7 +10,11 @@ export async function GET(request: NextRequest) {
     }
     const user = await getUserByClerkId(userId);
 
-    return NextResponse.json(user);
+    return NextResponse.json({
+      success: true,
+      message: "User found",
+      data: user,
+    });
   } catch (error: any) {
     return NextResponse.json(
       { success: false, error: error.message, code: error.code },

@@ -1,7 +1,7 @@
 "use client";
 import { useUserByClerkId } from "@/hooks/reactQuery/user/userGetById";
-import { useAuth, useUser } from "@clerk/nextjs";
-import { createContext, useContext, useState, useEffect } from "react";
+import { useUser } from "@clerk/nextjs";
+import { createContext, useContext } from "react";
 
 const UserContext = createContext({} as any);
 

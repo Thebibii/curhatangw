@@ -1,11 +1,7 @@
-import {
-  SignedIn,
-  SignedOut,
-  SignInButton,
-  SignOutButton,
-} from "@clerk/nextjs";
+import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { Button } from "./ui/button";
+import ButtonLogout from "./ButtonLogout";
 
 async function Navbar() {
   /* if (user) await syncUser(); // POST */
@@ -24,9 +20,7 @@ async function Navbar() {
           </div>
 
           <SignedIn>
-            <SignOutButton>
-              <Button variant="neutral">Logout</Button>
-            </SignOutButton>
+            <ButtonLogout />
           </SignedIn>
           <SignedOut>
             <SignInButton mode="modal">

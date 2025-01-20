@@ -10,7 +10,7 @@ export const useUserByClerkId = ({
     queryKey: ["get.user"],
     queryFn: async () => {
       const userResponse = await axiosInstance.get("/user/userbyid");
-      return userResponse;
+      return await userResponse.data;
     },
     enabled: isSignedIn ? true : false,
   });
