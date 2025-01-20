@@ -13,20 +13,34 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { useDeletePost } from "@/hooks/reactQuery/posts/useDeletePost.hook";
+import { toast } from "@/hooks/use-toast";
+import { useQueryClient } from "@tanstack/react-query";
 
 interface DeleteAlertDialogProps {
-  isDeleting: boolean;
-  onDelete: () => Promise<void>;
+  postId: string;
   title?: string;
   description?: string;
 }
 
 export function DeleteAlertDialog({
-  isDeleting,
-  onDelete,
+  postId,
   title = "Delete Post",
   description = "This action cannot be undone.",
 }: DeleteAlertDialogProps) {
+  const queryClient = useQueryClient();
+
+  const { isPending, mutate, isSuccess } = useDeletePost({
+    postId,
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["get.post"] });
+      toast({
+        title: "Post deleted",
+        description: "Your post has been deleted successfully",
+        duration: 1500,
+      });
+    },
+  });
   return (
     <AlertDialog>
       <AlertDialogTrigger asChild>
@@ -34,8 +48,9 @@ export function DeleteAlertDialog({
           variant="neutral"
           size="sm"
           className="text-muted-foreground hover:text-red-500 -mr-2"
+          disabled={isPending}
         >
-          {isDeleting ? (
+          {isPending ? (
             <Loader2Icon className="size-4 animate-spin" />
           ) : (
             <Trash2Icon className="size-4" />
@@ -50,11 +65,11 @@ export function DeleteAlertDialog({
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
-            onClick={onDelete}
+            onClick={() => mutate()}
             className="bg-red-500 hover:bg-red-600"
-            disabled={isDeleting}
+            disabled={isSuccess}
           >
-            {isDeleting ? "Deleting..." : "Delete"}
+            {isPending ? "Deleting..." : "Delete"}
           </AlertDialogAction>
         </AlertDialogFooter>
       </AlertDialogContent>

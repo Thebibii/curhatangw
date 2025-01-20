@@ -33,20 +33,6 @@ function PostCard() {
     }
   }; */
 
-  const handleDeletePost = async () => {
-    if (isDeleting) return;
-    try {
-      setIsDeleting(true);
-      /*  const result = await deletePost(post.id);
-      if (result.success) toast.success("Post deleted successfully");
-      else throw new Error(result.error); */
-    } catch (error) {
-      console.log(error);
-    } finally {
-      setIsDeleting(false);
-    }
-  };
-
   return (
     <LoadingState
       data={data?.data || isLoading === false}
@@ -87,10 +73,7 @@ function PostCard() {
                     </div>
                     {/* Check if current user is the post author */}
                     {user?.data?.id === post.author.id && (
-                      <DeleteAlertDialog
-                        isDeleting={isDeleting}
-                        onDelete={handleDeletePost}
-                      />
+                      <DeleteAlertDialog postId={post.id} />
                     )}
                   </div>
                   <p className="mt-2 text-sm text-foreground break-words">
