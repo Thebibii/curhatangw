@@ -10,7 +10,7 @@ export const ReactQueryClientProvider = ({
 }) => {
   const [queryClient] = useState(
     () =>
-      new QueryClient({
+      /*  new QueryClient({
         defaultOptions: {
           queries: {
             // With SSR, we usually want to set some default staleTime
@@ -18,7 +18,8 @@ export const ReactQueryClientProvider = ({
             staleTime: 60 * 1000,
           },
         },
-      })
+      }) */
+      new QueryClient()
   );
   return (
     <QueryClientProvider client={queryClient}>{children}</QueryClientProvider>
