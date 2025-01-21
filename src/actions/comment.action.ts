@@ -48,7 +48,15 @@ export async function createComment(postId: string, content: string) {
 export async function getComments(postId: string) {
   return prisma.comment.findMany({
     where: { postId },
-    include: { author: true },
+    include: {
+      author: {
+        select: {
+          name: true,
+          username: true,
+          image: true,
+        },
+      },
+    },
     orderBy: { createdAt: "desc" },
   });
 }
