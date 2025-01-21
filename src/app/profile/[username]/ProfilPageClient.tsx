@@ -24,7 +24,6 @@ import { Separator } from "@/components/ui/separator";
 import { Textarea } from "@/components/ui/textarea";
 import { useUserContext } from "@/contexts/UserContext";
 import { SignInButton, useUser } from "@clerk/nextjs";
-import { AvatarFallback } from "@radix-ui/react-avatar";
 import { format } from "date-fns";
 import {
   CalendarIcon,
@@ -59,7 +58,12 @@ function ProfilePageClient({
   const [isFollowing, setIsFollowing] = useState(initialIsFollowing);
   const [isUpdatingFollow, setIsUpdatingFollow] = useState(false);
 
-  const [editForm, setEditForm] = useState({});
+  const [editForm, setEditForm] = useState({
+    name: user?.data?.name,
+    bio: user?.data?.bio,
+    location: user?.data?.location,
+    website: user?.data?.website,
+  });
 
   //   const handleEditSubmit = async () => {
   //     const formData = new FormData();
@@ -114,8 +118,7 @@ function ProfilePageClient({
             <CardContent className="pt-6">
               <div className="flex flex-col items-center text-center">
                 <Avatar className="w-24 h-24">
-                  <AvatarImage src={user?.data?.image} />
-                  <AvatarFallback>SC</AvatarFallback>
+                  <AvatarImage src={user?.data?.image ?? "/avatar.png"} />
                 </Avatar>
                 <h1 className="mt-4 text-2xl font-bold">
                   {user?.data?.name ?? user?.data?.username}
@@ -271,7 +274,7 @@ function ProfilePageClient({
                 <Label>Name</Label>
                 <Input
                   name="name"
-                  value={editForm.name}
+                  value={editForm?.name}
                   onChange={(e) =>
                     setEditForm({ ...editForm, name: e.target.value })
                   }
@@ -282,7 +285,7 @@ function ProfilePageClient({
                 <Label>Bio</Label>
                 <Textarea
                   name="bio"
-                  value={editForm.bio}
+                  value={editForm?.bio}
                   onChange={(e) =>
                     setEditForm({ ...editForm, bio: e.target.value })
                   }
@@ -294,7 +297,7 @@ function ProfilePageClient({
                 <Label>Location</Label>
                 <Input
                   name="location"
-                  value={editForm.location}
+                  value={editForm?.location}
                   onChange={(e) =>
                     setEditForm({ ...editForm, location: e.target.value })
                   }
@@ -305,7 +308,7 @@ function ProfilePageClient({
                 <Label>Website</Label>
                 <Input
                   name="website"
-                  value={editForm.website}
+                  value={editForm?.website}
                   onChange={(e) =>
                     setEditForm({ ...editForm, website: e.target.value })
                   }
