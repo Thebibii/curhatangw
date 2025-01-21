@@ -1,4 +1,3 @@
-"use server";
 import prisma from "@/lib/db/prisma";
 import { getDbUserId } from "./user.action";
 
