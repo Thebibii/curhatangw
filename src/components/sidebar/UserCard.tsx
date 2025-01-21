@@ -5,7 +5,6 @@ import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Separator } from "../ui/separator";
 import { LinkIcon, MapPinIcon } from "lucide-react";
-import { useUserByClerkId } from "@/hooks/reactQuery/user/userGetById";
 import { Skeleton } from "../ui/skeleton";
 import LoadingState from "../LoadingState";
 import { useUserContext } from "@/contexts/UserContext";

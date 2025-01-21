@@ -7,6 +7,7 @@ export async function POST(req: Request) {
   try {
     // Parse the Clerk Webhook event
     const evt = (await req.json()) as WebhookEvent;
+    console.log(evt.type);
 
     const { id: clerkId } = evt.data;
     if (!clerkId)
@@ -27,7 +28,7 @@ export async function POST(req: Request) {
           last_name,
         } = evt.data;
         const email = email_addresses?.[0]?.email_address;
-
+        const usernameByEmail = email?.split("@")[0];
         if (!email)
           return NextResponse.json(
             { error: "No email provided" },
@@ -41,14 +42,46 @@ export async function POST(req: Request) {
           update: {
             clerkId,
             email,
-            username: username ?? email,
+            username: username ?? usernameByEmail,
             image: image_url,
             name: `${first_name || ""} ${last_name || ""}`,
           },
           create: {
             clerkId,
             email,
-            username: username ?? email,
+            username: username ?? usernameByEmail,
+            image: image_url,
+            name: `${first_name || ""} ${last_name || ""}`,
+          },
+        });
+        break;
+      }
+      case "user.updated": {
+        console.log(evt.type);
+
+        const {
+          email_addresses = [],
+          username,
+          image_url,
+          first_name,
+          last_name,
+        } = evt.data;
+        const email = email_addresses?.[0]?.email_address;
+        const usernameByEmail = email?.split("@")[0];
+
+        if (!email)
+          return NextResponse.json(
+            { error: "No email provided" },
+            { status: 400 }
+          );
+
+        user = await prisma.user.update({
+          where: {
+            clerkId,
+          },
+          data: {
+            email,
+            username: username ?? usernameByEmail,
             image: image_url,
             name: `${first_name || ""} ${last_name || ""}`,
           },
