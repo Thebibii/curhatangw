@@ -44,7 +44,9 @@ export default function UserCard() {
           </Link>
 
           {data?.data?.bio && (
-            <p className="mt-3 text-sm text-muted-foreground">user.bio</p>
+            <p className="mt-3 text-sm text-muted-foreground">
+              {data?.data?.bio}
+            </p>
           )}
 
           <div className="w-full">

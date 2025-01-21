@@ -1,7 +1,7 @@
 import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import Link from "next/link";
 import { Button } from "./ui/button";
-import ButtonLogout from "./ButtonLogout";
+import PopoverProfile from "./PopoverProfile";
 
 function Navbar() {
   return (
@@ -18,7 +18,7 @@ function Navbar() {
           </div>
 
           <SignedIn>
-            <ButtonLogout />
+            <PopoverProfile />
           </SignedIn>
           <SignedOut>
             <SignInButton mode="modal">

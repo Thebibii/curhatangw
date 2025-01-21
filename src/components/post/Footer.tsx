@@ -125,9 +125,7 @@ export default function Footer({ postId, count_comment }: any) {
                 {comments?.data?.map((comment: any) => (
                   <div key={comment.id} className="flex space-x-3 ">
                     <Avatar className="size-8 flex-shrink-0">
-                      <AvatarImage
-                        src={comment.author.image ?? "/avatar.png"}
-                      />
+                      <AvatarImage src={comment.author.image} />
                     </Avatar>
                     <div className="flex-1 min-w-0">
                       <div className="flex flex-wrap justify-between items-center  gap-y-1">
@@ -159,7 +157,7 @@ export default function Footer({ postId, count_comment }: any) {
           {user ? (
             <div className="flex space-x-3">
               <Avatar className="size-8 flex-shrink-0">
-                <AvatarImage src={user?.imageUrl || "/avatar.png"} />
+                <AvatarImage src={user?.imageUrl} />
               </Avatar>
               <div className="flex-1">
                 <Textarea

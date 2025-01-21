@@ -64,7 +64,7 @@ function PostCard() {
                       </Link>
                       <div className="flex items-center space-x-2 text-sm text-muted-foreground">
                         {/* <Link href={`/profile/${post.author.username}`}> */}
-                        <Link href="#">@{post.author.username}</Link>
+                        <Link href="#">{post.author.username}</Link>
                         <span>•</span>
                         <span>
                           {formatDistanceToNow(new Date(post.createdAt))} ago
