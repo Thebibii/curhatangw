@@ -37,20 +37,19 @@ import { useState } from "react";
 // }
 
 function ProfilePageClient({
-  isFollowing: initialIsFollowing,
-  likedPosts,
+  // isFollowing: initialIsFollowing,
+  // likedPosts,
   username,
-  posts,
-}: any) {
+}: // posts,
+any) {
   const { user: currentUser } = useUser();
   const { data: user } = useProfileByUsername({ username });
 
-  if (user?.error) return notFound();
-
-  const [isFollowing, setIsFollowing] = useState(initialIsFollowing);
+  const [isFollowing, setIsFollowing] = useState(null);
   const [showEditDialog, setShowEditDialog] = useState(false);
 
   const [isUpdatingFollow, setIsUpdatingFollow] = useState(false);
+  if (user?.error) return notFound();
 
   //   const handleFollow = async () => {
   //     if (!currentUser) return;
