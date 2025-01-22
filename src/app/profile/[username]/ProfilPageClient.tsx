@@ -2,23 +2,9 @@
 
 import LoadingState from "@/components/LoadingState";
 import DialogEditProfile from "@/components/profile/DialogEditProfile";
-/* import {
-  getProfileByUsername,
-  getUserPosts,
-  updateProfile,
-} from "@/actions/profile.action"; */
-// import { toggleFollow } from "@/actions/user?.data?.action";
-// import PostCard from "@/components/PostCard";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
@@ -28,7 +14,6 @@ import { Textarea } from "@/components/ui/textarea";
 import { useUserContext } from "@/contexts/UserContext";
 import { useProfileByUsername } from "@/hooks/reactQuery/profile/useProfileByUsername";
 import { SignInButton, useUser } from "@clerk/nextjs";
-import { format } from "date-fns";
 import {
   CalendarIcon,
   EditIcon,
@@ -38,7 +23,7 @@ import {
   MapPinIcon,
 } from "lucide-react";
 import { notFound } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useState } from "react";
 // import toast from "react-hot-toast";
 
 // type User = Awaited<ReturnType<typeof getProfileByUsername>>;
@@ -67,26 +52,6 @@ function ProfilePageClient({
 
   const [isUpdatingFollow, setIsUpdatingFollow] = useState(false);
 
-  const [editForm, setEditForm] = useState({
-    name: user?.data?.name,
-    bio: user?.data?.bio,
-    location: user?.data?.location,
-    website: user?.data?.website,
-  });
-
-  //   const handleEditSubmit = async () => {
-  //     const formData = new FormData();
-  //     Object.entries(editForm).forEach(([key, value]) => {
-  //       formData.append(key, value);
-  //     });
-
-  //     const result = await updateProfile(formData);
-  //     if (result.success) {
-  //       setShowEditDialog(false);
-  //       toast.success("Profile updated successfully");
-  //     }
-  //   };
-
   //   const handleFollow = async () => {
   //     if (!currentUser) return;
 
@@ -105,17 +70,6 @@ function ProfilePageClient({
     currentUser?.emailAddresses[0].emailAddress === user?.data?.username ||
     currentUser?.emailAddresses[0].emailAddress.split("@")[0] ===
       user?.data?.username;
-
-  useEffect(() => {
-    if (user?.data) {
-      setEditForm({
-        name: user.data.name || "",
-        bio: user.data.bio || "",
-        location: user.data.location || "",
-        website: user.data.website || "",
-      });
-    }
-  }, [user]);
 
   //   const formattedDate = format(new Date(user?.data?.createdAt), "MMMM yyyy");
 

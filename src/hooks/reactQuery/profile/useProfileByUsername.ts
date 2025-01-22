@@ -7,7 +7,7 @@ export const useProfileByUsername = ({ username }: any) => {
   return useQuery({
     queryKey: ["get.profile", usernameDecoded],
     queryFn: async () => {
-      const res = await fetch(`${baseURL}/profile/${username}`);
+      const res = await fetch(`${baseURL}/profile/${usernameDecoded}`);
 
       const data = await res.json();
 

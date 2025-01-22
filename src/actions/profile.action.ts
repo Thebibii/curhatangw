@@ -1,11 +1,9 @@
 import prisma from "@/lib/db/prisma";
 
 export async function getProfileByUsername(username: string) {
-  const decodedUsername = decodeURIComponent(username);
-
   try {
     const user = await prisma.user.findFirstOrThrow({
-      where: { username: decodedUsername },
+      where: { username },
       select: {
         id: true,
         name: true,

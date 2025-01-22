@@ -82,7 +82,7 @@ function PostCard() {
               </div>
 
               {/* POST IMAGE */}
-              {post.image && (
+              {/* {post.image && (
                 <div className="rounded-lg overflow-hidden">
                   <img
                     src={post.image}
@@ -90,7 +90,7 @@ function PostCard() {
                     className="w-full h-auto object-cover"
                   />
                 </div>
-              )}
+              )} */}
 
               {/* LIKE & COMMENT BUTTONS */}
               <Footer postId={post.id} count_comment={post._count.comments} />
