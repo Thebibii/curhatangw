@@ -1,9 +1,9 @@
 "use client";
-import { Button } from "./ui/button";
+import { Button } from "../ui/button";
 import React from "react";
 import { useAuth } from "@clerk/nextjs";
 import { useQueryClient } from "@tanstack/react-query";
-import { Popover, PopoverContent, PopoverTrigger } from "./ui/popover";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import {
   Command,
   CommandEmpty,
@@ -12,8 +12,8 @@ import {
   CommandItem,
   CommandList,
   CommandSeparator,
-} from "./ui/command";
-import { Avatar, AvatarImage } from "./ui/avatar";
+} from "../ui/command";
+import { Avatar, AvatarImage } from "../ui/avatar";
 import { useUserContext } from "@/contexts/UserContext";
 import { HomeIcon, LogOutIcon, Settings, User } from "lucide-react";
 import Link from "next/link";
@@ -60,23 +60,23 @@ const PopoverProfile = () => {
               <CommandSeparator />
               <CommandGroup heading="Settings">
                 <Link href={`/profile/${user?.data?.username}`}>
-                  <CommandItem>
+                  <CommandItem className="cursor-pointer">
                     <User />
                     <span>Profile</span>
                   </CommandItem>
                 </Link>
 
                 <Link href="/settings">
-                  <CommandItem>
+                  <CommandItem className="cursor-pointer">
                     <Settings />
                     <span>Settings</span>
                   </CommandItem>
                 </Link>
-                <CommandItem>
+                <CommandItem className="cursor-pointer">
                   {/* <LogOutIcon /> */}
                   <Button
                     variant="neutral"
-                    className="w-full"
+                    className="w-full h-8"
                     onClick={handleLogout}
                   >
                     Logout

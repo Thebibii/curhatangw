@@ -1,8 +1,11 @@
 import prisma from "@/lib/db/prisma";
-import { auth, currentUser } from "@clerk/nextjs/server";
+import { auth, createClerkClient, currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
 
 const userCache = new Map<string, string>();
+const clerkClient = createClerkClient({
+  secretKey: process.env.CLERK_SECRET_KEY,
+});
 
 export async function syncUser() {
   try {
@@ -81,6 +84,36 @@ export async function getDbUserId() {
 
   userCache.set(clerkId, user.id); // Simpan userId di cache
   return user.id;
+}
+
+export async function updateCurrentUser(dataUpdated: any) {
+  const name = dataUpdated.name.split(" ");
+  const firstName = name[0];
+  const lastName = name.slice(1).join(" ");
+  try {
+    const { userId: clerkId } = await auth();
+    if (!clerkId) throw new Error("Unauthorized");
+
+    // const name = formData.get("name") as string;
+    // const bio = formData.get("bio") as string;
+    // const location = formData.get("location") as string;
+    // const website = formData.get("website") as string;
+
+    const user = await prisma.user.update({
+      where: { clerkId },
+      data: dataUpdated,
+    });
+
+    await clerkClient.users.updateUser(clerkId, {
+      firstName,
+      lastName,
+    });
+
+    return user;
+  } catch (error) {
+    console.error("Error updating profile:", error);
+    throw new Error("Failed to update profile");
+  }
 }
 
 export async function getRandomUsers() {

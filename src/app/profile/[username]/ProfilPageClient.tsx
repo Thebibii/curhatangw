@@ -1,5 +1,7 @@
 "use client";
 
+import LoadingState from "@/components/LoadingState";
+import DialogEditProfile from "@/components/profile/DialogEditProfile";
 /* import {
   getProfileByUsername,
   getUserPosts,
@@ -20,9 +22,11 @@ import {
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
+import { Skeleton } from "@/components/ui/skeleton";
 // import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Textarea } from "@/components/ui/textarea";
 import { useUserContext } from "@/contexts/UserContext";
+import { useProfileByUsername } from "@/hooks/reactQuery/profile/useProfileByUsername";
 import { SignInButton, useUser } from "@clerk/nextjs";
 import { format } from "date-fns";
 import {
@@ -33,6 +37,7 @@ import {
   LinkIcon,
   MapPinIcon,
 } from "lucide-react";
+import { notFound } from "next/navigation";
 import { useEffect, useState } from "react";
 // import toast from "react-hot-toast";
 
@@ -53,9 +58,13 @@ function ProfilePageClient({
   posts,
 }: any) {
   const { user: currentUser } = useUser();
-  const { user } = useUserContext();
-  const [showEditDialog, setShowEditDialog] = useState(false);
+  const { data: user } = useProfileByUsername({ username });
+
+  if (user?.error) return notFound();
+
   const [isFollowing, setIsFollowing] = useState(initialIsFollowing);
+  const [showEditDialog, setShowEditDialog] = useState(false);
+
   const [isUpdatingFollow, setIsUpdatingFollow] = useState(false);
 
   const [editForm, setEditForm] = useState({
@@ -117,41 +126,61 @@ function ProfilePageClient({
           <Card className="bg-card">
             <CardContent className="pt-6">
               <div className="flex flex-col items-center text-center">
-                <Avatar className="w-24 h-24">
-                  <AvatarImage src={user?.data?.image ?? "/avatar.png"} />
-                </Avatar>
-                <h1 className="mt-4 text-2xl font-bold">
-                  {user?.data?.name ?? user?.data?.username}
-                </h1>
-                <p className="text-muted-foreground">@{user?.data?.username}</p>
-                <p className="mt-2 text-sm">{user?.data?.bio}</p>
+                <LoadingState
+                  data={user?.data}
+                  loadingFallback={
+                    <Skeleton className="w-24 h-24 rounded-full animate-pulse" />
+                  }
+                >
+                  <Avatar className="w-24 h-24">
+                    <AvatarImage src={user?.data?.image ?? "/avatar.png"} />
+                  </Avatar>
+                </LoadingState>
+                <LoadingState
+                  data={user?.data}
+                  loadingFallback={<Skeleton className="w-1/3 h-4 mt-4" />}
+                >
+                  <h1 className="mt-4 text-2xl font-bold">
+                    {user?.data?.name ?? user?.data?.username}
+                  </h1>
+                </LoadingState>
+                <LoadingState
+                  data={user?.data}
+                  loadingFallback={
+                    <Skeleton className="w-1/4 h-4 mt-2 text-mtext" />
+                  }
+                >
+                  <p className="text-mtext">@{user?.data?.username}</p>
+                </LoadingState>
+                <LoadingState
+                  data={user?.data}
+                  loadingFallback={<Skeleton className="w-1/2 h-4 mt-2" />}
+                >
+                  <p className="mt-2 text-sm">{user?.data?.bio}</p>
+                </LoadingState>
 
                 {/* PROFILE STATS */}
                 <div className="w-full mt-6">
                   <div className="flex justify-between mb-4">
                     <div>
                       <div className="font-semibold">
-                        {user?.data?._count.following.toLocaleString()}
+                        {user?.data?._count.following.toLocaleString() ?? 0}
                       </div>
-                      <div className="text-sm text-muted-foreground">
-                        Following
-                      </div>
+                      <div className="text-sm text-mtext">Following</div>
                     </div>
                     <Separator orientation="vertical" />
                     <div>
                       <div className="font-semibold">
-                        {user?.data?._count.followers.toLocaleString()}
+                        {user?.data?._count.followers.toLocaleString() ?? 0}
                       </div>
-                      <div className="text-sm text-muted-foreground">
-                        Followers
-                      </div>
+                      <div className="text-sm text-mtext">Followers</div>
                     </div>
                     <Separator orientation="vertical" />
                     <div>
                       <div className="font-semibold">
-                        {user?.data?._count.posts.toLocaleString()}
+                        {user?.data?._count.posts.toLocaleString() ?? 0}
                       </div>
-                      <div className="text-sm text-muted-foreground">Posts</div>
+                      <div className="text-sm text-mtext">Posts</div>
                     </div>
                   </div>
                 </div>
@@ -183,13 +212,13 @@ function ProfilePageClient({
                 {/* LOCATION & WEBSITE */}
                 <div className="w-full mt-6 space-y-2 text-sm">
                   {user?.data?.location && (
-                    <div className="flex items-center text-muted-foreground">
+                    <div className="flex items-center text-mtext">
                       <MapPinIcon className="size-4 mr-2" />
                       {user?.data?.location}
                     </div>
                   )}
                   {user?.data?.website && (
-                    <div className="flex items-center text-muted-foreground">
+                    <div className="flex items-center text-mtext">
                       <LinkIcon className="size-4 mr-2" />
                       <a
                         href={
@@ -205,7 +234,7 @@ function ProfilePageClient({
                       </a>
                     </div>
                   )}
-                  <div className="flex items-center text-muted-foreground">
+                  <div className="flex items-center text-mtext">
                     <CalendarIcon className="size-4 mr-2" />
                     Joined formattedDate
                   </div>
@@ -242,7 +271,7 @@ function ProfilePageClient({
                   <PostCard key={post.id} post={post} dbUserId={user?.data?.id} />
                 ))
               ) : (
-                <div className="text-center py-8 text-muted-foreground">
+                <div className="text-center py-8 text-mtext">
                   No posts yet
                 </div>
               )}
@@ -256,7 +285,7 @@ function ProfilePageClient({
                   <PostCard key={post.id} post={post} dbUserId={user?.data?.id} />
                 ))
               ) : (
-                <div className="text-center py-8 text-muted-foreground">
+                <div className="text-center py-8 text-mtext">
                   No liked posts to show
                 </div>
               )}
@@ -264,67 +293,11 @@ function ProfilePageClient({
           </TabsContent>
         </Tabs> */}
 
-        <Dialog open={showEditDialog} onOpenChange={setShowEditDialog}>
-          <DialogContent className="sm:max-w-[500px]">
-            <DialogHeader>
-              <DialogTitle>Edit Profile</DialogTitle>
-            </DialogHeader>
-            <div className="space-y-4 py-4">
-              <div className="space-y-2">
-                <Label>Name</Label>
-                <Input
-                  name="name"
-                  value={editForm?.name}
-                  onChange={(e) =>
-                    setEditForm({ ...editForm, name: e.target.value })
-                  }
-                  placeholder="Your name"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Bio</Label>
-                <Textarea
-                  name="bio"
-                  value={editForm?.bio}
-                  onChange={(e) =>
-                    setEditForm({ ...editForm, bio: e.target.value })
-                  }
-                  className="min-h-[100px]"
-                  placeholder="Tell us about yourself"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Location</Label>
-                <Input
-                  name="location"
-                  value={editForm?.location}
-                  onChange={(e) =>
-                    setEditForm({ ...editForm, location: e.target.value })
-                  }
-                  placeholder="Where are you based?"
-                />
-              </div>
-              <div className="space-y-2">
-                <Label>Website</Label>
-                <Input
-                  name="website"
-                  value={editForm?.website}
-                  onChange={(e) =>
-                    setEditForm({ ...editForm, website: e.target.value })
-                  }
-                  placeholder="Your personal website"
-                />
-              </div>
-            </div>
-            <div className="flex justify-end gap-3">
-              <DialogClose asChild>
-                <Button variant="neutral">Cancel</Button>
-              </DialogClose>
-              {/* <Button onClick={handleEditSubmit}>Save Changes</Button> */}
-              <Button>Save Changes</Button>
-            </div>
-          </DialogContent>
-        </Dialog>
+        <DialogEditProfile
+          showEditDialog={showEditDialog}
+          setShowEditDialog={setShowEditDialog}
+          user={user?.data}
+        />
       </div>
     </div>
   );

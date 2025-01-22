@@ -1,4 +1,3 @@
-"use server";
 import prisma from "@/lib/db/prisma";
 import { getDbUserId } from "./user.action";
 
@@ -26,7 +25,6 @@ export async function createComment(postId: string, content: string) {
       },
     });
 
-    // Create notification if commenting on someone else's post
     if (post.authorId !== userId) {
       await tx.notification.create({
         data: {
