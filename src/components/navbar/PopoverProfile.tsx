@@ -13,7 +13,7 @@ import {
   CommandList,
   CommandSeparator,
 } from "../ui/command";
-import { Avatar, AvatarImage } from "../ui/avatar";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useUserContext } from "@/contexts/UserContext";
 import { HomeIcon, LogOutIcon, Settings, User } from "lucide-react";
 import Link from "next/link";
@@ -32,22 +32,29 @@ const PopoverProfile = () => {
   const { user } = useUserContext();
 
   return (
-    <div className="hidden md:flex items-center space-x-4">
-      <Button variant="neutral" className="flex items-center gap-2" asChild>
+    <div className="flex items-center space-x-4">
+      <Button
+        variant="neutral"
+        className=" items-center gap-2  hidden sm:flex"
+        asChild
+      >
         <Link href="/">
           <HomeIcon className="w-4 h-4" />
-          <span className="hidden lg:inline">Home</span>
+          <span className="hidden sm:inline">Home</span>
         </Link>
       </Button>
 
       <Popover>
         <PopoverTrigger asChild>
-          <Avatar className="w-10 h-10 border-2 border-main">
-            <AvatarImage src="https://github.com/shadcn.png" />
+          <Avatar className="w-10 h-10 ">
+            <AvatarImage src={user?.data?.image} />
+            <AvatarFallback className="border border-ring">
+              {user?.data.name[0]}
+            </AvatarFallback>
           </Avatar>
         </PopoverTrigger>
         <PopoverContent className="p-0 mt-2 w-full" align="end">
-          <Command className="rounded-lg   md:min-w-56">
+          <Command className="rounded-lg min-w-56">
             <CommandList>
               <CommandGroup heading="User Profile">
                 <CommandItem className="py-0">
@@ -59,6 +66,12 @@ const PopoverProfile = () => {
               </CommandGroup>
               <CommandSeparator />
               <CommandGroup heading="Settings">
+                <Link href="/" className="block sm:hidden">
+                  <CommandItem className="cursor-pointer">
+                    <HomeIcon className="w-4 h-4" />
+                    <span>Home</span>
+                  </CommandItem>
+                </Link>
                 <Link href={`/profile/${user?.data?.username}`}>
                   <CommandItem className="cursor-pointer">
                     <User />
@@ -73,14 +86,8 @@ const PopoverProfile = () => {
                   </CommandItem>
                 </Link>
                 <CommandItem className="cursor-pointer">
-                  {/* <LogOutIcon /> */}
-                  <Button
-                    variant="neutral"
-                    className="w-full h-8"
-                    onClick={handleLogout}
-                  >
-                    Logout
-                  </Button>
+                  <LogOutIcon />
+                  <span onClick={handleLogout}>Logout</span>
                 </CommandItem>
               </CommandGroup>
             </CommandList>

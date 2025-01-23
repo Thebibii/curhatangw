@@ -1,20 +1,35 @@
+"use client";
 import CreatePost from "@/components/CreatePost";
+import LoadingState from "@/components/LoadingState";
 import PostCard from "@/components/post/PostCard";
-import { currentUser } from "@clerk/nextjs/server";
-import Image from "next/image";
+import { Skeleton } from "@/components/ui/skeleton";
+import { useUserContext } from "@/contexts/UserContext";
+import { useGetPost } from "@/hooks/reactQuery/posts/useGetPost";
 import Link from "next/link";
 
-export default async function Home() {
-  const user = await currentUser();
-  /* const posts = await getPosts();
-  const dbUserId = await getDbUserId(); */
+export default function Home() {
+  const { data, isLoading } = useGetPost();
+
+  const { user } = useUserContext();
   return (
     <div className="grid grid-cols-1 lg:grid-cols-10 gap-6">
       <div className="lg:col-span-6">
-        {user ? <CreatePost /> : null}
+        <CreatePost />
 
         <div className="space-y-6">
-          <PostCard />
+          <LoadingState
+            data={isLoading === false}
+            loadingFallback={<Skeleton className="w-full h-36" />}
+          >
+            {data?.data?.map((post: any) => (
+              <PostCard
+                key={post.id}
+                post={post}
+                dbUserId={user?.data?.id}
+                isLoading={isLoading}
+              />
+            ))}
+          </LoadingState>
         </div>
       </div>
 

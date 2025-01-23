@@ -3,8 +3,10 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function DELETE(request: NextRequest, { params }: any) {
   try {
-    const { id } = await params;
-    await deletePost(id);
+    const { postId } = await params;
+    console.log(postId);
+
+    await deletePost(postId);
     return NextResponse.json({
       success: true,
       message: "Your post has been deleted successfully",

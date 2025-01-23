@@ -2,26 +2,16 @@
 
 import LoadingState from "@/components/LoadingState";
 import DialogEditProfile from "@/components/profile/DialogEditProfile";
+import PostAndLike from "@/components/profile/PostAndLike";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Input } from "@/components/ui/input";
-import { Label } from "@/components/ui/label";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
-// import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { Textarea } from "@/components/ui/textarea";
 import { useUserContext } from "@/contexts/UserContext";
-import { useProfileByUsername } from "@/hooks/reactQuery/profile/useProfileByUsername";
-import { SignInButton, useUser } from "@clerk/nextjs";
-import {
-  CalendarIcon,
-  EditIcon,
-  FileTextIcon,
-  HeartIcon,
-  LinkIcon,
-  MapPinIcon,
-} from "lucide-react";
+import { useGetUserByName } from "@/hooks/reactQuery/user/useGetUserByName";
+import { SignInButton } from "@clerk/nextjs";
+import { CalendarIcon, EditIcon, LinkIcon, MapPinIcon } from "lucide-react";
 import { notFound } from "next/navigation";
 import { useState } from "react";
 // import toast from "react-hot-toast";
@@ -42,8 +32,8 @@ function ProfilePageClient({
   username,
 }: // posts,
 any) {
-  const { user: currentUser } = useUser();
-  const { data: user } = useProfileByUsername({ username });
+  const { user: currentUser } = useUserContext();
+  const { data: user } = useGetUserByName({ username });
 
   const [isFollowing, setIsFollowing] = useState(null);
   const [showEditDialog, setShowEditDialog] = useState(false);
@@ -65,10 +55,7 @@ any) {
   //     }
   //   };
 
-  const isOwnProfile =
-    currentUser?.emailAddresses[0].emailAddress === user?.data?.username ||
-    currentUser?.emailAddresses[0].emailAddress.split("@")[0] ===
-      user?.data?.username;
+  const isOwnProfile = currentUser?.data?.id === user?.data?.id;
 
   //   const formattedDate = format(new Date(user?.data?.createdAt), "MMMM yyyy");
 
@@ -197,54 +184,10 @@ any) {
           </Card>
         </div>
 
-        {/* <Tabs defaultValue="posts" className="w-full">
-          <TabsList className="w-full justify-start border-b rounded-none h-auto p-0 bg-transparent">
-            <TabsTrigger
-              value="posts"
-              className="flex items-center gap-2 rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary
-               data-[state=active]:bg-transparent px-6 font-semibold"
-            >
-              <FileTextIcon className="size-4" />
-              Posts
-            </TabsTrigger>
-            <TabsTrigger
-              value="likes"
-              className="flex items-center gap-2 rounded-none data-[state=active]:border-b-2 data-[state=active]:border-primary
-               data-[state=active]:bg-transparent px-6 font-semibold"
-            >
-              <HeartIcon className="size-4" />
-              Likes
-            </TabsTrigger>
-          </TabsList>
-
-          <TabsContent value="posts" className="mt-6">
-            <div className="space-y-6">
-              {posts.length > 0 ? (
-                posts.map((post) => (
-                  <PostCard key={post.id} post={post} dbUserId={user?.data?.id} />
-                ))
-              ) : (
-                <div className="text-center py-8 text-mtext">
-                  No posts yet
-                </div>
-              )}
-            </div>
-          </TabsContent>
-
-          <TabsContent value="likes" className="mt-6">
-            <div className="space-y-6">
-              {likedPosts.length > 0 ? (
-                likedPosts.map((post) => (
-                  <PostCard key={post.id} post={post} dbUserId={user?.data?.id} />
-                ))
-              ) : (
-                <div className="text-center py-8 text-mtext">
-                  No liked posts to show
-                </div>
-              )}
-            </div>
-          </TabsContent>
-        </Tabs> */}
+        <PostAndLike
+          userId={user?.data?.id}
+          currentUser={currentUser?.data?.id}
+        />
 
         <DialogEditProfile
           showEditDialog={showEditDialog}
