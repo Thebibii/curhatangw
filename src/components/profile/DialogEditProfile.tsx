@@ -59,7 +59,7 @@ const DialogEditProfile = ({
 
       queryClient.invalidateQueries({ queryKey: ["get.user"] });
       queryClient.invalidateQueries({
-        queryKey: ["get.profile", user?.username],
+        queryKey: ["get.post", user?.id],
       });
       toast({
         title: "Notification",
