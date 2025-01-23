@@ -6,9 +6,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
 import {
   Command,
-  CommandEmpty,
   CommandGroup,
-  CommandInput,
   CommandItem,
   CommandList,
   CommandSeparator,
@@ -45,15 +43,15 @@ const PopoverProfile = () => {
       </Button>
 
       <Popover>
-        <PopoverTrigger asChild>
-          <Avatar className="w-10 h-10 ">
+        <PopoverTrigger asChild className="cursor-pointer">
+          <Avatar className="w-10 h-10">
             <AvatarImage src={user?.data?.image} />
             <AvatarFallback className="border border-ring">
               {user?.data.name[0]}
             </AvatarFallback>
           </Avatar>
         </PopoverTrigger>
-        <PopoverContent className="p-0 mt-2 w-full" align="end">
+        <PopoverContent className="p-0 mt-2 w-full" align="end" asChild>
           <Command className="rounded-lg min-w-56">
             <CommandList>
               <CommandGroup heading="User Profile">

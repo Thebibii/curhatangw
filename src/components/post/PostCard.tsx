@@ -6,7 +6,6 @@ import { Skeleton } from "../ui/skeleton";
 import { AvatarFallback } from "@radix-ui/react-avatar";
 import { formatDistanceToNow } from "date-fns";
 import Footer from "./Footer";
-import { useUserContext } from "@/contexts/UserContext";
 import { DeleteAlertDialog } from "../DeleteAlertDialog";
 
 function PostCard({ post, dbUserId }: any) {
@@ -31,10 +30,10 @@ function PostCard({ post, dbUserId }: any) {
         <div className="space-y-4">
           <div className="flex space-x-3 sm:space-x-4">
             <Link href={`/profile/${post.author.username}`}>
-              <Avatar className="w-10 h-10 inline-flex items-center justify-center">
+              <Avatar className="w-10 h-10 inline-flex items-center justify-center border">
                 <AvatarImage src={post.author.image} />
-                <AvatarFallback className="border border-ring">
-                  {post.author.name[0]}
+                <AvatarFallback>
+                  {post.author.name[0].toUpperCase()}
                 </AvatarFallback>
               </Avatar>
             </Link>

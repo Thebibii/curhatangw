@@ -10,7 +10,6 @@ import { toast } from "@/hooks/use-toast";
 import { useCreatePost } from "@/hooks/reactQuery/posts/useCreatePost";
 import { useQueryClient } from "@tanstack/react-query";
 import { useUserContext } from "@/contexts/UserContext";
-// import { createPost } from "@/actions/post.action";
 // import ImageUpload from "./ImageUpload";
 
 function CreatePost() {
@@ -24,7 +23,6 @@ function CreatePost() {
   const { mutate, isPending } = useCreatePost({
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["get.post"] });
-      // reset the form
       setContent("");
       setImageUrl("");
       setShowImageUpload(false);
