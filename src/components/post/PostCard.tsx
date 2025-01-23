@@ -31,9 +31,11 @@ function PostCard({ post, dbUserId }: any) {
         <div className="space-y-4">
           <div className="flex space-x-3 sm:space-x-4">
             <Link href={`/profile/${post.author.username}`}>
-              <Avatar className="size-8 sm:w-10 sm:h-10">
+              <Avatar className="w-10 h-10 inline-flex items-center justify-center">
                 <AvatarImage src={post.author.image} />
-                <AvatarFallback>{post.author.name[0]}</AvatarFallback>
+                <AvatarFallback className="border border-ring">
+                  {post.author.name[0]}
+                </AvatarFallback>
               </Avatar>
             </Link>
 
