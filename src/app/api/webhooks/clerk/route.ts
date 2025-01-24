@@ -1,5 +1,6 @@
 import prisma from "@/lib/db/prisma";
 import type { WebhookEvent } from "@clerk/nextjs/server";
+import { log } from "console";
 import { NextResponse } from "next/server";
 
 // Clerk Webhook: create or delete a user in the database by Clerk ID
@@ -10,6 +11,8 @@ export async function POST(req: Request) {
     console.log(evt.type);
 
     const { id: clerkId } = evt.data;
+    console.log(clerkId);
+
     if (!clerkId)
       return NextResponse.json(
         { error: "No user ID provided" },
@@ -28,8 +31,10 @@ export async function POST(req: Request) {
           last_name,
         } = evt.data;
         const email = email_addresses?.[0]?.email_address;
+
         const usernameByEmail = email?.split("@")[0];
         const name = `${first_name} ${last_name}`;
+        console.log(email, username, name);
 
         user = await prisma.user.upsert({
           where: {
@@ -37,19 +42,21 @@ export async function POST(req: Request) {
           },
           update: {
             clerkId,
-            email,
+            email: email ?? null,
             username: username ?? usernameByEmail,
             image: image_url,
             name: name ?? usernameByEmail,
           },
           create: {
             clerkId,
-            email,
+            email: email ? email : null,
             username: username ?? usernameByEmail,
             image: image_url,
             name: name ?? usernameByEmail,
           },
         });
+        console.log(user);
+
         break;
       }
       case "user.updated": {
@@ -64,12 +71,6 @@ export async function POST(req: Request) {
         } = evt.data;
         const email = email_addresses?.[0]?.email_address;
         const usernameByEmail = email?.split("@")[0];
-
-        if (!email)
-          return NextResponse.json(
-            { error: "No email provided" },
-            { status: 400 }
-          );
 
         user = await prisma.user.update({
           where: {
@@ -97,7 +98,8 @@ export async function POST(req: Request) {
     }
 
     return NextResponse.json({ user });
-  } catch (error) {
-    return NextResponse.json({ error }, { status: 500 });
+  } catch (error: any) {
+    console.log(error);
+    return NextResponse.json({ error: error.message }, { status: 500 });
   }
 }
