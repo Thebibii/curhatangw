@@ -30,11 +30,6 @@ export async function POST(req: Request) {
         const email = email_addresses?.[0]?.email_address;
         const usernameByEmail = email?.split("@")[0];
         const name = `${first_name} ${last_name}`;
-        if (!email)
-          return NextResponse.json(
-            { error: "No email provided" },
-            { status: 400 }
-          );
 
         user = await prisma.user.upsert({
           where: {
