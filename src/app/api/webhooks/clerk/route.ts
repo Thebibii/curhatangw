@@ -29,6 +29,7 @@ export async function POST(req: Request) {
         } = evt.data;
         const email = email_addresses?.[0]?.email_address;
         const usernameByEmail = email?.split("@")[0];
+        const name = `${first_name} ${last_name}`;
         if (!email)
           return NextResponse.json(
             { error: "No email provided" },
@@ -44,14 +45,14 @@ export async function POST(req: Request) {
             email,
             username: username ?? usernameByEmail,
             image: image_url,
-            name: `${first_name || ""} ${last_name || ""}`,
+            name: name ?? usernameByEmail,
           },
           create: {
             clerkId,
             email,
             username: username ?? usernameByEmail,
             image: image_url,
-            name: `${first_name || ""} ${last_name || ""}`,
+            name: name ?? usernameByEmail,
           },
         });
         break;
