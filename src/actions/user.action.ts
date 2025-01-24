@@ -1,3 +1,4 @@
+"use server";
 import prisma from "@/lib/db/prisma";
 import { auth, createClerkClient, currentUser } from "@clerk/nextjs/server";
 import { revalidatePath } from "next/cache";
@@ -40,7 +41,7 @@ export async function syncUser() {
 }
 
 export async function getUserByClerkId(clerkId: string) {
-  return prisma.user.findUnique({
+  return await prisma.user.findUnique({
     where: {
       clerkId,
     },

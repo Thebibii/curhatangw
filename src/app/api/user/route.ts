@@ -5,12 +5,13 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(request: NextRequest) {
   try {
     const { userId } = await auth();
-    console.log(userId);
+    console.log(userId, "cek user api");
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
     const user = await getUserByClerkId(userId);
+    console.log(user, "userApi");
 
     return NextResponse.json({
       success: true,

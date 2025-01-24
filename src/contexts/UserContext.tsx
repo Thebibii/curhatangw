@@ -7,7 +7,7 @@ const UserContext = createContext({} as any);
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
   const { isSignedIn } = useUser();
-  const { data: user } = useGetCurrentUser({ isSignedIn });
+  const { user } = useGetCurrentUser({ isSignedIn });
 
   return (
     <UserContext.Provider value={{ user }}>{children}</UserContext.Provider>

@@ -1,7 +1,7 @@
 import { clerkMiddleware } from "@clerk/nextjs/server";
 import { NextRequest, NextResponse } from "next/server";
 
-export default clerkMiddleware((auth, request: NextRequest) => {
+export default clerkMiddleware(async (auth, request: NextRequest) => {
   // let paramPostId = request.nextUrl.pathname.includes("postId");
   // console.log(paramPostId);
   // let paramUserId = request.nextUrl.pathname.includes("userId");

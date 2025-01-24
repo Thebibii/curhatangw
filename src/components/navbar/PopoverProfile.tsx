@@ -47,7 +47,7 @@ const PopoverProfile = () => {
           <Avatar className="w-10 h-10">
             <AvatarImage src={user?.data?.image} />
             <AvatarFallback className="border border-ring">
-              {user?.data.name[0]}
+              {user?.data?.name[0]}
             </AvatarFallback>
           </Avatar>
         </PopoverTrigger>

@@ -3,6 +3,8 @@ import type { WebhookEvent } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 
 // Clerk Webhook: create or delete a user in the database by Clerk ID
+let webhookResponse: any = null;
+
 export async function POST(req: Request) {
   try {
     // Parse the Clerk Webhook event
@@ -90,7 +92,21 @@ export async function POST(req: Request) {
         break;
     }
 
+    if (user) {
+      webhookResponse = user;
+      console.log(webhookResponse, "webhook");
+    }
+
     return NextResponse.json({ user });
+  } catch (error: any) {
+    return NextResponse.json({ error }, { status: 500 });
+    // return NextResponse.json({ error: error.message }, { status: 500 });
+  }
+}
+
+export async function GET(req: Request) {
+  try {
+    return NextResponse.json(webhookResponse);
   } catch (error: any) {
     return NextResponse.json({ error }, { status: 500 });
     // return NextResponse.json({ error: error.message }, { status: 500 });
