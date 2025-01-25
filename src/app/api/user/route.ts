@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
 
     let user = null;
     let retries = 5;
-    let delay = 200; // Delay 1 detik antara percobaan
+    let delay = 100; // Delay 1 detik antara percobaan
 
     // Retry logic untuk menunggu sampai data user tersedia
     while (retries > 0) {
