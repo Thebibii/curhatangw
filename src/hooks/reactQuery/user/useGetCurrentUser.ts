@@ -13,7 +13,6 @@ export const useGetCurrentUser = ({
       return await userResponse.data;
     },
     enabled: isSignedIn ? true : false,
-    refetchInterval: isSignedIn ? 0 : 700,
   });
   return { user };
 };

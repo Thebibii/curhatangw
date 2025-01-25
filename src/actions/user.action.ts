@@ -207,10 +207,44 @@ export async function toggleFollow(targetUserId: string) {
       ]);
     }
 
-    revalidatePath("/");
-    return { success: true };
+    return;
   } catch (error) {
     console.log("Error in toggleFollow", error);
     return { success: false, error: "Error toggling follow" };
+  }
+}
+
+export async function isFollowing(username: string) {
+  try {
+    const currentUserId = await getDbUserId();
+    if (!currentUserId) return false;
+    const userId = await getDbUserIdByUsername(username);
+
+    const follow = await prisma.follows.findUnique({
+      where: {
+        followerId_followingId: {
+          followerId: currentUserId,
+          followingId: userId,
+        },
+      },
+    });
+
+    return !!follow;
+  } catch (error) {
+    console.error("Error checking follow status:", error);
+    return false;
+  }
+}
+
+export async function getDbUserIdByUsername(username: string) {
+  try {
+    const user = await prisma.user.findFirstOrThrow({
+      where: { username },
+    });
+
+    return user.id;
+  } catch (error) {
+    console.error("Error fetching profile:", error);
+    throw new Error("Failed to fetch profile");
   }
 }

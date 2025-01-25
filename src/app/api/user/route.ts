@@ -5,25 +5,33 @@ import { NextRequest, NextResponse } from "next/server";
 export async function GET(request: NextRequest) {
   try {
     const { userId } = await auth();
-    console.log(userId, "cek user api");
 
     if (!userId) {
       return new NextResponse("Unauthorized", { status: 401 });
     }
 
-    let user = null;
-    let retries = 5;
-    let delay = 100; // Delay 1 detik antara percobaan
+    let user = await getUserByClerkId(userId);
 
-    // Retry logic untuk menunggu sampai data user tersedia
-    while (retries > 0) {
-      user = await getUserByClerkId(userId);
-      if (user) {
-        break; // Jika data ditemukan, keluar dari loop
+    if (!user) {
+      console.log("User not found, starting retry...");
+
+      let retries = 5;
+      const delay = 100;
+
+      while (retries > 0) {
+        await new Promise((resolve) => setTimeout(resolve, delay));
+        user = await getUserByClerkId(userId);
+        if (user) {
+          break;
+        }
+        retries--;
       }
-      console.log("Retrying to fetch user data...");
-      await new Promise((resolve) => setTimeout(resolve, delay)); // Tunggu 1 detik
-      retries--;
+    }
+
+    if (!user) {
+      return new NextResponse("User data not available after retries", {
+        status: 404,
+      });
     }
 
     return NextResponse.json({

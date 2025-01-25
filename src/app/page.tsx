@@ -3,6 +3,7 @@ import CreatePost from "@/components/CreatePost";
 import LoadingState from "@/components/LoadingState";
 import PostCard from "@/components/post/PostCard";
 import { Skeleton } from "@/components/ui/skeleton";
+import WhoToFollow from "@/components/follow/WhoToFollow";
 import { useUserContext } from "@/contexts/UserContext";
 import { useGetPost } from "@/hooks/reactQuery/posts/useGetPost";
 import Link from "next/link";
@@ -34,7 +35,7 @@ export default function Home() {
       </div>
 
       <div className="hidden lg:block lg:col-span-4 sticky top-20">
-        {/* <WhoToFollow /> */}
+        <WhoToFollow />
       </div>
     </div>
   );

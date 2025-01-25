@@ -39,13 +39,13 @@ export default function PostAndLike({
             data={data?.data}
             loadingFallback={<Skeleton className="w-full h-36" />}
           >
-            {data?.data ? (
+            {data?.data &&
               data?.data?.map((post: any) => (
                 <PostCard key={post.id} post={post} dbUserId={currentUser} />
-              ))
-            ) : (
-              <div className="text-center py-8 text-muted-foreground">
-                No posts yet
+              ))}
+            {data?.data?.length === 0 && (
+              <div className="text-center py-8 text-mtext">
+                No posts to show
               </div>
             )}
           </LoadingState>

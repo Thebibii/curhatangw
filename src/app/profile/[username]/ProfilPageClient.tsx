@@ -1,5 +1,6 @@
 "use client";
 
+import FollowButton from "@/components/follow/FollowButton";
 import LoadingState from "@/components/LoadingState";
 import DialogEditProfile from "@/components/profile/DialogEditProfile";
 import PostAndLike from "@/components/profile/PostAndLike";
@@ -9,12 +10,13 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useUserContext } from "@/contexts/UserContext";
+import { useGetIsFollowingUser } from "@/hooks/reactQuery/profile/useGetIsFollowingUser";
 import { useGetUserByName } from "@/hooks/reactQuery/user/useGetUserByName";
+import { useToggleFollow } from "@/hooks/reactQuery/user/useToggleFollow";
 import { SignInButton } from "@clerk/nextjs";
 import { CalendarIcon, EditIcon, LinkIcon, MapPinIcon } from "lucide-react";
 import { notFound } from "next/navigation";
 import { useState } from "react";
-// import toast from "react-hot-toast";
 
 // type User = Awaited<ReturnType<typeof getProfileByUsername>>;
 // type Posts = Awaited<ReturnType<typeof getUserPosts>>;
@@ -34,11 +36,10 @@ function ProfilePageClient({
 any) {
   const { user: currentUser } = useUserContext();
   const { data: user } = useGetUserByName({ username });
-
-  const [isFollowing, setIsFollowing] = useState(null);
   const [showEditDialog, setShowEditDialog] = useState(false);
-
+  const { data: isFollowing, isPending } = useGetIsFollowingUser({ username });
   const [isUpdatingFollow, setIsUpdatingFollow] = useState(false);
+  // console.log(isUpdatingFollow != (isFollowing !== undefined));
   if (user?.error) return notFound();
 
   //   const handleFollow = async () => {
@@ -127,9 +128,14 @@ any) {
 
                 {/* "FOLLOW & EDIT PROFILE" BUTTONS */}
                 {!currentUser ? (
-                  <SignInButton mode="modal">
-                    <Button className="w-full mt-4">Follow</Button>
-                  </SignInButton>
+                  <LoadingState
+                    data={!isPending}
+                    loadingFallback={<Skeleton className="w-full h-10 mt-4" />}
+                  >
+                    <SignInButton mode="modal">
+                      <Button className="w-full mt-4">Follow</Button>
+                    </SignInButton>
+                  </LoadingState>
                 ) : isOwnProfile ? (
                   <Button
                     className="w-full mt-4"
@@ -139,14 +145,19 @@ any) {
                     Edit Profile
                   </Button>
                 ) : (
-                  <Button
-                    className="w-full mt-4"
-                    // onClick={handleFollow}
-                    disabled={isUpdatingFollow}
-                    variant={isFollowing ? "neutral" : "default"}
+                  <LoadingState
+                    data={!isPending}
+                    loadingFallback={<Skeleton className="w-full h-10 mt-4" />}
                   >
-                    {isFollowing ? "Unfollow" : "Follow"}
-                  </Button>
+                    <FollowButton
+                      userId={user?.data?.id}
+                      className="w-full mt-4"
+                      variant={"default"}
+                      size={"default"}
+                      username={user?.data?.username}
+                      isFollowing={isFollowing}
+                    />
+                  </LoadingState>
                 )}
 
                 {/* LOCATION & WEBSITE */}

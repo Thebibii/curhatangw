@@ -26,13 +26,13 @@ import { useQueryClient } from "@tanstack/react-query";
 
 const formSchema = z.object({
   name: z.string().min(2, { message: "Name must be at least 2 characters." }),
-  bio: z.string().min(6, { message: "Bio must be at least 6 characters." }),
+  bio: z.string().max(100, { message: "Bio must not exceed 100 characters." }),
   location: z
     .string()
     .max(200, { message: "Location must not exceed 200 characters." }),
   website: z
     .string()
-    .min(5, { message: "Website must be at least 5 characters." }),
+    .max(50, { message: "Website must not exceed 50 characters." }),
 });
 
 const DialogEditProfile = ({
@@ -44,15 +44,21 @@ const DialogEditProfile = ({
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     mode: "onChange",
+    defaultValues: {
+      name: user?.name ?? "",
+      bio: user?.bio ?? "",
+      location: user?.location ?? "",
+      website: user?.website ?? "",
+    },
     values: {
       name: user?.name,
-      bio: user?.bio,
-      location: user?.location,
-      website: user?.website,
+      bio: user?.bio ?? "",
+      location: user?.location ?? "",
+      website: user?.website ?? "",
     },
   });
 
-  const { mutate } = useUpdateCurrentUser({
+  const { mutate, isPending } = useUpdateCurrentUser({
     onSuccess: () => {
       setShowEditDialog(false);
       form.reset();
@@ -145,7 +151,9 @@ const DialogEditProfile = ({
                   Cancel
                 </Button>
               </DialogClose>
-              <Button type="submit">Save Changes</Button>
+              <Button type="submit" disabled={isPending}>
+                Save Changes
+              </Button>
             </div>
           </form>
         </Form>
