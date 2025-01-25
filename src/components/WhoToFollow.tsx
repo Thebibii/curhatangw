@@ -1,9 +1,9 @@
-import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
-import { Avatar, AvatarImage } from "../ui/avatar";
 import { useGetRandomUser } from "@/hooks/reactQuery/user/useGetRandomUser";
 import { useUserContext } from "@/contexts/UserContext";
 import Link from "next/link";
-import FollowButton from "./FollowButton";
+import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
+import { Avatar, AvatarImage } from "./ui/avatar";
+import FollowAndUnfollow from "./FollowAndUnfollow";
 
 export default function WhoToFollow() {
   const { data: users } = useGetRandomUser();
@@ -42,7 +42,7 @@ export default function WhoToFollow() {
                   </p>
                 </div>
               </div>
-              <FollowButton userId={user.id} />
+              <FollowAndUnfollow userId={user.id} />
             </div>
           ))}
         </div>

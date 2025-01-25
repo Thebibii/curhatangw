@@ -1,6 +1,6 @@
 "use client";
 
-import FollowButton from "@/components/follow/FollowButton";
+import FollowAndUnfollow from "@/components/FollowAndUnfollow";
 import LoadingState from "@/components/LoadingState";
 import DialogEditProfile from "@/components/profile/DialogEditProfile";
 import PostAndLike from "@/components/profile/PostAndLike";
@@ -12,7 +12,6 @@ import { Skeleton } from "@/components/ui/skeleton";
 import { useUserContext } from "@/contexts/UserContext";
 import { useGetIsFollowingUser } from "@/hooks/reactQuery/profile/useGetIsFollowingUser";
 import { useGetUserByName } from "@/hooks/reactQuery/user/useGetUserByName";
-import { useToggleFollow } from "@/hooks/reactQuery/user/useToggleFollow";
 import { SignInButton } from "@clerk/nextjs";
 import { CalendarIcon, EditIcon, LinkIcon, MapPinIcon } from "lucide-react";
 import { notFound } from "next/navigation";
@@ -149,7 +148,7 @@ any) {
                     data={!isPending}
                     loadingFallback={<Skeleton className="w-full h-10 mt-4" />}
                   >
-                    <FollowButton
+                    <FollowAndUnfollow
                       userId={user?.data?.id}
                       className="w-full mt-4"
                       variant={"default"}

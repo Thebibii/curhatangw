@@ -1,8 +1,6 @@
 import { Card, CardContent } from "../ui/card";
 import Link from "next/link";
 import { Avatar, AvatarImage } from "../ui/avatar";
-import LoadingState from "../LoadingState";
-import { Skeleton } from "../ui/skeleton";
 import { AvatarFallback } from "@radix-ui/react-avatar";
 import { formatDistanceToNow } from "date-fns";
 import Footer from "./Footer";

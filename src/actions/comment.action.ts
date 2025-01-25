@@ -55,6 +55,6 @@ export async function getComments(postId: string) {
         },
       },
     },
-    orderBy: { createdAt: "desc" },
+    orderBy: { createdAt: "asc" },
   });
 }
