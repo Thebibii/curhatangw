@@ -40,7 +40,7 @@ export default function AvatarChange() {
     const formData = new FormData();
     formData.append("file", file);
 
-    const uploadResponse = await uploadFiles("imageUploader", {
+    const uploadResponse = await uploadFiles("postImage", {
       files: [file],
     });
   };
