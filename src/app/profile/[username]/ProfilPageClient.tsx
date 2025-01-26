@@ -31,8 +31,7 @@ function ProfilePageClient({
   // isFollowing: initialIsFollowing,
   // likedPosts,
   username,
-}: // posts,
-any) {
+}: any) {
   const { user: currentUser } = useUserContext();
   const { data: user } = useGetUserByName({ username });
   const [showEditDialog, setShowEditDialog] = useState(false);

@@ -64,6 +64,15 @@ function PostCard({ post, dbUserId }: any) {
               <p className="mt-2 text-sm text-foreground break-words">
                 {post.content}
               </p>
+              {post.image && (
+                <div className="rounded-lg overflow-hidden mt-2">
+                  <img
+                    src={post.image}
+                    alt="Post content"
+                    className="w-56 object-cover rounded-lg"
+                  />
+                </div>
+              )}
             </div>
           </div>
 

@@ -66,7 +66,7 @@ export default function PostForm() {
       return;
     }
 
-    const uploadResponse = await uploadFiles("imageUploader", {
+    const uploadResponse = await uploadFiles("postImage", {
       files: [file],
     });
     mutate({ content, image: uploadResponse[0].url || "" });

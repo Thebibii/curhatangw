@@ -16,7 +16,7 @@ export async function GET(request: NextRequest) {
       console.log("User not found, starting retry...");
 
       let retries = 5;
-      const delay = 100;
+      const delay = 200;
 
       while (retries > 0) {
         await new Promise((resolve) => setTimeout(resolve, delay));

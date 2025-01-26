@@ -18,6 +18,7 @@ import Link from "next/link";
 
 const PopoverProfile = () => {
   const { signOut, isLoaded } = useAuth();
+  const [open, setOpen] = React.useState(false);
 
   const queryClient = useQueryClient();
   const handleLogout = () => {
@@ -42,7 +43,7 @@ const PopoverProfile = () => {
         </Link>
       </Button>
 
-      <Popover>
+      <Popover open={open} onOpenChange={setOpen}>
         <PopoverTrigger asChild className="cursor-pointer">
           <Avatar className="w-10 h-10">
             <AvatarImage src={user?.data?.image} />
@@ -52,40 +53,45 @@ const PopoverProfile = () => {
           </Avatar>
         </PopoverTrigger>
         <PopoverContent className="p-0 mt-2 w-full" align="end" asChild>
-          <Command className="rounded-lg min-w-56">
+          <Command className="rounded-lg min-w-60">
             <CommandList>
               <CommandGroup heading="User Profile">
-                <CommandItem className="py-0">
+                <CommandItem className="py-0 aria-selected:outline-none">
                   <span>{user?.data?.name}</span>
                 </CommandItem>
-                <CommandItem className="py-0">
+                <CommandItem className="aria-selected:outline-none">
                   <span>{user?.data?.username}</span>
                 </CommandItem>
               </CommandGroup>
               <CommandSeparator />
               <CommandGroup heading="Settings">
                 <Link href="/" className="block sm:hidden">
-                  <CommandItem className="cursor-pointer">
+                  <CommandItem
+                    className="cursor-pointer"
+                    onSelect={() => setOpen(false)}
+                  >
                     <HomeIcon className="w-4 h-4" />
                     <span>Home</span>
                   </CommandItem>
                 </Link>
                 <Link href={`/profile/${user?.data?.username}`}>
-                  <CommandItem className="cursor-pointer">
+                  <CommandItem
+                    className="cursor-pointer "
+                    onSelect={() => setOpen(false)}
+                  >
                     <User />
                     <span>Profile</span>
                   </CommandItem>
                 </Link>
-
-                <Link href="/settings">
-                  <CommandItem className="cursor-pointer">
-                    <Settings />
-                    <span>Settings</span>
-                  </CommandItem>
-                </Link>
-                <CommandItem className="cursor-pointer">
+                <CommandItem
+                  className="cursor-pointer"
+                  onSelect={() => {
+                    setOpen(false);
+                    handleLogout();
+                  }}
+                >
                   <LogOutIcon />
-                  <span onClick={handleLogout}>Logout</span>
+                  <span>Logout</span>
                 </CommandItem>
               </CommandGroup>
             </CommandList>
