@@ -1,10 +1,10 @@
 "use client";
-import { LogInIcon, MessageCircleIcon, Scroll, SendIcon } from "lucide-react";
+import { LogInIcon, MessageCircleIcon, SendIcon } from "lucide-react";
 import { Button } from "../ui/button";
 import { useState } from "react";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { formatDistanceToNow } from "date-fns";
-import { SignInButton, useUser } from "@clerk/nextjs";
+import { SignInButton } from "@clerk/nextjs";
 import { Textarea } from "../ui/textarea";
 import { useCreateComment } from "@/hooks/reactQuery/comments/useCreateComment";
 import { toast } from "@/hooks/use-toast";
@@ -12,9 +12,10 @@ import { useGetCommentByPost } from "@/hooks/reactQuery/comments/useGetComments"
 import LoadingState from "../LoadingState";
 import { Skeleton } from "../ui/skeleton";
 import { ScrollArea } from "../ui/scroll-area";
+import { useUserContext } from "@/contexts/UserContext";
 
 export default function Footer({ postId, count_comment }: any) {
-  const { user } = useUser();
+  const { user } = useUserContext();
 
   const [showComments, setShowComments] = useState(false);
   const [newComment, setNewComment] = useState("");
@@ -154,10 +155,10 @@ export default function Footer({ postId, count_comment }: any) {
             </div>
           </ScrollArea>
 
-          {user ? (
+          {user?.data ? (
             <div className="flex space-x-3">
               <Avatar className="size-8 flex-shrink-0">
-                <AvatarImage src={user?.imageUrl} />
+                <AvatarImage src={user?.data?.image} />
               </Avatar>
               <div className="flex-1">
                 <Textarea

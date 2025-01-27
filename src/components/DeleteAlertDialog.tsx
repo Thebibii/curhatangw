@@ -16,20 +16,25 @@ import {
 import { useDeletePost } from "@/hooks/reactQuery/posts/useDeletePost.hook";
 import { toast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
+import { useDeletePhoto } from "@/hooks/useDeletePhoto";
 
 interface DeleteAlertDialogProps {
   postId: string;
   title?: string;
+  imageUrl?: string;
   description?: string;
 }
 
 export function DeleteAlertDialog({
   postId,
   title = "Delete Post",
+  imageUrl,
   description = "This action cannot be undone.",
 }: DeleteAlertDialogProps) {
   const queryClient = useQueryClient();
 
+  const { mutate: deletePhoto } = useDeletePhoto();
+  // deletePhoto({ imageUrl });
   const { isPending, mutate, isSuccess } = useDeletePost({
     postId,
     onSuccess: () => {
@@ -65,7 +70,12 @@ export function DeleteAlertDialog({
         <AlertDialogFooter>
           <AlertDialogCancel>Cancel</AlertDialogCancel>
           <AlertDialogAction
-            onClick={() => mutate()}
+            onClick={() => {
+              if (imageUrl) {
+                deletePhoto({ imageUrl });
+              }
+              mutate();
+            }}
             className="bg-red-500 hover:bg-red-600"
             disabled={isSuccess}
           >

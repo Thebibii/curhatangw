@@ -5,6 +5,7 @@ import { AvatarFallback } from "@radix-ui/react-avatar";
 import { formatDistanceToNow } from "date-fns";
 import Footer from "./Footer";
 import { DeleteAlertDialog } from "../DeleteAlertDialog";
+import Image from "next/image";
 
 function PostCard({ post, dbUserId }: any) {
   /* const handleLike = async () => {
@@ -58,7 +59,7 @@ function PostCard({ post, dbUserId }: any) {
                 </div>
                 {/* Check if current user is the post author */}
                 {dbUserId === post.author.id && (
-                  <DeleteAlertDialog postId={post.id} />
+                  <DeleteAlertDialog postId={post.id} imageUrl={post.image} />
                 )}
               </div>
               <p className="mt-2 text-sm text-foreground break-words">
@@ -66,7 +67,11 @@ function PostCard({ post, dbUserId }: any) {
               </p>
               {post.image && (
                 <div className="rounded-lg overflow-hidden mt-2">
-                  <img
+                  <Image
+                    width={500}
+                    height={500}
+                    loading="lazy"
+                    decoding="async"
                     src={post.image}
                     alt="Post content"
                     className="w-56 object-cover rounded-lg"
@@ -75,17 +80,6 @@ function PostCard({ post, dbUserId }: any) {
               )}
             </div>
           </div>
-
-          {/* POST IMAGE */}
-          {/* {post.image && (
-                <div className="rounded-lg overflow-hidden">
-                  <img
-                    src={post.image}
-                    alt="Post content"
-                    className="w-full h-auto object-cover"
-                  />
-                </div>
-              )} */}
 
           {/* LIKE & COMMENT BUTTONS */}
           <Footer postId={post.id} count_comment={post._count.comments} />

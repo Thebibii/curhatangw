@@ -1,3 +1,5 @@
+import { CloudUpload } from "lucide-react";
+
 type IconProps = React.HTMLAttributes<SVGElement>;
 
 export const Icons = {
@@ -145,4 +147,5 @@ export const Icons = {
       <path d="M21 12a9 9 0 1 1-6.219-8.56" />
     </svg>
   ),
+  cloudUpload: (props: IconProps) => <CloudUpload {...props} />,
 };
