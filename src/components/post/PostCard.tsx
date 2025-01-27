@@ -74,7 +74,7 @@ function PostCard({ post, dbUserId }: any) {
                     decoding="async"
                     src={post.image}
                     alt="Post content"
-                    className="w-56 object-cover rounded-lg"
+                    className="h-full w-fit object-cover rounded-lg"
                   />
                 </div>
               )}
