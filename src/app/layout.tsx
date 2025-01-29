@@ -8,6 +8,7 @@ import { ReactQueryClientProvider } from "@/lib/react-query";
 import Navbar from "@/components/navbar/Navbar";
 import Sidebar from "@/components/sidebar/Sidebar";
 import { UserProvider } from "@/contexts/UserContext";
+import ProgressProvider from "@/components/provider/progress-provider";
 
 export default function RootLayout({
   children,
@@ -29,20 +30,22 @@ export default function RootLayout({
               routerConfig={extractRouterConfig(ourFileRouter)}
             />
             <UserProvider>
-              <div className="min-h-screen">
-                <Navbar />
+              <ProgressProvider>
+                <div className="min-h-screen">
+                  <Navbar />
 
-                <main className="py-8">
-                  <div className="max-w-7xl mx-auto px-4">
-                    <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
-                      <div className="hidden lg:block lg:col-span-3">
-                        <Sidebar />
+                  <main className="py-8">
+                    <div className="max-w-7xl mx-auto px-4">
+                      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+                        <div className="hidden lg:block lg:col-span-3">
+                          <Sidebar />
+                        </div>
+                        <div className="lg:col-span-9">{children}</div>
                       </div>
-                      <div className="lg:col-span-9">{children}</div>
                     </div>
-                  </div>
-                </main>
-              </div>
+                  </main>
+                </div>
+              </ProgressProvider>
             </UserProvider>
             <Toaster />
           </ReactQueryClientProvider>
