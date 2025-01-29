@@ -57,7 +57,7 @@ function PostCard({ post, dbUserId }: any) {
                     </span>
                   </div>
                 </div>
-                {/* Check if current user is the post author */}
+
                 {dbUserId === post.author.id && (
                   <DeleteAlertDialog postId={post.id} imageUrl={post.image} />
                 )}
@@ -82,7 +82,12 @@ function PostCard({ post, dbUserId }: any) {
           </div>
 
           {/* LIKE & COMMENT BUTTONS */}
-          <Footer postId={post.id} count_comment={post._count.comments} />
+          <Footer
+            postId={post.id}
+            count_comment={post._count.comments}
+            count_like={post._count.likes}
+            likes={post.likes}
+          />
 
           {/* COMMENTS SECTION */}
         </div>

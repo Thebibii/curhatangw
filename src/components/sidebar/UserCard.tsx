@@ -76,7 +76,7 @@ export default function UserCard() {
                 data={user?.data}
                 loadingFallback={<Skeleton className="w-full h-4" />}
               >
-                {user?.data?.location || "No location"}
+                <p>{user?.data?.location || "No location"}</p>
               </LoadingState>
             </div>
             <div className="flex items-center text-muted-foreground">
@@ -85,7 +85,7 @@ export default function UserCard() {
                 data={user?.data}
                 loadingFallback={<Skeleton className="w-full h-4" />}
               >
-                {user?.data?.website && (
+                {user?.data?.website ? (
                   <a
                     href={
                       user?.data?.website.startsWith("http")
@@ -98,6 +98,8 @@ export default function UserCard() {
                   >
                     {user?.data?.website}
                   </a>
+                ) : (
+                  <span>No website</span>
                 )}
               </LoadingState>
             </div>

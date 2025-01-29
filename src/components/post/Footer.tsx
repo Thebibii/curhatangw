@@ -1,7 +1,11 @@
-"use client";
-import { LogInIcon, MessageCircleIcon, SendIcon } from "lucide-react";
+import {
+  HeartIcon,
+  LogInIcon,
+  MessageCircleIcon,
+  SendIcon,
+} from "lucide-react";
 import { Button } from "../ui/button";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Avatar, AvatarImage } from "../ui/avatar";
 import { formatDistanceToNow } from "date-fns";
 import { SignInButton } from "@clerk/nextjs";
@@ -14,13 +18,21 @@ import { Skeleton } from "../ui/skeleton";
 import { ScrollArea } from "../ui/scroll-area";
 import { useUserContext } from "@/contexts/UserContext";
 
-export default function Footer({ postId, count_comment }: any) {
+export default function Footer({
+  postId,
+  count_comment,
+  count_like,
+  likes,
+}: any) {
   const { user } = useUserContext();
 
   const [showComments, setShowComments] = useState(false);
   const [newComment, setNewComment] = useState("");
   const [isCommenting, setIsCommenting] = useState(false);
   const [isLiking, setIsLiking] = useState(false);
+  const [hasLiked, setHasLiked] = useState(false);
+
+  const [optimisticLikes, setOptmisticLikes] = useState(count_like);
 
   const {
     data: comments,
@@ -39,10 +51,12 @@ export default function Footer({ postId, count_comment }: any) {
       setNewComment("");
     },
   });
-  /*   const [hasLiked, setHasLiked] = useState(
-    post.likes.some((like) => like.userId === dbUserId)
-  );
-  const [optimisticLikes, setOptmisticLikes] = useState(post._count.likes); */
+
+  useEffect(() => {
+    if (likes && user?.data?.id) {
+      setHasLiked(likes.some((like: any) => like.userId === user?.data?.id));
+    }
+  }, [likes, user?.data?.id]);
 
   const handleAddComment = async () => {
     if (!newComment.trim() || isCommenting) return;
@@ -66,7 +80,7 @@ export default function Footer({ postId, count_comment }: any) {
   return (
     <>
       <div className="flex items-center pt-2 space-x-4">
-        {/* {user ? (
+        {user ? (
           <Button
             variant="neutral"
             size="sm"
@@ -75,7 +89,6 @@ export default function Footer({ postId, count_comment }: any) {
                 ? "text-red-500 hover:text-red-600"
                 : "hover:text-red-500"
             }`}
-            onClick={handleLike}
           >
             {hasLiked ? (
               <HeartIcon className="size-5 fill-current" />
@@ -95,7 +108,7 @@ export default function Footer({ postId, count_comment }: any) {
               <span>{optimisticLikes}</span>
             </Button>
           </SignInButton>
-        )} */}
+        )}
 
         <Button
           variant="neutral"
@@ -105,7 +118,7 @@ export default function Footer({ postId, count_comment }: any) {
         >
           <MessageCircleIcon
             className={`size-5 ${
-              showComments ? "fill-blue-500 text-blue-500" : ""
+              showComments && "fill-blue-500 text-blue-500"
             }`}
           />
           <span>{comments?.data?.length ?? count_comment}</span>

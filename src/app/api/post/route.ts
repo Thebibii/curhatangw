@@ -23,11 +23,14 @@ export async function POST(request: NextRequest) {
   try {
     const { content, image } = await request.json();
     const post = await createPost(content, image);
-    return NextResponse.json({
-      success: true,
-      message: "Post created successfully",
-      post,
-    });
+    return NextResponse.json(
+      {
+        success: true,
+        message: "Post created successfully",
+        post,
+      },
+      { status: 201 }
+    );
   } catch (error: any) {
     return NextResponse.json(
       { success: false, error: error.message, code: error.code },
