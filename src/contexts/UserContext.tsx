@@ -6,8 +6,10 @@ import { useGetCurrentUser } from "@/hooks/reactQuery/user/useGetCurrentUser";
 const UserContext = createContext({} as any);
 
 export const UserProvider = ({ children }: { children: React.ReactNode }) => {
-  const { isSignedIn } = useUser();
-  const { user } = useGetCurrentUser({ isSignedIn });
+  const { user: userSignIn } = useUser();
+  const { user } = useGetCurrentUser({
+    isSignedIn: userSignIn?.id,
+  });
 
   return (
     <UserContext.Provider value={{ user }}>{children}</UserContext.Provider>

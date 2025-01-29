@@ -40,20 +40,6 @@ function ProfilePageClient({
   // console.log(isUpdatingFollow != (isFollowing !== undefined));
   if (user?.error) return notFound();
 
-  //   const handleFollow = async () => {
-  //     if (!currentUser) return;
-
-  //     try {
-  //       setIsUpdatingFollow(true);
-  //       await toggleFollow(user?.data?.id);
-  //       setIsFollowing(!isFollowing);
-  //     } catch (error) {
-  //       toast.error("Failed to update follow status");
-  //     } finally {
-  //       setIsUpdatingFollow(false);
-  //     }
-  //   };
-
   const isOwnProfile = currentUser?.data?.id === user?.data?.id;
 
   //   const formattedDate = format(new Date(user?.data?.createdAt), "MMMM yyyy");

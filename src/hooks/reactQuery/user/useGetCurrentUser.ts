@@ -4,7 +4,7 @@ import { useQuery } from "@tanstack/react-query";
 export const useGetCurrentUser = ({
   isSignedIn,
 }: {
-  isSignedIn: boolean | undefined;
+  isSignedIn: string | undefined;
 }) => {
   const { data: user } = useQuery({
     queryKey: ["get.user"],

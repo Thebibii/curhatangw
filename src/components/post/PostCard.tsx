@@ -70,7 +70,7 @@ function PostCard({ post, dbUserId }: any) {
                   <Image
                     width={500}
                     height={500}
-                    loading="lazy"
+                    priority
                     decoding="async"
                     src={post.image}
                     alt="Post content"

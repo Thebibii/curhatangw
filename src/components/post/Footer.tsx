@@ -17,6 +17,7 @@ import LoadingState from "../LoadingState";
 import { Skeleton } from "../ui/skeleton";
 import { ScrollArea } from "../ui/scroll-area";
 import { useUserContext } from "@/contexts/UserContext";
+import { useLikePost } from "@/hooks/reactQuery/posts/useLikePost";
 
 export default function Footer({
   postId,
@@ -52,6 +53,13 @@ export default function Footer({
     },
   });
 
+  const { mutate: likePost } = useLikePost({
+    postId,
+    onSuccess: () => {
+      setIsLiking(false);
+    },
+  });
+
   useEffect(() => {
     if (likes && user?.data?.id) {
       setHasLiked(likes.some((like: any) => like.userId === user?.data?.id));
@@ -77,6 +85,19 @@ export default function Footer({
     }
   };
 
+  const handleLike = async () => {
+    if (isLiking) return;
+    try {
+      setIsLiking(true);
+      setHasLiked((prev) => !prev);
+      setOptmisticLikes((prev: any) => prev + (hasLiked ? -1 : 1));
+      likePost();
+    } catch (error) {
+      setOptmisticLikes(count_like);
+      setHasLiked(likes.some((like: any) => like.userId === user?.data?.id));
+    }
+  };
+
   return (
     <>
       <div className="flex items-center pt-2 space-x-4">
@@ -89,6 +110,7 @@ export default function Footer({
                 ? "text-red-500 hover:text-red-600"
                 : "hover:text-red-500"
             }`}
+            onClick={handleLike}
           >
             {hasLiked ? (
               <HeartIcon className="size-5 fill-current" />

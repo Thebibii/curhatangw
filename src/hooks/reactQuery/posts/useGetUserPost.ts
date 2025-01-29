@@ -11,5 +11,6 @@ export const useGetUserPost = ({ userId }: any) => {
 
       return data;
     },
+    enabled: userId ? true : false,
   });
 };
