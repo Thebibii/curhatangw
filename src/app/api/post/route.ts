@@ -2,14 +2,27 @@ import { getPosts } from "@/actions/post.action";
 
 import { createPost } from "@/actions/post.action";
 import { NextRequest, NextResponse } from "next/server";
-export async function GET() {
+export async function GET(request: NextRequest) {
   try {
-    const posts = await getPosts();
+    const { searchParams } = new URL(request.url);
+    const cursor = searchParams.get("cursor") || undefined;
+    const limitParam = searchParams.get("limit");
+
+    const limit = Number(limitParam) || 10;
+    if (isNaN(limit) || limit <= 0) {
+      return NextResponse.json(
+        { success: false, error: "Invalid limit parameter" },
+        { status: 400 }
+      );
+    }
+
+    const { posts, nextCursor } = await getPosts(limit, cursor);
 
     return NextResponse.json({
       success: true,
-      message: "All posts successfully",
+      message: "All posts retrieved successfully",
       data: posts,
+      nextCursor,
     });
   } catch (error: any) {
     return NextResponse.json(

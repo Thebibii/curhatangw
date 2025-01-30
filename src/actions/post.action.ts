@@ -22,8 +22,11 @@ export async function createPost(content: string, image: string) {
   }
 }
 
-export async function getPosts() {
+export async function getPosts(limit: number, cursor?: string | undefined) {
   const posts = await prisma.post.findMany({
+    take: limit,
+    skip: cursor ? 1 : 0,
+    cursor: cursor ? { id: cursor } : undefined,
     orderBy: {
       createdAt: "desc",
     },
@@ -50,7 +53,9 @@ export async function getPosts() {
     },
   });
 
-  return posts;
+  const nextCursor = posts.length === limit ? posts[posts.length - 1].id : null;
+
+  return { posts, nextCursor };
 }
 
 export async function deletePost(postId: string) {

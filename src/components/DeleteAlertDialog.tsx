@@ -16,7 +16,7 @@ import {
 import { useDeletePost } from "@/hooks/reactQuery/posts/useDeletePost.hook";
 import { toast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
-import { useDeletePhoto } from "@/hooks/useDeletePhoto";
+import { useDeletePhoto } from "@/hooks/useDeletePhoto.hook";
 
 interface DeleteAlertDialogProps {
   postId: string;

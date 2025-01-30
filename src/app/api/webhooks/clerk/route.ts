@@ -94,7 +94,6 @@ export async function POST(req: Request) {
 
     if (user) {
       webhookResponse = user;
-      console.log(webhookResponse, "webhook");
     }
 
     return NextResponse.json({ user });

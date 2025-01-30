@@ -1,14 +1,20 @@
-import { baseURL } from "@/lib/db/env";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 
-export const useGetPost = () => {
-  return useQuery({
+const fetchPosts = async ({ pageParam = undefined }) => {
+  const res = await fetch(`/api/post?cursor=${pageParam || ""}&limit=10`);
+  if (!res.ok) {
+    const error = new Error("Failed to fetch posts");
+
+    throw error;
+  }
+  return res.json();
+};
+
+export const useGetPost = ({ getNextPageParam }: any) => {
+  return useInfiniteQuery({
     queryKey: ["get.post"],
-    queryFn: async () => {
-      const res = await fetch(`${baseURL}/post`);
-      const data = await res.json();
-
-      return data;
-    },
+    queryFn: fetchPosts,
+    initialPageParam: undefined,
+    getNextPageParam,
   });
 };

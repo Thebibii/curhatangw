@@ -1,14 +1,18 @@
 "use client";
 import CreatePost from "@/components/CreatePost";
 import LoadingState from "@/components/LoadingState";
+import ObserverPlaceholder from "@/components/post/ObserverPlaceholder";
 import PostCard from "@/components/post/PostCard";
-import { Skeleton } from "@/components/ui/skeleton";
+import SkeletonCard from "@/components/post/SkeletonCard";
 import WhoToFollow from "@/components/WhoToFollow";
 import { useUserContext } from "@/contexts/UserContext";
 import { useGetPost } from "@/hooks/reactQuery/posts/useGetPost";
 
 export default function Home() {
-  const { data, isLoading } = useGetPost();
+  const { data, fetchNextPage } = useGetPost({
+    getNextPageParam: (lastPost: { nextCursor: string }) =>
+      lastPost?.nextCursor!,
+  });
 
   const { user } = useUserContext();
   return (
@@ -18,18 +22,22 @@ export default function Home() {
 
         <div className="space-y-6">
           <LoadingState
-            data={isLoading === false}
-            loadingFallback={<Skeleton className="w-full h-36" />}
+            data={data?.pages[0].data}
+            loadingFallback={<SkeletonCard />}
           >
-            {data?.data?.map((post: any) => (
-              <PostCard
-                key={post.id}
-                post={post}
-                dbUserId={user?.data?.id}
-                isLoading={isLoading}
-              />
-            ))}
+            {data?.pages?.map((response: any) => {
+              return response?.data?.map((post: any) => (
+                <PostCard key={post.id} post={post} dbUserId={user?.id} />
+              ));
+            })}
           </LoadingState>
+          {!!data?.pages[data?.pages.length - 1]?.nextCursor && (
+            <ObserverPlaceholder
+              callback={() => {
+                fetchNextPage();
+              }}
+            />
+          )}
         </div>
       </div>
 

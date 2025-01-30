@@ -2,8 +2,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGetUserPost } from "@/hooks/reactQuery/posts/useGetUserPost";
 import { FileTextIcon, HeartIcon } from "lucide-react";
 import LoadingState from "../LoadingState";
-import { Skeleton } from "../ui/skeleton";
 import PostCard from "../post/PostCard";
+import SkeletonCard from "../post/SkeletonCard";
 
 export default function PostAndLike({
   userId,
@@ -35,10 +35,7 @@ export default function PostAndLike({
 
       <TabsContent value="posts" className="mt-6">
         <div className="space-y-6">
-          <LoadingState
-            data={data?.data}
-            loadingFallback={<Skeleton className="w-full h-36" />}
-          >
+          <LoadingState data={data?.data} loadingFallback={<SkeletonCard />}>
             {data?.data &&
               data?.data?.map((post: any) => (
                 <PostCard key={post.id} post={post} dbUserId={currentUser} />

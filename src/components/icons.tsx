@@ -1,4 +1,4 @@
-import { CloudUpload } from "lucide-react";
+import { CloudUpload, Loader2Icon } from "lucide-react";
 
 type IconProps = React.HTMLAttributes<SVGElement>;
 
@@ -148,4 +148,5 @@ export const Icons = {
     </svg>
   ),
   cloudUpload: (props: IconProps) => <CloudUpload {...props} />,
+  Loader2Icon: (props: IconProps) => <Loader2Icon {...props} />,
 };

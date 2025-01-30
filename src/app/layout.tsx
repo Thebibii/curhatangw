@@ -4,11 +4,12 @@ import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
 import { ourFileRouter } from "./api/uploadthing/core";
 import { Toaster } from "@/components/ui/toaster";
-import { ReactQueryClientProvider } from "@/lib/react-query";
+import { ReactQueryClientProvider } from "@/provider/react-query";
 import Navbar from "@/components/navbar/Navbar";
 import Sidebar from "@/components/sidebar/Sidebar";
 import { UserProvider } from "@/contexts/UserContext";
-import ProgressProvider from "@/components/provider/progress-provider";
+import ProgressProvider from "@/provider/progress-provider";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export default function RootLayout({
   children,
@@ -20,15 +21,7 @@ export default function RootLayout({
       <body>
         <ClerkProvider>
           <ReactQueryClientProvider>
-            <NextSSRPlugin
-              /**
-               * The `extractRouterConfig` will extract **only** the route configs
-               * from the router to prevent additional information from being
-               * leaked to the client. The data passed to the client is the same
-               * as if you were to fetch `/api/uploadthing` directly.
-               */
-              routerConfig={extractRouterConfig(ourFileRouter)}
-            />
+            <NextSSRPlugin routerConfig={extractRouterConfig(ourFileRouter)} />
             <UserProvider>
               <ProgressProvider>
                 <div className="min-h-screen">
@@ -48,6 +41,7 @@ export default function RootLayout({
               </ProgressProvider>
             </UserProvider>
             <Toaster />
+            <SpeedInsights />
           </ReactQueryClientProvider>
         </ClerkProvider>
       </body>

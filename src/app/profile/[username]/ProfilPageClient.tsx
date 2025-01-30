@@ -13,6 +13,7 @@ import { useUserContext } from "@/contexts/UserContext";
 import { useGetIsFollowingUser } from "@/hooks/reactQuery/profile/useGetIsFollowingUser";
 import { useGetUserByName } from "@/hooks/reactQuery/user/useGetUserByName";
 import { SignInButton } from "@clerk/nextjs";
+import { formatDate, formatDistanceToNow } from "date-fns";
 import { CalendarIcon, EditIcon, LinkIcon, MapPinIcon } from "lucide-react";
 import { notFound } from "next/navigation";
 import { useState } from "react";
@@ -37,7 +38,6 @@ function ProfilePageClient({
   const [showEditDialog, setShowEditDialog] = useState(false);
   const { data: isFollowing, isPending } = useGetIsFollowingUser({ username });
   const [isUpdatingFollow, setIsUpdatingFollow] = useState(false);
-  // console.log(isUpdatingFollow != (isFollowing !== undefined));
   if (user?.error) return notFound();
 
   const isOwnProfile = currentUser?.data?.id === user?.data?.id;
@@ -171,7 +171,7 @@ function ProfilePageClient({
                   )}
                   <div className="flex items-center text-mtext">
                     <CalendarIcon className="size-4 mr-2" />
-                    Joined formattedDate
+                    Joined
                   </div>
                 </div>
               </div>
