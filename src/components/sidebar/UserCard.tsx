@@ -4,10 +4,10 @@ import { Card, CardContent } from "../ui/card";
 import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Separator } from "../ui/separator";
-import { LinkIcon, MapPinIcon } from "lucide-react";
 import { Skeleton } from "../ui/skeleton";
 import LoadingState from "../LoadingState";
 import { useUserContext } from "@/contexts/UserContext";
+import { Icons } from "../icons";
 
 export default function UserCard() {
   const { user } = useUserContext();
@@ -71,7 +71,7 @@ export default function UserCard() {
 
           <div className="w-full space-y-2 text-sm">
             <div className="flex items-center text-muted-foreground">
-              <MapPinIcon className="w-4 h-4 mr-2 shrink-0" />
+              <Icons.MapPinIcon className="w-4 h-4 mr-2 shrink-0" />
               <LoadingState
                 data={user?.data}
                 loadingFallback={<Skeleton className="w-full h-4" />}
@@ -80,7 +80,7 @@ export default function UserCard() {
               </LoadingState>
             </div>
             <div className="flex items-center text-muted-foreground">
-              <LinkIcon className="w-4 h-4 mr-2 shrink-0" />
+              <Icons.LinkIcon className="w-4 h-4 mr-2 shrink-0" />
               <LoadingState
                 data={user?.data}
                 loadingFallback={<Skeleton className="w-full h-4" />}

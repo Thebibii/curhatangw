@@ -4,13 +4,11 @@ import { useState } from "react";
 import { Card, CardContent } from "./ui/card";
 import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
 import { Textarea } from "./ui/textarea";
-import { CloudUpload, ImageIcon, Loader2Icon, SendIcon } from "lucide-react";
 import { Button } from "./ui/button";
 import { toast } from "@/hooks/use-toast";
 import { useCreatePost } from "@/hooks/reactQuery/posts/useCreatePost";
 import { useQueryClient } from "@tanstack/react-query";
 import { useUserContext } from "@/contexts/UserContext";
-import { Label } from "./ui/label";
 import { generateReactHelpers } from "@uploadthing/react";
 import { OurFileRouter } from "@/app/api/uploadthing/core";
 import { Icons } from "./icons";
@@ -127,7 +125,7 @@ function CreatePost() {
                     onClick={() => setShowImageUpload(!showImageUpload)}
                     disabled={isPosting}
                   >
-                    <ImageIcon className="size-4 mr-2" />
+                    <Icons.ImageIcon className="size-4 mr-2" />
                     Photo
                   </Button>
                 </div>
@@ -143,12 +141,12 @@ function CreatePost() {
                 >
                   {isPending || isPosting ? (
                     <>
-                      <Loader2Icon className="size-4 mr-2 animate-spin" />
+                      <Icons.Loader2Icon className="size-4 mr-2 animate-spin" />
                       Posting...
                     </>
                   ) : (
                     <>
-                      <SendIcon className="size-4 mr-2" />
+                      <Icons.SendIcon className="size-4 mr-2" />
                       Post
                     </>
                   )}

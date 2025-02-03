@@ -1,6 +1,7 @@
 "use client";
 
 import FollowAndUnfollow from "@/components/FollowAndUnfollow";
+import { Icons } from "@/components/icons";
 import LoadingState from "@/components/LoadingState";
 import DialogEditProfile from "@/components/profile/DialogEditProfile";
 import PostAndLike from "@/components/profile/PostAndLike";
@@ -14,7 +15,6 @@ import { useGetIsFollowingUser } from "@/hooks/reactQuery/profile/useGetIsFollow
 import { useGetUserByName } from "@/hooks/reactQuery/user/useGetUserByName";
 import { SignInButton } from "@clerk/nextjs";
 import { formatDate, formatDistanceToNow } from "date-fns";
-import { CalendarIcon, EditIcon, LinkIcon, MapPinIcon } from "lucide-react";
 import { notFound } from "next/navigation";
 import { useState } from "react";
 
@@ -125,7 +125,7 @@ function ProfilePageClient({
                     className="w-full mt-4"
                     onClick={() => setShowEditDialog(true)}
                   >
-                    <EditIcon className="size-4 mr-2" />
+                    <Icons.EditIcon className="size-4 mr-2" />
                     Edit Profile
                   </Button>
                 ) : (
@@ -148,13 +148,13 @@ function ProfilePageClient({
                 <div className="w-full mt-6 space-y-2 text-sm">
                   {user?.data?.location && (
                     <div className="flex items-center text-mtext">
-                      <MapPinIcon className="size-4 mr-2" />
+                      <Icons.MapPinIcon className="size-4 mr-2" />
                       {user?.data?.location}
                     </div>
                   )}
                   {user?.data?.website && (
                     <div className="flex items-center text-mtext">
-                      <LinkIcon className="size-4 mr-2" />
+                      <Icons.LinkIcon className="size-4 mr-2" />
                       <a
                         href={
                           user?.data?.website.startsWith("http")
@@ -170,7 +170,7 @@ function ProfilePageClient({
                     </div>
                   )}
                   <div className="flex items-center text-mtext">
-                    <CalendarIcon className="size-4 mr-2" />
+                    <Icons.CalendarIcon className="size-4 mr-2" />
                     Joined
                   </div>
                 </div>

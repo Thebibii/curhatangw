@@ -13,8 +13,8 @@ import {
 } from "../ui/command";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { useUserContext } from "@/contexts/UserContext";
-import { HomeIcon, LogOutIcon, User } from "lucide-react";
 import Link from "next/link";
+import { Icons } from "../icons";
 
 const PopoverProfile = () => {
   const { signOut, isLoaded } = useAuth();
@@ -33,6 +33,16 @@ const PopoverProfile = () => {
   return (
     <>
       <SignedIn>
+        <Button
+          variant="neutral"
+          className=" items-center gap-2   hidden sm:flex"
+          asChild
+        >
+          <Link href="/notification">
+            <Icons.BellIcon className="w-4 h-4" />
+            <span className="hidden sm:inline">Notifications</span>
+          </Link>
+        </Button>
         <Popover open={open} onOpenChange={setOpen}>
           <PopoverTrigger asChild className="cursor-pointer">
             <Avatar className="w-10 h-10">
@@ -60,7 +70,7 @@ const PopoverProfile = () => {
                       className="cursor-pointer"
                       onSelect={() => setOpen(false)}
                     >
-                      <HomeIcon className="w-4 h-4" />
+                      <Icons.HomeIcon className="w-4 h-4" />
                       <span>Home</span>
                     </CommandItem>
                   </Link>
@@ -69,8 +79,17 @@ const PopoverProfile = () => {
                       className="cursor-pointer "
                       onSelect={() => setOpen(false)}
                     >
-                      <User />
+                      <Icons.User />
                       <span>Profile</span>
+                    </CommandItem>
+                  </Link>
+                  <Link href={`/notification`} className="block sm:hidden">
+                    <CommandItem
+                      className="cursor-pointer "
+                      onSelect={() => setOpen(false)}
+                    >
+                      <Icons.BellIcon />
+                      <span>Notifications</span>
                     </CommandItem>
                   </Link>
                   <CommandItem
@@ -80,7 +99,7 @@ const PopoverProfile = () => {
                       handleLogout();
                     }}
                   >
-                    <LogOutIcon />
+                    <Icons.LogOutIcon />
                     <span>Logout</span>
                   </CommandItem>
                 </CommandGroup>

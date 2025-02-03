@@ -1,9 +1,3 @@
-import {
-  HeartIcon,
-  LogInIcon,
-  MessageCircleIcon,
-  SendIcon,
-} from "lucide-react";
 import { Button } from "../ui/button";
 import { useEffect, useState } from "react";
 import { Avatar, AvatarImage } from "../ui/avatar";
@@ -19,6 +13,7 @@ import { ScrollArea } from "../ui/scroll-area";
 import { useUserContext } from "@/contexts/UserContext";
 import { useLikePost } from "@/hooks/reactQuery/posts/useLikePost";
 import { useQueryClient } from "@tanstack/react-query";
+import { Icons } from "../icons";
 
 export default function Footer({
   postId,
@@ -120,9 +115,9 @@ export default function Footer({
             onClick={handleLike}
           >
             {hasLiked ? (
-              <HeartIcon className="size-5 fill-current" />
+              <Icons.HeartIcon className="size-5 fill-current" />
             ) : (
-              <HeartIcon className="size-5" />
+              <Icons.HeartIcon className="size-5" />
             )}
             <span>{optimisticLikes}</span>
           </Button>
@@ -133,7 +128,7 @@ export default function Footer({
               size="sm"
               className="text-muted-foreground gap-2"
             >
-              <HeartIcon className="size-5" />
+              <Icons.HeartIcon className="size-5" />
               <span>{optimisticLikes}</span>
             </Button>
           </SignInButton>
@@ -145,7 +140,7 @@ export default function Footer({
           className="text-muted-foreground gap-2 hover:text-blue-500"
           onClick={handleToggleComments}
         >
-          <MessageCircleIcon
+          <Icons.MessageCircleIcon
             className={`size-5 ${
               showComments && "fill-blue-500 text-blue-500"
             }`}
@@ -220,7 +215,7 @@ export default function Footer({
                       "Posting..."
                     ) : (
                       <>
-                        <SendIcon className="size-4" />
+                        <Icons.SendIcon className="size-4" />
                         Comment
                       </>
                     )}
@@ -232,7 +227,7 @@ export default function Footer({
             <div className="flex justify-center p-4 border rounded-lg bg-muted/50">
               <SignInButton mode="modal">
                 <Button variant="neutral" className="gap-2">
-                  <LogInIcon className="size-4" />
+                  <Icons.LogInIcon className="size-4" />
                   Sign in to comment
                 </Button>
               </SignInButton>

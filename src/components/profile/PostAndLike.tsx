@@ -1,11 +1,11 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGetUserPost } from "@/hooks/reactQuery/posts/useGetUserPost.hook";
-import { FileTextIcon, HeartIcon } from "lucide-react";
 import LoadingState from "../LoadingState";
 import PostCard from "../post/PostCard";
-import SkeletonCard from "../post/SkeletonCard";
+import SkeletonCard from "../skeleton/SkeletonCard";
 import { User } from "@/types/user";
 import { useUserLikedPosts } from "@/hooks/reactQuery/posts/useUserLikedPosts.hook";
+import { Icons } from "../icons";
 
 export default function PostAndLike({ user }: { user: User }) {
   const { data: post } = useGetUserPost({ username: user?.username });
@@ -18,14 +18,14 @@ export default function PostAndLike({ user }: { user: User }) {
           value="posts"
           className="flex items-center gap-2 data-[state=active]:bg-bw px-6 font-semibold"
         >
-          <FileTextIcon className="size-4" />
+          <Icons.FileTextIcon className="size-4" />
           Posts
         </TabsTrigger>
         <TabsTrigger
           value="likes"
           className="flex items-center gap-2 data-[state=active]:bg-bw  px-6 font-semibold"
         >
-          <HeartIcon className="size-4" />
+          <Icons.HeartIcon className="size-4" />
           Likes
         </TabsTrigger>
       </TabsList>

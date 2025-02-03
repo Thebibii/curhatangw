@@ -1,4 +1,24 @@
-import { BellIcon, CloudUpload, HomeIcon, Loader2Icon } from "lucide-react";
+import {
+  ArrowLeftIcon,
+  BellIcon,
+  CalendarIcon,
+  CloudUpload,
+  EditIcon,
+  FileTextIcon,
+  HeartIcon,
+  HomeIcon,
+  ImageIcon,
+  LinkIcon,
+  Loader2Icon,
+  LogInIcon,
+  LogOutIcon,
+  MapPinIcon,
+  MessageCircleIcon,
+  SendIcon,
+  Trash2Icon,
+  User,
+  UserPlusIcon,
+} from "lucide-react";
 
 type IconProps = React.HTMLAttributes<SVGElement>;
 
@@ -151,4 +171,19 @@ export const Icons = {
   Loader2Icon: (props: IconProps) => <Loader2Icon {...props} />,
   HomeIcon: (props: IconProps) => <HomeIcon {...props} />,
   BellIcon: (props: IconProps) => <BellIcon {...props} />,
+  HeartIcon: (props: IconProps) => <HeartIcon {...props} />,
+  MessageCircleIcon: (props: IconProps) => <MessageCircleIcon {...props} />,
+  UserPlusIcon: (props: IconProps) => <UserPlusIcon {...props} />,
+  User: (props: IconProps) => <User {...props} />,
+  LogOutIcon: (props: IconProps) => <LogOutIcon {...props} />,
+  ArrowLeftIcon: (props: IconProps) => <ArrowLeftIcon {...props} />,
+  CalendarIcon: (props: IconProps) => <CalendarIcon {...props} />,
+  EditIcon: (props: IconProps) => <EditIcon {...props} />,
+  LinkIcon: (props: IconProps) => <LinkIcon {...props} />,
+  MapPinIcon: (props: IconProps) => <MapPinIcon {...props} />,
+  ImageIcon: (props: IconProps) => <ImageIcon {...props} />,
+  SendIcon: (props: IconProps) => <SendIcon {...props} />,
+  Trash2Icon: (props: IconProps) => <Trash2Icon {...props} />,
+  FileTextIcon: (props: IconProps) => <FileTextIcon {...props} />,
+  LogInIcon: (props: IconProps) => <LogInIcon {...props} />,
 };

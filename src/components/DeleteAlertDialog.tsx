@@ -1,6 +1,5 @@
 "use client";
 
-import { Loader2Icon, Trash2Icon } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import {
   AlertDialog,
@@ -17,6 +16,7 @@ import { useDeletePost } from "@/hooks/reactQuery/posts/useDeletePost.hook";
 import { toast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
 import { useDeletePhoto } from "@/hooks/useDeletePhoto.hook";
+import { Icons } from "./icons";
 
 interface DeleteAlertDialogProps {
   postId: string;
@@ -55,9 +55,9 @@ export function DeleteAlertDialog({
           disabled={isPending}
         >
           {isPending ? (
-            <Loader2Icon className="size-4 animate-spin" />
+            <Icons.Loader2Icon className="size-4 animate-spin" />
           ) : (
-            <Trash2Icon className="size-4" />
+            <Icons.Trash2Icon className="size-4" />
           )}
         </Button>
       </AlertDialogTrigger>

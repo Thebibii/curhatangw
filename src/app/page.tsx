@@ -3,7 +3,7 @@ import CreatePost from "@/components/CreatePost";
 import LoadingState from "@/components/LoadingState";
 import ObserverPlaceholder from "@/components/post/ObserverPlaceholder";
 import PostCard from "@/components/post/PostCard";
-import SkeletonCard from "@/components/post/SkeletonCard";
+import SkeletonCard from "@/components/skeleton/SkeletonCard";
 import WhoToFollow from "@/components/WhoToFollow";
 import { useUserContext } from "@/contexts/UserContext";
 import { useGetPost } from "@/hooks/reactQuery/posts/useGetPost";

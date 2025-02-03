@@ -1,8 +1,8 @@
 import { Button } from "./ui/button";
-import { Loader2Icon } from "lucide-react";
 import { useToggleFollow } from "@/hooks/reactQuery/user/useToggleFollow";
 import { toast } from "@/hooks/use-toast";
 import { useQueryClient } from "@tanstack/react-query";
+import { Icons } from "./icons";
 
 export default function FollowAndUnfollow({
   userId,
@@ -40,7 +40,7 @@ export default function FollowAndUnfollow({
         // className="w-20"
       >
         {isPending ? (
-          <Loader2Icon className="size-4 animate-spin" />
+          <Icons.Loader2Icon className="size-4 animate-spin" />
         ) : isFollowing?.data ? (
           "Unfollow"
         ) : (

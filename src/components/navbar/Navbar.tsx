@@ -27,16 +27,6 @@ function Navbar() {
                 <span className="hidden sm:inline">Home</span>
               </Link>
             </Button>
-            <Button
-              variant="neutral"
-              className=" items-center gap-2   hidden sm:flex"
-              asChild
-            >
-              <Link href="/">
-                <Icons.BellIcon className="w-4 h-4" />
-                <span className="hidden sm:inline">Notifications</span>
-              </Link>
-            </Button>
             <PopoverProfile />
           </div>
         </div>

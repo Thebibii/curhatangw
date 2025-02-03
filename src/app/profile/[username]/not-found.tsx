@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { HomeIcon, ArrowLeftIcon } from "lucide-react";
+import { Icons } from "@/components/icons";
 
 export default function NotFound() {
   return (
@@ -26,14 +26,14 @@ export default function NotFound() {
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Button variant="neutral" asChild>
                 <Link href="/">
-                  <HomeIcon className="mr-2 size-4" />
+                  <Icons.HomeIcon className="mr-2 size-4" />
                   Back to Home
                 </Link>
               </Button>
 
               <Button variant="default" asChild>
                 <Link href="/">
-                  <ArrowLeftIcon className="mr-2 size-4" />
+                  <Icons.ArrowLeftIcon className="mr-2 size-4" />
                   Home
                 </Link>
               </Button>
