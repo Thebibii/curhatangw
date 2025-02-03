@@ -34,7 +34,6 @@ export function DeleteAlertDialog({
   const queryClient = useQueryClient();
 
   const { mutate: deletePhoto } = useDeletePhoto();
-  // deletePhoto({ imageUrl });
   const { isPending, mutate, isSuccess } = useDeletePost({
     postId,
     onSuccess: () => {

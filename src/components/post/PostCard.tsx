@@ -7,7 +7,13 @@ import Footer from "./Footer";
 import { DeleteAlertDialog } from "../DeleteAlertDialog";
 import Image from "next/image";
 
-function PostCard({ post, dbUserId }: any) {
+type PostCardProps = {
+  post: any;
+  dbUserId: string;
+  username?: string | null;
+};
+
+function PostCard({ post, dbUserId, username = null }: PostCardProps) {
   return (
     <Card className="overflow-hidden bg-bw">
       <CardContent className="p-4 sm:p-6">
@@ -72,6 +78,7 @@ function PostCard({ post, dbUserId }: any) {
             count_comment={post._count.comments}
             count_like={post._count.likes}
             likes={post.likes}
+            username={username}
           />
         </div>
       </CardContent>

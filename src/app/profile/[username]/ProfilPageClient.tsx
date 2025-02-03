@@ -179,10 +179,7 @@ function ProfilePageClient({
           </Card>
         </div>
 
-        <PostAndLike
-          userId={user?.data?.id}
-          currentUser={currentUser?.data?.id}
-        />
+        <PostAndLike user={user?.data} />
 
         <DialogEditProfile
           showEditDialog={showEditDialog}

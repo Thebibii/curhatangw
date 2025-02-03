@@ -1,18 +1,15 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { useGetUserPost } from "@/hooks/reactQuery/posts/useGetUserPost";
+import { useGetUserPost } from "@/hooks/reactQuery/posts/useGetUserPost.hook";
 import { FileTextIcon, HeartIcon } from "lucide-react";
 import LoadingState from "../LoadingState";
 import PostCard from "../post/PostCard";
 import SkeletonCard from "../post/SkeletonCard";
+import { User } from "@/types/user";
+import { useUserLikedPosts } from "@/hooks/reactQuery/posts/useUserLikedPosts.hook";
 
-export default function PostAndLike({
-  userId,
-  currentUser,
-}: {
-  userId: string;
-  currentUser: any;
-}) {
-  const { data } = useGetUserPost({ userId });
+export default function PostAndLike({ user }: { user: User }) {
+  const { data: post } = useGetUserPost({ username: user?.username });
+  const { data: likedPost } = useUserLikedPosts({ username: user?.username });
 
   return (
     <Tabs defaultValue="posts" className="w-full ">
@@ -35,12 +32,17 @@ export default function PostAndLike({
 
       <TabsContent value="posts" className="mt-6">
         <div className="space-y-6">
-          <LoadingState data={data?.data} loadingFallback={<SkeletonCard />}>
-            {data?.data &&
-              data?.data?.map((post: any) => (
-                <PostCard key={post.id} post={post} dbUserId={currentUser} />
+          <LoadingState data={post?.data} loadingFallback={<SkeletonCard />}>
+            {post?.data &&
+              post?.data?.map((post: any) => (
+                <PostCard
+                  key={post.id}
+                  post={post}
+                  dbUserId={user?.id}
+                  username={user?.username}
+                />
               ))}
-            {data?.data?.length === 0 && (
+            {post?.data?.length === 0 && (
               <div className="text-center py-8 text-mtext">
                 No posts to show
               </div>
@@ -49,19 +51,29 @@ export default function PostAndLike({
         </div>
       </TabsContent>
 
-      {/*  <TabsContent value="likes" className="mt-6">
+      <TabsContent value="likes" className="mt-6">
         <div className="space-y-6">
-          {likedPosts.length > 0 ? (
-            likedPosts.map((post) => (
-              <PostCard key={post.id} post={post} dbUserId={user?.data?.id} />
-            ))
-          ) : (
-            <div className="text-center py-8 text-mtext">
-              No liked posts to show
-            </div>
-          )}
+          <LoadingState
+            data={likedPost?.data}
+            loadingFallback={<SkeletonCard />}
+          >
+            {likedPost?.data?.length > 0 ? (
+              likedPost?.data?.map((post: any) => (
+                <PostCard
+                  key={post.id}
+                  post={post}
+                  dbUserId={user?.id}
+                  username={user?.username}
+                />
+              ))
+            ) : (
+              <div className="text-center py-8 text-mtext">
+                No liked posts to show
+              </div>
+            )}
+          </LoadingState>
         </div>
-      </TabsContent> */}
+      </TabsContent>
     </Tabs>
   );
 }

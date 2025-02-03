@@ -1,5 +1,5 @@
 import prisma from "@/lib/db/prisma";
-import { getDbUserId } from "./user.action";
+import { getDbUserByUsername, getDbUserId } from "./user.action";
 
 export async function createPost(content: string, image: string) {
   try {
@@ -80,11 +80,13 @@ export async function deletePost(postId: string) {
   }
 }
 
-export async function getUserPosts(userId: string) {
+export async function getUserPosts(username: string) {
   try {
     const posts = await prisma.post.findMany({
       where: {
-        authorId: userId,
+        author: {
+          username: username,
+        },
       },
       include: {
         author: {

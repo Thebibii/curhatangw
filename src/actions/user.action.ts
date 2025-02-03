@@ -218,13 +218,13 @@ export async function isFollowing(username: string) {
   try {
     const currentUserId = await getDbUserId();
     if (!currentUserId) return false;
-    const userId = await getDbUserIdByUsername(username);
+    const userId = await getDbUserByUsername(username);
 
     const follow = await prisma.follows.findUnique({
       where: {
         followerId_followingId: {
           followerId: currentUserId,
-          followingId: userId,
+          followingId: userId.id,
         },
       },
     });
@@ -236,13 +236,13 @@ export async function isFollowing(username: string) {
   }
 }
 
-export async function getDbUserIdByUsername(username: string) {
+export async function getDbUserByUsername(username: string) {
   try {
     const user = await prisma.user.findFirstOrThrow({
       where: { username },
     });
 
-    return user.id;
+    return user;
   } catch (error) {
     console.error("Error fetching profile:", error);
     throw new Error("Failed to fetch profile");

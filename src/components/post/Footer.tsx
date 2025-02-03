@@ -18,14 +18,19 @@ import { Skeleton } from "../ui/skeleton";
 import { ScrollArea } from "../ui/scroll-area";
 import { useUserContext } from "@/contexts/UserContext";
 import { useLikePost } from "@/hooks/reactQuery/posts/useLikePost";
+import { useQueryClient } from "@tanstack/react-query";
 
 export default function Footer({
   postId,
   count_comment,
   count_like,
   likes,
+  username,
 }: any) {
+  console.log(username);
+
   const { user } = useUserContext();
+  const queryClient = useQueryClient();
 
   const [showComments, setShowComments] = useState(false);
   const [newComment, setNewComment] = useState("");
@@ -56,6 +61,8 @@ export default function Footer({
   const { mutate: likePost } = useLikePost({
     postId,
     onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["get.user.likes", username] });
+      queryClient.invalidateQueries({ queryKey: ["get.post", username] });
       setIsLiking(false);
     },
   });

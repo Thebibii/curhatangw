@@ -68,7 +68,7 @@ export default function UploadImage({
         data-ut-element="allowed-content"
         data-state="ready"
       >
-        Image (4MB)
+        Image (2MB)
       </div>
     </div>
   );

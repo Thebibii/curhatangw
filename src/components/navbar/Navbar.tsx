@@ -1,7 +1,7 @@
-import { SignedIn, SignedOut, SignInButton } from "@clerk/nextjs";
 import Link from "next/link";
-import { Button } from "../ui/button";
 import PopoverProfile from "./PopoverProfile";
+import { Button } from "../ui/button";
+import { Icons } from "../icons";
 
 function Navbar() {
   return (
@@ -16,17 +16,29 @@ function Navbar() {
               CurhatanGw
             </Link>
           </div>
-
-          <SignedIn>
+          <div className="flex items-center space-x-4">
+            <Button
+              variant="neutral"
+              className=" items-center gap-2   hidden sm:flex"
+              asChild
+            >
+              <Link href="/">
+                <Icons.HomeIcon className="w-4 h-4" />
+                <span className="hidden sm:inline">Home</span>
+              </Link>
+            </Button>
+            <Button
+              variant="neutral"
+              className=" items-center gap-2   hidden sm:flex"
+              asChild
+            >
+              <Link href="/">
+                <Icons.BellIcon className="w-4 h-4" />
+                <span className="hidden sm:inline">Notifications</span>
+              </Link>
+            </Button>
             <PopoverProfile />
-          </SignedIn>
-          <SignedOut>
-            <SignInButton mode="modal">
-              <Button variant="neutral">Login</Button>
-            </SignInButton>
-          </SignedOut>
-          {/* <DesktopNavbar />
-          <MobileNavbar /> */}
+          </div>
         </div>
       </div>
     </nav>

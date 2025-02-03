@@ -27,7 +27,7 @@ export default function Home() {
           >
             {data?.pages?.map((response: any) => {
               return response?.data?.map((post: any) => (
-                <PostCard key={post.id} post={post} dbUserId={user?.id} />
+                <PostCard key={post.id} post={post} dbUserId={user?.data?.id} />
               ));
             })}
           </LoadingState>

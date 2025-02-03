@@ -73,7 +73,7 @@ function CreatePost() {
       if (file?.size > 1024 * 2000) {
         return toast({
           title: "Notification",
-          description: "Image 2 MB",
+          description: "Image size should be less than 2MB",
         });
       }
 

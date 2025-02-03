@@ -1,4 +1,4 @@
-import { CloudUpload, Loader2Icon } from "lucide-react";
+import { BellIcon, CloudUpload, HomeIcon, Loader2Icon } from "lucide-react";
 
 type IconProps = React.HTMLAttributes<SVGElement>;
 
@@ -149,4 +149,6 @@ export const Icons = {
   ),
   cloudUpload: (props: IconProps) => <CloudUpload {...props} />,
   Loader2Icon: (props: IconProps) => <Loader2Icon {...props} />,
+  HomeIcon: (props: IconProps) => <HomeIcon {...props} />,
+  BellIcon: (props: IconProps) => <BellIcon {...props} />,
 };
