@@ -6,6 +6,7 @@ import { formatDistanceToNow } from "date-fns";
 import Footer from "./Footer";
 import { DeleteAlertDialog } from "../DeleteAlertDialog";
 import Image from "next/image";
+import { filterBadWord } from "@/lib/helper/sensor.helper";
 
 type PostCardProps = {
   post: any;
@@ -54,7 +55,8 @@ function PostCard({ post, dbUserId, username = null }: PostCardProps) {
                 )}
               </div>
               <p className="mt-2 text-sm text-foreground break-words">
-                {post.content}
+                {/* {post.content} */}
+                {filterBadWord(post.content)}
               </p>
               {post.image && (
                 <div className="rounded-lg overflow-hidden mt-2">
