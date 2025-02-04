@@ -2,7 +2,6 @@ import { ClerkProvider } from "@clerk/nextjs";
 import "./globals.css";
 import { NextSSRPlugin } from "@uploadthing/react/next-ssr-plugin";
 import { extractRouterConfig } from "uploadthing/server";
-import { ourFileRouter } from "./api/uploadthing/core";
 import { Toaster } from "@/components/ui/toaster";
 import { ReactQueryClientProvider } from "@/provider/react-query";
 import Navbar from "@/components/navbar/Navbar";
@@ -10,6 +9,7 @@ import Sidebar from "@/components/sidebar/Sidebar";
 import { UserProvider } from "@/contexts/UserContext";
 import ProgressProvider from "@/provider/progress-provider";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import { ourFileRouter } from "@/lib/helper/uploadthing.helper";
 
 export default function RootLayout({
   children,
