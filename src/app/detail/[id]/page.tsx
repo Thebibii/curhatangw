@@ -1,3 +1,5 @@
+import React from "react";
+
 type TProps = {
   children: React.ReactNode;
   params: any;
