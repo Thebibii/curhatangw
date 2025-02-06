@@ -1,11 +1,13 @@
 import React from "react";
 
 type TProps = {
-  children: React.ReactNode;
-  params: any;
+  params: {
+    id: string;
+  };
 };
-export default async function Detail(props: TProps) {
-  const { id } = await props.params;
+
+export default async function Detail({ params }: TProps) {
+  const { id } = params;
 
   return <p>{id} a</p>;
 }
