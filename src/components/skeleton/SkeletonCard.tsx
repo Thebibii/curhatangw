@@ -1,7 +1,7 @@
 import { Skeleton } from "../ui/skeleton";
 
-export default function SkeletonCard() {
-  const skeletonItems = Array.from({ length: 3 }, (_, i) => i);
+export default function SkeletonCard({ length }: { length: number }) {
+  const skeletonItems = Array.from({ length }, (_, i) => i);
 
   return (
     <>

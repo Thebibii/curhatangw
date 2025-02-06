@@ -23,7 +23,9 @@ export default function FollowAndUnfollow({
       });
       toast({
         title: "Success",
-        description: "You have successfully followed this user",
+        description: isFollowing?.data
+          ? "You have successfully unfollowed this user"
+          : "You have successfully followed this user",
         duration: 2000,
       });
     },

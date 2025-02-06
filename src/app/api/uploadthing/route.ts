@@ -1,4 +1,4 @@
-import { ourFileRouter } from "@/lib/helper/uploadthing.helper";
+import { ourFileRouter } from "@/helper/uploadthing.helper";
 import { createRouteHandler } from "uploadthing/next";
 
 import { UTApi } from "uploadthing/server";

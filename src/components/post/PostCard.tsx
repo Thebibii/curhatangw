@@ -6,7 +6,7 @@ import { formatDistanceToNow } from "date-fns";
 import Footer from "./Footer";
 import { DeleteAlertDialog } from "../DeleteAlertDialog";
 import Image from "next/image";
-import { filterBadWord } from "@/lib/helper/sensor.helper";
+import { filterBadWord } from "@/helper/sensor.helper";
 
 type PostCardProps = {
   post: any;
@@ -15,16 +15,22 @@ type PostCardProps = {
 };
 
 function PostCard({ post, dbUserId, username = null }: PostCardProps) {
+  console.log(post);
+
   return (
     <Card className="overflow-hidden bg-bw">
       <CardContent className="p-4 sm:p-6">
         <div className="space-y-4">
           <div className="flex space-x-3 sm:space-x-4">
-            <Link href={`/profile/${post.author.username}`} className="h-fit">
+            <Link href={`/profile/${post?.author?.username}`} className="h-fit">
               <Avatar className="w-10 h-10 inline-flex items-center justify-center border">
-                <AvatarImage src={post.author.image} width={100} height={100} />
+                <AvatarImage
+                  src={post?.author?.image}
+                  width={100}
+                  height={100}
+                />
                 <AvatarFallback>
-                  {post.author.name[0].toUpperCase()}
+                  {post?.author?.name[0].toUpperCase()}
                 </AvatarFallback>
               </Avatar>
             </Link>
@@ -34,38 +40,37 @@ function PostCard({ post, dbUserId, username = null }: PostCardProps) {
               <div className="flex items-start justify-between">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-2 truncate">
                   <Link
-                    href={`/profile/${post.author.username}`}
+                    href={`/profile/${post?.author?.username}`}
                     className="font-semibold truncate"
                   >
-                    {post.author.name}
+                    {post?.author?.name}
                   </Link>
                   <div className="flex items-center space-x-2 text-sm text-muted-foreground">
-                    <Link href={`/profile/${post.author.username}`}>
-                      {post.author.username}
+                    <Link href={`/profile/${post?.author?.username}`}>
+                      {post?.author?.username}
                     </Link>
                     <span>•</span>
                     <span>
-                      {formatDistanceToNow(new Date(post.createdAt))} ago
+                      {formatDistanceToNow(new Date(post?.createdAt))} ago
                     </span>
                   </div>
                 </div>
 
-                {dbUserId === post.author.id && (
-                  <DeleteAlertDialog postId={post.id} imageUrl={post.image} />
+                {dbUserId === post?.author?.id && (
+                  <DeleteAlertDialog postId={post?.id} imageUrl={post?.image} />
                 )}
               </div>
               <p className="mt-2 text-sm text-foreground break-words">
-                {/* {post.content} */}
-                {filterBadWord(post.content)}
+                {filterBadWord(post?.content)}
               </p>
-              {post.image && (
+              {post?.image && (
                 <div className="rounded-lg overflow-hidden mt-2">
                   <Image
                     width={500}
                     height={500}
                     priority
                     decoding="async"
-                    src={post.image}
+                    src={post?.image}
                     alt="Post content"
                     className="h-full w-fit object-cover rounded-lg"
                   />
@@ -75,13 +80,13 @@ function PostCard({ post, dbUserId, username = null }: PostCardProps) {
           </div>
 
           {/* LIKE & COMMENT BUTTONS */}
-          <Footer
+          {/* <Footer
             postId={post.id}
             count_comment={post._count.comments}
             count_like={post._count.likes}
             likes={post.likes}
             username={username}
-          />
+          /> */}
         </div>
       </CardContent>
     </Card>

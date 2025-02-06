@@ -32,7 +32,10 @@ export default function PostAndLike({ user }: { user: User }) {
 
       <TabsContent value="posts" className="mt-6">
         <div className="space-y-6">
-          <LoadingState data={post?.data} loadingFallback={<SkeletonCard />}>
+          <LoadingState
+            data={post?.data}
+            loadingFallback={<SkeletonCard length={3} />}
+          >
             {post?.data &&
               post?.data?.map((post: any) => (
                 <PostCard
@@ -55,7 +58,7 @@ export default function PostAndLike({ user }: { user: User }) {
         <div className="space-y-6">
           <LoadingState
             data={likedPost?.data}
-            loadingFallback={<SkeletonCard />}
+            loadingFallback={<SkeletonCard length={3} />}
           >
             {likedPost?.data?.length > 0 ? (
               likedPost?.data?.map((post: any) => (

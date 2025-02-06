@@ -12,7 +12,7 @@ import { useUserContext } from "@/contexts/UserContext";
 import { generateReactHelpers } from "@uploadthing/react";
 import { Icons } from "./icons";
 import UploadImage from "./UploadImage";
-import { OurFileRouter } from "@/lib/helper/uploadthing.helper";
+import { OurFileRouter } from "@/helper/uploadthing.helper";
 
 const { uploadFiles } = generateReactHelpers<OurFileRouter>();
 

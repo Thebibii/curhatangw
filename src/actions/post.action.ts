@@ -58,6 +58,38 @@ export async function getPosts(limit: number, cursor?: string | undefined) {
   return { posts, nextCursor };
 }
 
+export async function getDetailPost(postId: string) {
+  try {
+    const post = await prisma.post.findUnique({
+      where: { id: postId },
+      include: {
+        author: {
+          select: {
+            name: true,
+            username: true,
+            image: true,
+          },
+        },
+        comments: {
+          include: {
+            author: {
+              select: {
+                id: true,
+                name: true,
+                username: true,
+                image: true,
+              },
+            },
+          },
+        },
+      },
+    });
+    return post;
+  } catch (error) {
+    throw new Error("Failed to fetch post");
+  }
+}
+
 export async function deletePost(postId: string) {
   try {
     const userId = await getDbUserId();

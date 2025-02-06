@@ -29,6 +29,7 @@ const PopoverProfile = () => {
   };
 
   const { user } = useUserContext();
+  const { notifications } = useUserContext();
 
   return (
     <>
@@ -39,7 +40,15 @@ const PopoverProfile = () => {
           asChild
         >
           <Link href="/notification">
-            <Icons.BellIcon className="w-4 h-4" />
+            <div className="relative">
+              {notifications?.data?.filter((n: any) => !n.read).length > 0 && (
+                <>
+                  <div className="absolute top-0 right-0 w-2 h-2 bg-red-400 z-10 rounded-full" />
+                  <div className="absolute top-0 right-0 w-2 h-2 animate-ping bg-red-400 z-0 rounded-full" />
+                </>
+              )}
+              <Icons.BellIcon className="w-4 h-4" />
+            </div>
             <span className="hidden sm:inline">Notifications</span>
           </Link>
         </Button>

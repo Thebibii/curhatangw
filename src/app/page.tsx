@@ -15,6 +15,7 @@ export default function Home() {
   });
 
   const { user } = useUserContext();
+
   return (
     <div className="grid grid-cols-1 lg:grid-cols-10 gap-6">
       <div className="lg:col-span-6">
@@ -23,7 +24,7 @@ export default function Home() {
         <div className="space-y-6">
           <LoadingState
             data={data?.pages[0].data}
-            loadingFallback={<SkeletonCard />}
+            loadingFallback={<SkeletonCard length={3} />}
           >
             {data?.pages?.map((response: any) => {
               return response?.data?.map((post: any) => (

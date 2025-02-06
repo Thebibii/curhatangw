@@ -14,6 +14,7 @@ import { useUserContext } from "@/contexts/UserContext";
 import { useLikePost } from "@/hooks/reactQuery/posts/useLikePost";
 import { useQueryClient } from "@tanstack/react-query";
 import { Icons } from "../icons";
+import { filterBadWord } from "@/helper/sensor.helper";
 
 export default function Footer({
   postId,
@@ -22,8 +23,6 @@ export default function Footer({
   likes,
   username,
 }: any) {
-  console.log(username);
-
   const { user } = useUserContext();
   const queryClient = useQueryClient();
 
@@ -184,7 +183,9 @@ export default function Footer({
                           </span>
                         </div>
                       </div>
-                      <p className="text-sm break-words">{comment.content}</p>
+                      <p className="text-sm break-words">
+                        {filterBadWord(comment.content)}
+                      </p>
                     </div>
                   </div>
                 ))}

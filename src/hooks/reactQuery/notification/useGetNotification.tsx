@@ -1,7 +1,11 @@
 import { baseURL } from "@/lib/db/env";
 import { useQuery } from "@tanstack/react-query";
 
-export const useGetNotification = () => {
+export const useGetNotification = ({
+  isSignedIn,
+}: {
+  isSignedIn: string | undefined;
+}) => {
   return useQuery({
     queryKey: ["get.notification"],
     queryFn: async () => {
@@ -11,5 +15,6 @@ export const useGetNotification = () => {
 
       return data;
     },
+    enabled: isSignedIn ? true : false,
   });
 };

@@ -10,7 +10,7 @@ export const useDeletePost = ({ postId, onSuccess }: DeletePostProps) => {
   return useMutation({
     mutationKey: ["delete.post", postId],
     mutationFn: async () => {
-      const res = await fetch(`${baseURL}/post/${postId}`, {
+      const res = await fetch(`${baseURL}/post/${postId}/delete`, {
         method: "DELETE",
       });
 

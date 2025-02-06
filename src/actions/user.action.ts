@@ -120,6 +120,8 @@ export async function updateCurrentUser(dataUpdated: any) {
 export async function getRandomUsers() {
   try {
     const userId = await getDbUserId();
+    const postsCount = await prisma.post.count();
+    const skip = Math.floor(Math.random() * postsCount);
 
     if (!userId) return [];
 
@@ -151,6 +153,7 @@ export async function getRandomUsers() {
         },
       },
       take: 3,
+      skip,
     });
 
     return randomUsers;

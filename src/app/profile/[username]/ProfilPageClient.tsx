@@ -37,7 +37,7 @@ function ProfilePageClient({
   const { data: user } = useGetUserByName({ username });
   const [showEditDialog, setShowEditDialog] = useState(false);
   const { data: isFollowing, isPending } = useGetIsFollowingUser({ username });
-  const [isUpdatingFollow, setIsUpdatingFollow] = useState(false);
+
   if (user?.error) return notFound();
 
   const isOwnProfile = currentUser?.data?.id === user?.data?.id;

@@ -94,7 +94,7 @@ export const filterBadWord = (str: string, dictionary: string[] = _badWord) => {
     const lowerCaseBadWord = word.toLowerCase();
     const regex = new RegExp(`\\b${lowerCaseBadWord}\\b`, "gi");
 
-    str = str.replace(regex, (match) => "*".repeat(match.length));
+    str = str?.replace(regex, (match) => "*".repeat(match.length));
   }
 
   return str;

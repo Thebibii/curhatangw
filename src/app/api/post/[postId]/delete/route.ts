@@ -1,5 +1,6 @@
-import { deletePost } from "@/actions/post.action";
+import { deletePost,  } from "@/actions/post.action";
 import { NextRequest, NextResponse } from "next/server";
+
 
 export async function DELETE(request: NextRequest, { params }: any) {
   try {
