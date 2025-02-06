@@ -8,10 +8,7 @@ import { useGetDetailPost } from "@/hooks/reactQuery/posts/useGetDetailPost";
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
 
-type TProps = {
-  children?: React.ReactNode;
-};
-export default function DetailModal(props: TProps) {
+export default function DetailModal() {
   const params = useParams<{ id: string }>();
   const router = useRouter();
 
