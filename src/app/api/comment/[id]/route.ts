@@ -3,7 +3,7 @@ import { NextRequest, NextResponse } from "next/server";
 
 export async function DELETE(request: NextRequest, { params }: any) {
   try {
-    const id = await params.id;
+    const { id } = await params;
 
     await deleteComment(id);
 
