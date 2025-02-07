@@ -26,9 +26,11 @@ export default {
         blank: "var(--blank)",
         text: "var(--text)",
         mtext: "var(--mtext)",
+        secondary: "var(--secondary)",
         border: "var(--border)",
         ring: "var(--ring)",
         ringOffset: "var(--ring-offset)",
+        destructive: "var(--destructive)",
 
         secondaryBlack: "#212121",
       },

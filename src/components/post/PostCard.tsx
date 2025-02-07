@@ -15,8 +15,6 @@ type PostCardProps = {
 };
 
 function PostCard({ post, dbUserId, username = null }: PostCardProps) {
-  console.log(post);
-
   return (
     <Card className="overflow-hidden bg-bw">
       <CardContent className="p-4 sm:p-6">
@@ -80,13 +78,13 @@ function PostCard({ post, dbUserId, username = null }: PostCardProps) {
           </div>
 
           {/* LIKE & COMMENT BUTTONS */}
-          {/* <Footer
+          <Footer
             postId={post.id}
             count_comment={post._count.comments}
             count_like={post._count.likes}
             likes={post.likes}
             username={username}
-          /> */}
+          />
         </div>
       </CardContent>
     </Card>

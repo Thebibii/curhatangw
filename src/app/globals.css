@@ -19,7 +19,8 @@
   --mtext: #000; /* text that is placed on background with main color e.g. text color of default button */
   --ring: #000;
   --ring-offset: #fff;
-
+  --secondary: #4b5563;
+  --destructive: #ef4444;
   --border-radius: 5px;
   --box-shadow-x: 4px;
   --box-shadow-y: 4px;
@@ -43,3 +44,7 @@
 
   --shadow: var(--box-shadow-x) var(--box-shadow-y) 0px 0px var(--border);
 }
+
+/* body {
+  pointer-events: auto !important;
+} */

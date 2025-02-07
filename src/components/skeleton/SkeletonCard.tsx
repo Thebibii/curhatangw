@@ -13,7 +13,6 @@ export default function SkeletonCard({ length }: { length: number }) {
                 <Skeleton className="w-10 h-10 rounded-full" />
 
                 <div className="flex-1 min-w-0 space-y-4">
-                  <Skeleton className="w-14 h-8 rounded-md" />
                   <div className="flex items-start justify-between">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-2 truncate">
                       <Skeleton className="w-36 h-4 " />

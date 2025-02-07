@@ -6,8 +6,9 @@ import { Avatar, AvatarImage } from "./ui/avatar";
 import FollowAndUnfollow from "./FollowAndUnfollow";
 
 export default function WhoToFollow() {
-  const { data: users } = useGetRandomUser();
   const { user } = useUserContext();
+
+  const { data: users } = useGetRandomUser(user?.data?.id);
 
   if (user === undefined) return null;
   if (users?.length === 0) return null;

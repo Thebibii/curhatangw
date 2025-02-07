@@ -29,7 +29,6 @@ const PopoverProfile = () => {
   };
 
   const { user } = useUserContext();
-  const { notifications } = useUserContext();
 
   return (
     <>
@@ -41,7 +40,7 @@ const PopoverProfile = () => {
         >
           <Link href="/notification">
             <div className="relative">
-              {notifications?.data?.filter((n: any) => !n.read).length > 0 && (
+              {user?.data?._count?.notifications > 0 && (
                 <>
                   <div className="absolute top-0 right-0 w-2 h-2 bg-red-400 z-10 rounded-full" />
                   <div className="absolute top-0 right-0 w-2 h-2 animate-ping bg-red-400 z-0 rounded-full" />
@@ -61,7 +60,7 @@ const PopoverProfile = () => {
               </AvatarFallback>
             </Avatar>
           </PopoverTrigger>
-          <PopoverContent className="p-0 mt-2 w-full" align="end" asChild>
+          <PopoverContent className="p-0 mt-2 w-full bg-bw" align="end" asChild>
             <Command className="rounded-lg min-w-60">
               <CommandList>
                 <CommandGroup heading="User Profile">
@@ -97,7 +96,15 @@ const PopoverProfile = () => {
                       className="cursor-pointer "
                       onSelect={() => setOpen(false)}
                     >
-                      <Icons.BellIcon />
+                      <div className="relative">
+                        {user?.data?._count?.notifications > 0 && (
+                          <>
+                            <div className="absolute top-0 right-0 w-2 h-2 bg-red-400 z-10 rounded-full" />
+                            <div className="absolute top-0 right-0 w-2 h-2 animate-ping bg-red-400 z-0 rounded-full" />
+                          </>
+                        )}
+                        <Icons.BellIcon className="w-4 h-4" />
+                      </div>
                       <span>Notifications</span>
                     </CommandItem>
                   </Link>

@@ -1,22 +1,16 @@
-import { clerkMiddleware } from "@clerk/nextjs/server";
-import { NextRequest, NextResponse } from "next/server";
+import { clerkMiddleware, createRouteMatcher } from "@clerk/nextjs/server";
+import { NextResponse } from "next/server";
 
-export default clerkMiddleware(async (auth, request: NextRequest) => {
-  // let paramPostId = request.nextUrl.pathname.includes("postId");
-  // console.log(paramPostId);
-  // let paramUserId = request.nextUrl.pathname.includes("userId");
-  // if (paramPostId) {
-  //   // const [slug] = request.nextUrl.pathname.split("-");
-  //   return NextResponse.rewrite(
-  //     new URL(`/api/post/${paramPostId}`, request.url)
-  //   );
-  // }
-  // if (paramUserId) {
-  //   // const [slug] = request.nextUrl.pathname.split("-");
-  //   return NextResponse.rewrite(
-  //     new URL(`/api/user/${paramUserId}`, request.url)
-  //   );
-  // }
+const isProtectedRoute = createRouteMatcher(["/notification(.*)"]);
+
+export default clerkMiddleware(async (auth, req) => {
+  const { userId } = await auth();
+
+  if (!userId && isProtectedRoute(req)) {
+    // Add custom logic to run before redirecting
+
+    return NextResponse.redirect(new URL("/", req.url));
+  }
 });
 
 export const config = {

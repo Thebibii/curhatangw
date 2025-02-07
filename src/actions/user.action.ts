@@ -1,7 +1,6 @@
 "use server";
 import prisma from "@/lib/db/prisma";
 import { auth, createClerkClient, currentUser } from "@clerk/nextjs/server";
-import { revalidatePath } from "next/cache";
 
 const userCache = new Map<string, string>();
 const clerkClient = createClerkClient({
@@ -51,6 +50,11 @@ export async function getUserByClerkId(clerkId: string) {
           followers: true,
           following: true,
           posts: true,
+          notifications: {
+            where: {
+              read: false,
+            },
+          },
         },
       },
     },

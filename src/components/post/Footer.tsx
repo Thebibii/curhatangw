@@ -15,6 +15,7 @@ import { useLikePost } from "@/hooks/reactQuery/posts/useLikePost";
 import { useQueryClient } from "@tanstack/react-query";
 import { Icons } from "../icons";
 import { filterBadWord } from "@/helper/sensor.helper";
+import SettingComment from "./SettingComment";
 
 export default function Footer({
   postId,
@@ -165,23 +166,25 @@ export default function Footer({
                       <AvatarImage src={comment.author.image} />
                     </Avatar>
                     <div className="flex-1 min-w-0">
-                      <div className="flex flex-wrap justify-between items-center  gap-y-1">
-                        <div className="flex gap-x-2">
-                          <span className="font-medium text-sm ">
+                      <div className="flex items-center justify-between">
+                        <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
+                          <span className="font-medium text-sm">
                             {comment.author.name}
                           </span>
-                          <span className="text-sm text-muted-foreground">
+                          <span className="text-sm text-secondary">
                             @{comment.author.username}
                           </span>
-                        </div>
-                        <div className="gap-x-2 flex ">
-                          <span className="text-sm text-muted-foreground">
-                            ·
-                          </span>
-                          <span className="text-sm text-muted-foreground font-medium">
+                          <span className="text-sm text-secondary">·</span>
+                          <span className="text-sm text-secondary">
                             {formatDistanceToNow(new Date(comment.createdAt))}
                           </span>
                         </div>
+                        {user?.data?.username === comment.author.username && (
+                          <SettingComment
+                            commentId={comment.id}
+                            refetch={refetch}
+                          />
+                        )}
                       </div>
                       <p className="text-sm break-words">
                         {filterBadWord(comment.content)}
