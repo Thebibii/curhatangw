@@ -6,13 +6,14 @@ export async function DELETE(request: NextRequest, { params }: any) {
     const { id } = await params;
 
     await deleteComment(id);
-
     return NextResponse.json({
       success: true,
-      message: "Comment deleted successfully",
+      message: "Your comment has been deleted successfully",
     });
-  } catch (error) {
-    console.error("Failed to delete post:", error);
-    return { success: false, error: "Failed to delete post" };
+  } catch (error: any) {
+    return NextResponse.json(
+      { success: false, error: error.message, code: error.code },
+      { status: 400 }
+    );
   }
 }
