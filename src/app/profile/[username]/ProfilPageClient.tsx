@@ -2,7 +2,7 @@
 
 import FollowAndUnfollow from "@/components/FollowAndUnfollow";
 import { Icons } from "@/components/icons";
-import LoadingState from "@/components/LoadingState";
+import LoadingState from "@/components/state/LoadingState";
 import DialogEditProfile from "@/components/profile/DialogEditProfile";
 import PostAndLike from "@/components/profile/PostAndLike";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
@@ -14,7 +14,7 @@ import { useUserContext } from "@/contexts/UserContext";
 import { useGetIsFollowingUser } from "@/hooks/reactQuery/profile/useGetIsFollowingUser";
 import { useGetUserByName } from "@/hooks/reactQuery/user/useGetUserByName";
 import { SignInButton } from "@clerk/nextjs";
-import { formatDate, formatDistanceToNow } from "date-fns";
+import { format, formatDate, formatDistanceToNow } from "date-fns";
 import { notFound } from "next/navigation";
 import { useState } from "react";
 
@@ -42,7 +42,7 @@ function ProfilePageClient({
 
   const isOwnProfile = currentUser?.data?.id === user?.data?.id;
 
-  //   const formattedDate = format(new Date(user?.data?.createdAt), "MMMM yyyy");
+  // const formattedDate = format(new Date(user?.data?.createdAt), "MMMM yyyy");
 
   return (
     <div className="max-w-3xl mx-auto">
@@ -171,7 +171,14 @@ function ProfilePageClient({
                   )}
                   <div className="flex items-center text-mtext">
                     <Icons.CalendarIcon className="size-4 mr-2" />
-                    Joined
+                    <LoadingState
+                      data={user}
+                      loadingFallback={<Skeleton className="w-1/3 h-4" />}
+                    >
+                      Joined{" "}
+                      {user?.data?.createdAt &&
+                        format(new Date(user.data.createdAt), "MMMM yyyy")}
+                    </LoadingState>
                   </div>
                 </div>
               </div>

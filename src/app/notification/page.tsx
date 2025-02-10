@@ -1,7 +1,7 @@
 "use client";
 
 import { Icons } from "@/components/icons";
-import LoadingState from "@/components/LoadingState";
+import LoadingState from "@/components/state/LoadingState";
 import { NotificationsSkeleton } from "@/components/skeleton/NotificationCard";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

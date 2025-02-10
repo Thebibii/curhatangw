@@ -1,6 +1,6 @@
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { useGetUserPost } from "@/hooks/reactQuery/posts/useGetUserPost.hook";
-import LoadingState from "../LoadingState";
+import LoadingState from "../state/LoadingState";
 import PostCard from "../post/PostCard";
 import SkeletonCard from "../skeleton/SkeletonCard";
 import { User } from "@/types/user";

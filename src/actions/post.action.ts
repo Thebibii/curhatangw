@@ -82,6 +82,12 @@ export async function getDetailPost(postId: string) {
             },
           },
         },
+        _count: {
+          select: {
+            likes: true,
+            comments: true,
+          },
+        },
       },
     });
     return post;

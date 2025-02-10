@@ -1,6 +1,6 @@
 "use client";
 import CreatePost from "@/components/CreatePost";
-import LoadingState from "@/components/LoadingState";
+import LoadingState from "@/components/state/LoadingState";
 import ObserverPlaceholder from "@/components/skeleton/ObserverPlaceholder";
 import PostCard from "@/components/post/PostCard";
 import SkeletonCard from "@/components/skeleton/SkeletonCard";

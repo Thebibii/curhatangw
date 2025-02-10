@@ -7,8 +7,7 @@ import { Textarea } from "../ui/textarea";
 import { useCreateComment } from "@/hooks/reactQuery/comments/useCreateComment.hook";
 import { toast } from "@/hooks/use-toast";
 import { useGetCommentByPost } from "@/hooks/reactQuery/comments/useGetComments.hook";
-import LoadingState from "../LoadingState";
-import { Skeleton } from "../ui/skeleton";
+import LoadingState from "../state/LoadingState";
 import { ScrollArea } from "../ui/scroll-area";
 import { useUserContext } from "@/contexts/UserContext";
 import { useLikePost } from "@/hooks/reactQuery/posts/useLikePost";
@@ -16,6 +15,8 @@ import { useQueryClient } from "@tanstack/react-query";
 import { Icons } from "../icons";
 import { filterBadWord } from "@/helper/sensor.helper";
 import SettingComment from "./SettingComment";
+import CommentSkeleton from "../skeleton/CommentSkeleton";
+import EmptyState from "../state/EmptyState";
 
 export default function Footer({
   postId,
@@ -150,48 +151,52 @@ export default function Footer({
       </div>
 
       {showComments && (
-        <div className="space-y-4 pt-4 border-t ">
+        <div className="space-y-4 ">
           <ScrollArea
-            className={comments?.data?.length > 5 ? "h-72" : "h-full"}
+            className={
+              comments?.data?.length > 5 ? "h-72 border-y" : "h-full border-t"
+            }
           >
-            <div className="space-y-4 pr-3">
+            <div className="space-y-4 pr-3 py-2">
               <LoadingState
                 data={isLoading === false}
-                loadingFallback={<Skeleton className="w-full h-5" />}
+                loadingFallback={<CommentSkeleton />}
               >
-                {/* DISPLAY COMMENTS */}
-                {comments?.data?.map((comment: any) => (
-                  <div key={comment.id} className="flex space-x-3 ">
-                    <Avatar className="size-8 flex-shrink-0">
-                      <AvatarImage src={comment.author.image} />
-                    </Avatar>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <div className="flex flex-wrap items-center gap-x-2 gap-y-1">
-                          <span className="font-medium text-sm">
-                            {comment.author.name}
-                          </span>
-                          <span className="text-sm text-secondary">
-                            @{comment.author.username}
-                          </span>
-                          <span className="text-sm text-secondary">·</span>
-                          <span className="text-sm text-secondary">
-                            {formatDistanceToNow(new Date(comment.createdAt))}
-                          </span>
+                <EmptyState data={comments?.data} message={comments?.message}>
+                  {comments?.data?.map((comment: any) => (
+                    <div key={comment.id} className="flex space-x-3 ">
+                      <Avatar className="size-8 flex-shrink-0">
+                        <AvatarImage src={comment.author.image} />
+                      </Avatar>
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center justify-between">
+                          <div className="flex flex-wrap items-center gap-x-2 ">
+                            <span className="font-medium text-sm">
+                              {comment.author.name}
+                            </span>
+                            <span className="text-sm text-secondary">
+                              @{comment.author.username}
+                            </span>
+                            <span className="text-sm text-secondary">·</span>
+                            <span className="text-sm text-secondary">
+                              {formatDistanceToNow(new Date(comment.createdAt))}
+                            </span>
+                          </div>
+                          {user?.data?.username === comment.author.username && (
+                            <SettingComment
+                              commentId={comment.id}
+                              refetch={refetch}
+                              content={comment?.content}
+                            />
+                          )}
                         </div>
-                        {user?.data?.username === comment.author.username && (
-                          <SettingComment
-                            commentId={comment.id}
-                            refetch={refetch}
-                          />
-                        )}
+                        <p className="text-sm break-words">
+                          {filterBadWord(comment.content)}
+                        </p>
                       </div>
-                      <p className="text-sm break-words">
-                        {filterBadWord(comment.content)}
-                      </p>
                     </div>
-                  </div>
-                ))}
+                  ))}
+                </EmptyState>
               </LoadingState>
             </div>
           </ScrollArea>
@@ -216,7 +221,7 @@ export default function Footer({
                     disabled={isPending || !newComment.trim() || isCommenting}
                   >
                     {isPending ? (
-                      "Posting..."
+                      "Commenting..."
                     ) : (
                       <>
                         <Icons.SendIcon className="size-4" />

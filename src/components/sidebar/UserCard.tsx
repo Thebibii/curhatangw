@@ -5,7 +5,7 @@ import Link from "next/link";
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Separator } from "../ui/separator";
 import { Skeleton } from "../ui/skeleton";
-import LoadingState from "../LoadingState";
+import LoadingState from "../state/LoadingState";
 import { useUserContext } from "@/contexts/UserContext";
 import { Icons } from "../icons";
 

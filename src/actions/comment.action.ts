@@ -44,7 +44,7 @@ export async function createComment(postId: string, content: string) {
 }
 
 export async function getComments(postId: string) {
-  return prisma.comment.findMany({
+  const data = prisma.comment.findMany({
     where: { postId },
     include: {
       author: {
@@ -57,6 +57,8 @@ export async function getComments(postId: string) {
     },
     orderBy: { createdAt: "asc" },
   });
+
+  return data;
 }
 
 export async function deleteComment(commentId: string) {
@@ -78,5 +80,30 @@ export async function deleteComment(commentId: string) {
   } catch (error) {
     console.error("Failed to delete post:", error);
     return { success: false, error: "Failed to delete post" };
+  }
+}
+
+export async function updateComment(commentId: string, content: string) {
+  try {
+    const userId = await getDbUserId();
+    const comment = await prisma.comment.findUnique({
+      where: { id: commentId },
+      select: { authorId: true },
+    });
+
+    if (!comment) throw new Error("Comment not found");
+
+    if (comment.authorId !== userId)
+      throw new Error("Unauthorized - no update permission");
+
+    const updatedComment = await prisma.comment.update({
+      where: { id: commentId },
+      data: { content },
+    });
+
+    return updatedComment;
+  } catch (error) {
+    console.error("Failed to update comment:", error);
+    return { success: false, error: "Failed to update comment" };
   }
 }

@@ -1,29 +1,30 @@
 "use client";
-import LoadingState from "@/components/LoadingState";
-import PostCard from "@/components/post/PostCard";
+import LoadingState from "@/components/state/LoadingState";
 import SkeletonCard from "@/components/skeleton/SkeletonCard";
 import { Dialog, DialogContent, DialogTitle } from "@/components/ui/dialog";
 import { VisuallyHidden } from "@/components/ui/visually-hidden";
 import { useGetDetailPost } from "@/hooks/reactQuery/posts/useGetDetailPost";
 import { useRouter } from "next/navigation";
 import { useParams } from "next/navigation";
+import PostDetail from "@/components/post/detail/PostDetail";
 
 export default function DetailModal() {
   const params = useParams<{ id: string }>();
   const router = useRouter();
 
-  const { data } = useGetDetailPost({ postId: params.id });
+  const { data, isLoading } = useGetDetailPost({ postId: params.id });
 
   return (
     <Dialog
-      defaultOpen={true}
+      open={true}
+      // modal={false}
       onOpenChange={(open) => {
         if (!open) {
           router.back();
         }
       }}
     >
-      <DialogContent className="bg-bw">
+      <DialogContent className="bg-bw max-w-[50vw]">
         <DialogTitle>
           <VisuallyHidden />
         </DialogTitle>
@@ -31,7 +32,7 @@ export default function DetailModal() {
           data={data?.data}
           loadingFallback={<SkeletonCard length={1} />}
         >
-          <PostCard post={data?.data} dbUserId="id" />
+          <PostDetail post={data?.data} isLoading={isLoading} dbUserId="id" />
         </LoadingState>
       </DialogContent>
     </Dialog>
