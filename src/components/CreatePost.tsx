@@ -7,12 +7,18 @@ import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { toast } from "@/hooks/use-toast";
 import { useCreatePost } from "@/hooks/reactQuery/posts/useCreatePost";
-import { useQueryClient } from "@tanstack/react-query";
+import {
+  InfiniteData,
+  QueryFilters,
+  useQueryClient,
+} from "@tanstack/react-query";
 import { useUserContext } from "@/contexts/UserContext";
 import { generateReactHelpers } from "@uploadthing/react";
 import { Icons } from "./icons";
 import UploadImage from "./UploadImage";
 import { OurFileRouter } from "@/helper/uploadthing.helper";
+import { pages } from "next/dist/build/templates/app-page";
+import { PostsInfinite } from "@/types/post";
 
 const { uploadFiles } = generateReactHelpers<OurFileRouter>();
 
@@ -26,8 +32,27 @@ function CreatePost() {
   const [file, setFile] = useState<File | null>(null);
 
   const { mutate, isPending } = useCreatePost({
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["get.post"] });
+    onSuccess: async (newPost: any) => {
+      const queryFilter: QueryFilters = {
+        queryKey: ["get.post"],
+      };
+
+      await queryClient.cancelQueries(queryFilter);
+      queryClient.setQueriesData(queryFilter, (oldData: PostsInfinite) => {
+        const firstPage = oldData?.pages[0];
+        if (firstPage) {
+          return {
+            pageParams: oldData.pageParams,
+            pages: [
+              {
+                data: [newPost.data.post, ...firstPage.data],
+                nextPage: firstPage.nextCursor,
+              },
+              ...oldData.pages.slice(1),
+            ],
+          };
+        }
+      });
       setContent("");
       setImageUrl("");
       setShowImageUpload(false);

@@ -49,7 +49,9 @@ function PostCard({ post, dbUserId, username = null }: PostCardProps) {
                     </Link>
                     <span>•</span>
                     <span>
-                      {formatDistanceToNow(new Date(post?.createdAt))} ago
+                      {post?.createdAt &&
+                        formatDistanceToNow(new Date(post?.createdAt))}{" "}
+                      ago
                     </span>
                   </div>
                 </div>
@@ -80,9 +82,9 @@ function PostCard({ post, dbUserId, username = null }: PostCardProps) {
           {/* LIKE & COMMENT BUTTONS */}
           <Footer
             postId={post.id}
-            count_comment={post._count.comments}
-            count_like={post._count.likes}
-            likes={post.likes}
+            count_comment={post?._count?.comments}
+            count_like={post?._count?.likes}
+            likes={post?.likes}
             username={username}
           />
         </div>

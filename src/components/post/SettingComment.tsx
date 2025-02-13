@@ -8,7 +8,6 @@ import {
 } from "../ui/dropdown-menu";
 import {
   AlertDialog,
-  AlertDialogAction,
   AlertDialogCancel,
   AlertDialogContent,
   AlertDialogDescription,
@@ -61,8 +60,6 @@ export default function SettingComment({
   refetch?: () => void;
   content: string;
 }) {
-  console.log(content);
-
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
 
@@ -85,7 +82,11 @@ export default function SettingComment({
         <DropdownMenuTrigger asChild>
           <MoreHorizontalIcon className="w-4 aspect-square cursor-pointer hover:text-gray-600" />
         </DropdownMenuTrigger>
-        <DropdownMenuContent side="left" className="bg-bw" align="start">
+        <DropdownMenuContent
+          side="left"
+          className="bg-bw z-[1000]"
+          align="start"
+        >
           <DropdownMenuItem
             className="cursor-pointer bg-bw"
             onClick={() => setOpenEditDialog(true)}
@@ -225,7 +226,11 @@ const EditCommentDialog = ({
               />
               <div className="flex justify-end gap-3">
                 <DialogClose asChild>
-                  <Button variant="neutral" onClick={() => form.reset()}>
+                  <Button
+                    variant="neutral"
+                    onClick={() => form.reset()}
+                    disabled={isPending}
+                  >
                     Cancel
                   </Button>
                 </DialogClose>
@@ -236,9 +241,6 @@ const EditCommentDialog = ({
             </div>
           </form>
         </Form>
-        {/* <DialogFooter>
-          <Button type="submit">Save changes</Button>
-        </DialogFooter> */}
       </DialogContent>
     </Dialog>
   );

@@ -16,8 +16,7 @@ export default function DetailModal() {
 
   return (
     <Dialog
-      open={true}
-      // modal={false}
+      defaultOpen={true}
       onOpenChange={(open) => {
         if (!open) {
           router.back();

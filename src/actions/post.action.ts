@@ -13,6 +13,16 @@ export async function createPost(content: string, image: string) {
         image,
         authorId: userId,
       },
+      include: {
+        author: {
+          select: {
+            id: true,
+            name: true,
+            username: true,
+            image: true,
+          },
+        },
+      },
     });
 
     return post;

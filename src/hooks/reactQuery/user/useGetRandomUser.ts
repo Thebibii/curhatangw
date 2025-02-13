@@ -12,5 +12,6 @@ export const useGetRandomUser = (isSignedIn: string | undefined) => {
       return data;
     },
     enabled: !!isSignedIn,
+    refetchOnWindowFocus: false,
   });
 };

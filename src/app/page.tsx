@@ -27,8 +27,8 @@ export default function Home() {
             loadingFallback={<SkeletonCard length={3} />}
           >
             {data?.pages?.map((response: any) => {
-              return response?.data?.map((post: any) => (
-                <PostCard key={post.id} post={post} dbUserId={user?.data?.id} />
+              return response?.data?.map((post: any, _: number) => (
+                <PostCard key={_} post={post} dbUserId={user?.data?.id} />
               ));
             })}
           </LoadingState>

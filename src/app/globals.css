@@ -48,3 +48,13 @@
 /* body {
   pointer-events: auto !important;
 } */
+
+/* Misalnya, di CSS Anda */
+.dropdown-menu {
+  z-index: 1000;
+  background-color: #ef4444;
+}
+
+.dialog {
+  z-index: 999;
+}
