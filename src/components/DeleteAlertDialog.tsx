@@ -17,7 +17,7 @@ import { toast } from "@/hooks/use-toast";
 import { QueryFilters, useQueryClient } from "@tanstack/react-query";
 import { useDeletePhoto } from "@/hooks/useDeletePhoto.hook";
 import { Icons } from "./icons";
-import { PostsInfinite } from "@/types/post";
+import { ApiPostsInfinite, PostInfinite } from "@/types/post";
 
 interface DeleteAlertDialogProps {
   postId: string;
@@ -37,20 +37,20 @@ export function DeleteAlertDialog({
   const { mutate: deletePhoto } = useDeletePhoto();
   const { isPending, mutate, isSuccess } = useDeletePost({
     postId,
-    onSuccess: async (body: any) => {
+    onSuccess: async ({ data: body }: { data: { id: string } }) => {
       const queryFilter: QueryFilters = {
         queryKey: ["get.post"],
       };
 
       await queryClient.cancelQueries(queryFilter);
-      queryClient.setQueriesData(queryFilter, (oldData: PostsInfinite) => {
+      queryClient.setQueriesData(queryFilter, (oldData: ApiPostsInfinite) => {
         if (!oldData) return;
 
         return {
           pageParams: oldData?.pageParams,
           pages: oldData?.pages?.map((page: any) => ({
             nextCursor: page.nextCursor,
-            data: page.data.filter((p: any) => p.id !== body.data.id),
+            data: page.data.filter((p: any) => p.id !== body.id),
           })),
         };
       });
