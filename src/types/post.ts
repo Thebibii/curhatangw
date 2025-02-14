@@ -1,29 +1,37 @@
-export type PostsInfinite = {
-  pages: {
-    success: boolean;
-    message: string;
-    data: {
+export type ApiPostsInfinite = {
+  pages: PostInfinite[];
+  pageParams: string | undefined[];
+};
+
+export type PostInfinite = {
+  success: boolean;
+  message: string;
+  data: {
+    id: string;
+    authorId: string;
+    content: string;
+    image: string;
+    createdAt: string;
+    updatedAt: string;
+    author: {
       id: string;
-      authorId: string;
-      content: string;
+      name: string;
       image: string;
-      createdAt: string;
-      updatedAt: string;
-      author: {
+      username: string;
+    };
+    tags: {
+      tag: {
         id: string;
         name: string;
-        image: string;
-        username: string;
-      };
-      likes: {
-        userId: string;
-      }[];
-      _count: {
-        likes: number;
-        comments: number;
       };
     }[];
-    nextCursor: string;
+    likes: {
+      userId: string;
+    }[];
+    _count: {
+      likes: number;
+      comments: number;
+    };
   }[];
-  pageParams: string | undefined[];
+  nextCursor: string;
 };

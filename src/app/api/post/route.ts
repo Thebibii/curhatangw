@@ -34,13 +34,13 @@ export async function GET(request: NextRequest) {
 
 export async function POST(request: NextRequest) {
   try {
-    const { content, image } = await request.json();
-    const post = await createPost(content, image);
+    const { content, image, tags } = await request.json();
+    const post = await createPost(content, image, tags);
     return NextResponse.json(
       {
         success: true,
         message: "Post created successfully",
-        post,
+        data: post,
       },
       { status: 201 }
     );

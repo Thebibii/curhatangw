@@ -53,8 +53,23 @@ model Post{
   comments Comment[]
   likes Like[]
   notifications Notification[]
+  tags PostTag[]
 }
 
+model Tag {
+  id    String @id @default(cuid())
+  name  String @unique
+  posts PostTag[]
+}
+
+model PostTag {
+  postId String
+  tagId  String
+
+  post Post @relation(fields: [postId], references: [id], onDelete: Cascade)
+  tag  Tag  @relation(fields: [tagId], references: [id], onDelete: Cascade)
+  @@id([postId, tagId])
+}
 
 model Comment{
   id String @id @default(cuid())
@@ -122,3 +137,4 @@ enum NotificationType {
   COMMENT 
   FOLLOW   
 }
+

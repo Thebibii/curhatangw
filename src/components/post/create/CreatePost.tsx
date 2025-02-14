@@ -1,20 +1,22 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardContent } from "./ui/card";
-import { Avatar, AvatarFallback, AvatarImage } from "./ui/avatar";
-import { Textarea } from "./ui/textarea";
-import { Button } from "./ui/button";
+import { Card, CardContent } from "../../ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "../../ui/avatar";
+import { Textarea } from "../../ui/textarea";
+import { Button } from "../../ui/button";
 import { toast } from "@/hooks/use-toast";
 import { useCreatePost } from "@/hooks/reactQuery/posts/useCreatePost";
 import { QueryFilters, useQueryClient } from "@tanstack/react-query";
 import { useUserContext } from "@/contexts/UserContext";
 import { generateReactHelpers } from "@uploadthing/react";
-import { Icons } from "./icons";
-import UploadImage from "./UploadImage";
+import { Icons } from "../../icons";
+import UploadImage from "../../UploadImage";
 import { OurFileRouter } from "@/helper/uploadthing.helper";
-import { pages } from "next/dist/build/templates/app-page";
-import { PostsInfinite } from "@/types/post";
+import { Label } from "../../ui/label";
+import InputTags from "./InputTags";
+import { Tag } from "@prisma/client";
+import { ApiPostsInfinite, PostInfinite } from "@/types/post";
 
 const { uploadFiles } = generateReactHelpers<OurFileRouter>();
 
@@ -26,27 +28,30 @@ function CreatePost() {
   const [imageUrl, setImageUrl] = useState<string | null>(null);
   const [showImageUpload, setShowImageUpload] = useState(false);
   const [file, setFile] = useState<File | null>(null);
+  const [tagInput, setTagInput] = useState("");
+  const [tags, setTags] = useState<Tag[]>([]);
 
   const { mutate, isPending } = useCreatePost({
-    onSuccess: async (newPost: any) => {
+    onSuccess: async ({ data: newPost }: { data: PostInfinite }) => {
       setContent("");
       setImageUrl("");
       setShowImageUpload(false);
       setFile(null);
+      setTags([]);
 
       const queryFilter: QueryFilters = {
         queryKey: ["get.post"],
       };
 
       await queryClient.cancelQueries(queryFilter);
-      queryClient.setQueriesData(queryFilter, (oldData: PostsInfinite) => {
+      queryClient.setQueriesData(queryFilter, (oldData: ApiPostsInfinite) => {
         const firstPage = oldData?.pages[0];
         if (firstPage) {
           return {
             pageParams: oldData.pageParams,
             pages: [
               {
-                data: [newPost.data.post, ...firstPage.data],
+                data: [newPost.data, ...firstPage.data],
                 nextPage: firstPage.nextCursor,
               },
               ...oldData.pages.slice(1),
@@ -75,7 +80,7 @@ function CreatePost() {
         uploadedImageUrl = uploadResponse?.[0]?.url || "";
       }
 
-      mutate({ content, image: uploadedImageUrl });
+      mutate({ content, image: uploadedImageUrl, tags });
     } catch (error) {
       console.error("Failed to create post:", error);
       toast({
@@ -115,14 +120,31 @@ function CreatePost() {
                     {user?.data.name[0]}
                   </AvatarFallback>
                 </Avatar>
-                <Textarea
-                  name="content"
-                  placeholder="What's on your mind?"
-                  className="min-h-[100px] resize-none  focus-visible:ring-0 focus-visible:ring-offset-0 text-base"
-                  value={content}
-                  onChange={(e) => setContent(e.target.value)}
-                  disabled={isPosting || isPending}
-                />
+                <div className="flex flex-col w-full space-y-4">
+                  <div className="flex flex-col space-y-2 ">
+                    <p className="font-semibold text-sm"># Tags</p>
+                    <InputTags
+                      setTagInput={setTagInput}
+                      tagInput={tagInput}
+                      tags={tags}
+                      setTags={setTags}
+                    />
+                  </div>
+                  <div className="flex flex-col space-y-2">
+                    <Label htmlFor="content" className="font-semibold">
+                      Message
+                    </Label>
+                    <Textarea
+                      name="content"
+                      id="content"
+                      placeholder="What's on your mind?"
+                      className="min-h-[100px] resize-none   focus-visible:ring-0 focus-visible:ring-offset-0 text-base"
+                      value={content}
+                      onChange={(e) => setContent(e.target.value)}
+                      disabled={isPosting || isPending}
+                    />
+                  </div>
+                </div>
               </div>
 
               {(showImageUpload || imageUrl) && (

@@ -1,7 +1,7 @@
 import prisma from "@/lib/db/prisma";
 import { getDbUserByUsername, getDbUserId } from "./user.action";
 
-export async function createPost(content: string, image: string) {
+export async function createPost(content: string, image: string, tags: any) {
   try {
     const userId = await getDbUserId();
 
@@ -12,30 +12,29 @@ export async function createPost(content: string, image: string) {
         content,
         image,
         authorId: userId,
+        tags:
+          tags?.length > 0
+            ? {
+                create: tags.map((tag: any) => ({
+                  tag: {
+                    connectOrCreate: {
+                      where: { id: tag.id },
+                      create: { id: tag.id, name: tag.name },
+                    },
+                  },
+                })),
+              }
+            : undefined, // Jika tags kosong, Prisma tidak akan membuat relasi
       },
       include: {
         author: {
-          select: {
-            id: true,
-            name: true,
-            username: true,
-            image: true,
-          },
+          select: { id: true, name: true, username: true, image: true },
         },
-        likes: {
-          select: {
-            userId: true,
-          },
-        },
-        _count: {
-          select: {
-            likes: true,
-            comments: true,
-          },
-        },
+        likes: { select: { userId: true } },
+        tags: { select: { tag: { select: { id: true, name: true } } } },
+        _count: { select: { comments: true } },
       },
     });
-
     return post;
   } catch (error) {
     console.error("Failed to create post:", error);
@@ -63,6 +62,16 @@ export async function getPosts(limit: number, cursor?: string | undefined) {
       likes: {
         select: {
           userId: true,
+        },
+      },
+      tags: {
+        select: {
+          tag: {
+            select: {
+              id: true,
+              name: true,
+            },
+          },
         },
       },
       _count: {

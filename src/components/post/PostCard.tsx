@@ -63,6 +63,16 @@ function PostCard({ post, dbUserId, username = null }: PostCardProps) {
               <p className="mt-2 text-sm text-foreground break-words">
                 {filterBadWord(post?.content)}
               </p>
+              {post?.tags?.length > 0 &&
+                post?.tags?.map(({ tag }: any, idx: number) => (
+                  <Link
+                    key={idx}
+                    href={`/tag/${tag?.name}`}
+                    className="mr-2 text-sm text-[#386ed3] hover:underline"
+                  >
+                    {`#${tag?.name}`}
+                  </Link>
+                ))}
               {post?.image && (
                 <div className="rounded-lg overflow-hidden mt-2">
                   <Image

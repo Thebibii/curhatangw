@@ -14,10 +14,13 @@ import {
   LogOutIcon,
   MapPinIcon,
   MessageCircleIcon,
+  PlusIcon,
   SendIcon,
+  TagsIcon,
   Trash2Icon,
   User,
   UserPlusIcon,
+  XIcon,
 } from "lucide-react";
 
 type IconProps = React.HTMLAttributes<SVGElement>;
@@ -186,4 +189,7 @@ export const Icons = {
   Trash2Icon: (props: IconProps) => <Trash2Icon {...props} />,
   FileTextIcon: (props: IconProps) => <FileTextIcon {...props} />,
   LogInIcon: (props: IconProps) => <LogInIcon {...props} />,
+  PlusIcon: (props: IconProps) => <PlusIcon {...props} />,
+  TagsIcon: (props: IconProps) => <TagsIcon {...props} />,
+  XIcon: (props: IconProps) => <XIcon {...props} />,
 };

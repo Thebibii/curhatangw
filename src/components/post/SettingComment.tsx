@@ -41,7 +41,8 @@ import {
 import { z } from "zod";
 import { useUpdateComment } from "@/hooks/reactQuery/comments/useUpdateComment.hook";
 import { QueryKey, useQueryClient } from "@tanstack/react-query";
-import { CommentsApiResponse } from "@/types/comment";
+import { CommentResponse, CommentsApiResponse } from "@/types/comment";
+import { DetailPost } from "@/types/detail-post";
 
 const formEditSchema = z.object({
   content: z
@@ -53,17 +54,34 @@ const formDeleteSchema = z.object({
   commentId: z.string(),
 });
 
+type TSettingComment = {
+  commentId: string;
+  refetch?: () => void;
+  content: string;
+  postId: string;
+};
+
+type TModal = {
+  openDeleteDialog?: boolean | undefined;
+  setOpenDeleteDialog?: (
+    value: React.SetStateAction<boolean>
+  ) => void | undefined;
+  openEditDialog?: boolean | undefined;
+  setOpenEditDialog?: (
+    value: React.SetStateAction<boolean>
+  ) => void | undefined;
+  commentId: string;
+  refetch?: () => void;
+  content?: string;
+  postId: string;
+};
+
 export default function SettingComment({
   commentId,
   refetch,
   content,
   postId,
-}: {
-  commentId: string;
-  refetch?: () => void;
-  content: string;
-  postId: string;
-}) {
+}: TSettingComment) {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
 
@@ -116,10 +134,14 @@ const DeleteCommentDialog = ({
   setOpenDeleteDialog,
   commentId,
   postId,
-}: any) => {
+}: TModal) => {
   const queryClient = useQueryClient();
   const { mutate, isPending } = useDeleteComment({
-    onSuccess: async (body: any) => {
+    onSuccess: async ({
+      data: body,
+    }: {
+      data: CommentResponse | DetailPost;
+    }) => {
       const queryKeys: QueryKey[] = [
         ["get.detail.post", postId],
         ["get.comment", postId],
@@ -139,7 +161,7 @@ const DeleteCommentDialog = ({
               data: {
                 ...oldData.data,
                 comments: oldData.data.comments?.filter(
-                  (c: any) => c.id !== body.data.id
+                  (c: any) => c.id !== body.id
                 ),
                 _count: {
                   ...oldData.data._count,
@@ -150,9 +172,13 @@ const DeleteCommentDialog = ({
           }
 
           if (queryKey[0] === "get.comment") {
+            const comments = oldData.data?.filter((c: any) => c.id !== body.id);
+
             return {
-              data: oldData.data?.filter((c: any) => c.id !== body.data.id),
-              success: true,
+              ...oldData,
+              data: comments ?? [],
+              message:
+                comments.length === 0 ? "No comments yet" : oldData.message,
             };
           }
 
@@ -160,7 +186,7 @@ const DeleteCommentDialog = ({
         });
       });
 
-      setOpenDeleteDialog(false);
+      setOpenDeleteDialog?.(false);
       toast({
         title: "Comment deleted",
         description: "Your comment has been deleted successfully",
@@ -192,7 +218,7 @@ const DeleteCommentDialog = ({
           <form onSubmit={form.handleSubmit(onDelete)}>
             <AlertDialogFooter>
               <AlertDialogCancel
-                onClick={() => setOpenDeleteDialog(false)}
+                onClick={() => setOpenDeleteDialog?.(false)}
                 disabled={isPending}
               >
                 Cancel
@@ -218,7 +244,7 @@ const EditCommentDialog = ({
   commentId,
   refetch,
   content,
-}: any) => {
+}: TModal) => {
   const form = useForm<z.infer<typeof formEditSchema>>({
     resolver: zodResolver(formEditSchema),
     mode: "onChange",
@@ -229,8 +255,8 @@ const EditCommentDialog = ({
 
   const { mutate, isPending } = useUpdateComment({
     onSuccess: () => {
-      refetch();
-      setOpenEditDialog(false);
+      refetch?.();
+      setOpenEditDialog?.(false);
       toast({
         title: "Comment updated",
         description: "Your comment has been updated successfully",
