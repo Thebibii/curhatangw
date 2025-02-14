@@ -38,10 +38,10 @@ export function DeleteAlertDialog({
   const { isPending, mutate, isSuccess } = useDeletePost({
     postId,
     onSuccess: async ({ data: body }: { data: { id: string } }) => {
-      const queryFilter: QueryFilters = {
+      queryClient.invalidateQueries({ queryKey: ["get.post"] });
+      /*   const queryFilter: QueryFilters = { // untuk memperbarui cache
         queryKey: ["get.post"],
       };
-
       await queryClient.cancelQueries(queryFilter);
       queryClient.setQueriesData(queryFilter, (oldData: ApiPostsInfinite) => {
         if (!oldData) return;
@@ -54,6 +54,7 @@ export function DeleteAlertDialog({
           })),
         };
       });
+      */
       toast({
         title: "Post deleted",
         description: "Your post has been deleted successfully",

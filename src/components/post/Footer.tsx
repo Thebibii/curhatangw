@@ -46,7 +46,8 @@ export default function Footer({
   const { mutate, isPending } = useCreateComment({
     postId,
     onSuccess: async (newComment: CommentsApiResponse) => {
-      const queryKey: QueryKey = ["get.comment", postId];
+      refetch();
+      /* const queryKey: QueryKey = ["get.comment", postId];
 
       await queryClient.cancelQueries({ queryKey });
 
@@ -54,15 +55,13 @@ export default function Footer({
         const firstPage = oldData?.data;
 
         if (firstPage) {
-          console.log([...firstPage, newComment.data]);
-
           return {
             data: [...firstPage, newComment.data],
             success: true,
             ...oldData.data.slice(1),
           };
         }
-      });
+      }); */
 
       toast({
         title: "Comment created",

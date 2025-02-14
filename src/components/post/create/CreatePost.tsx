@@ -33,16 +33,16 @@ function CreatePost() {
 
   const { mutate, isPending } = useCreatePost({
     onSuccess: async ({ data: newPost }: { data: PostInfinite }) => {
+      queryClient.invalidateQueries({ queryKey: ["get.post"] });
       setContent("");
       setImageUrl("");
       setShowImageUpload(false);
       setFile(null);
       setTags([]);
 
-      const queryFilter: QueryFilters = {
+      /*  const queryFilter: QueryFilters = { // untuk memperbarui cache
         queryKey: ["get.post"],
       };
-
       await queryClient.cancelQueries(queryFilter);
       queryClient.setQueriesData(queryFilter, (oldData: ApiPostsInfinite) => {
         const firstPage = oldData?.pages[0];
@@ -58,7 +58,7 @@ function CreatePost() {
             ],
           };
         }
-      });
+      }); */
 
       toast({
         title: "Notification",

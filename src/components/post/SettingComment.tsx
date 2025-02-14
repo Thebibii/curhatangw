@@ -134,6 +134,7 @@ const DeleteCommentDialog = ({
   setOpenDeleteDialog,
   commentId,
   postId,
+  refetch,
 }: TModal) => {
   const queryClient = useQueryClient();
   const { mutate, isPending } = useDeleteComment({
@@ -142,7 +143,8 @@ const DeleteCommentDialog = ({
     }: {
       data: CommentResponse | DetailPost;
     }) => {
-      const queryKeys: QueryKey[] = [
+      refetch?.();
+      /* const queryKeys: QueryKey[] = [ // untuk memperbarui cache
         ["get.detail.post", postId],
         ["get.comment", postId],
       ];
@@ -184,7 +186,7 @@ const DeleteCommentDialog = ({
 
           return oldData;
         });
-      });
+      }); */
 
       setOpenDeleteDialog?.(false);
       toast({

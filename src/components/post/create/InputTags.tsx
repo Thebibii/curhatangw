@@ -43,7 +43,8 @@ export default function InputTags(props: Props) {
       setOpenTagSearch(false);
       props.setTagInput("");
       props.setTags((prevTags) => [...prevTags, data]);
-      const queryKey: QueryKey = ["get.tags"];
+      queryClient.invalidateQueries({ queryKey: ["get.tags"] });
+      /* const queryKey: QueryKey = ["get.tags"]; // untuk memperbarui cache
       await queryClient.cancelQueries({ queryKey });
 
       queryClient.setQueryData(queryKey, (oldData: TagApiResponse) => {
@@ -53,7 +54,7 @@ export default function InputTags(props: Props) {
             data: [...oldData.data, data],
           };
         }
-      });
+      }); */
     },
   });
 
