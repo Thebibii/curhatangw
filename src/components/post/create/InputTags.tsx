@@ -76,7 +76,7 @@ export default function InputTags(props: Props) {
           </Button>
         </PopoverTrigger>
         <PopoverContent align="start" className="w-full  p-0 border-none">
-          <Command className="bg-bw w-[400px]">
+          <Command className="bg-bw w-full sm:w-[400px] lg:w-[300px] xl:w-[400px]">
             <CommandInput
               value={props.tagInput}
               onValueChange={(searchTag) => {
