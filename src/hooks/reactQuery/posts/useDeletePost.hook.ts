@@ -3,7 +3,7 @@ import { useMutation } from "@tanstack/react-query";
 
 type DeletePostProps = {
   postId: string;
-  onSuccess: () => void;
+  onSuccess: (body: any) => void;
 };
 
 export const useDeletePost = ({ postId, onSuccess }: DeletePostProps) => {

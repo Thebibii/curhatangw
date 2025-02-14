@@ -102,30 +102,30 @@ function PostDetail({
                 data={isLoading === false}
                 loadingFallback={<CommentSkeleton />}
               >
-                <EmptyState data={post?.comments} message={post?.message}>
-                  <div className="flex space-x-3 ">
-                    <Avatar className="size-8 flex-shrink-0">
-                      <AvatarImage src={post?.author.image} />
-                    </Avatar>
-                    <div className="flex-1 min-w-0">
-                      <div className="flex items-center justify-between">
-                        <div className="flex flex-wrap items-center gap-x-2 ">
-                          <span className="font-medium text-sm">
-                            {post?.author.name}
-                          </span>
-                          <span className="text-sm text-secondary">
-                            @{post?.author.username}
-                          </span>
-                        </div>
+                <div className="flex space-x-3 ">
+                  <Avatar className="size-8 flex-shrink-0">
+                    <AvatarImage src={post?.author.image} />
+                  </Avatar>
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between">
+                      <div className="flex flex-wrap items-center gap-x-2 ">
+                        <span className="font-medium text-sm">
+                          {post?.author.name}
+                        </span>
+                        <span className="text-sm text-secondary">
+                          @{post?.author.username}
+                        </span>
                       </div>
-                      <p className="text-sm break-words">
-                        {filterBadWord(post?.content)}
-                      </p>
-                      <span className="text-xs text-secondary">
-                        {formatDistanceToNow(new Date(post?.createdAt))}
-                      </span>
                     </div>
+                    <p className="text-sm break-words">
+                      {filterBadWord(post?.content)}
+                    </p>
+                    <span className="text-xs text-secondary">
+                      {formatDistanceToNow(new Date(post?.createdAt))}
+                    </span>
                   </div>
+                </div>
+                <EmptyState data={post?.comments} message="No comments yet">
                   {post?.comments?.map((comment: any) => (
                     <div key={comment.id} className="flex space-x-3 ">
                       <Avatar className="size-8 flex-shrink-0">
@@ -150,6 +150,7 @@ function PostDetail({
                               commentId={comment.id}
                               refetch={refetch}
                               content={comment.content}
+                              postId={post.id}
                             />
                           )}
                         </div>

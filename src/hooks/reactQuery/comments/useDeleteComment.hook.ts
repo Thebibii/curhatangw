@@ -1,9 +1,13 @@
 import { baseURL } from "@/lib/db/env";
 import { useMutation } from "@tanstack/react-query";
 
-export const useDeleteComment = ({ onSuccess }: { onSuccess: () => void }) => {
+export const useDeleteComment = ({
+  onSuccess,
+}: {
+  onSuccess: (body: any) => void;
+}) => {
   return useMutation({
-    mutationKey: ["get.comment"],
+    mutationKey: ["delete.comment"],
     mutationFn: async (body: any) => {
       const res = await fetch(`${baseURL}/comment/${body.commentId}`, {
         method: "DELETE",

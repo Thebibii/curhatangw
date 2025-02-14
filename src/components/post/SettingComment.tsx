@@ -40,6 +40,8 @@ import {
 } from "../ui/form";
 import { z } from "zod";
 import { useUpdateComment } from "@/hooks/reactQuery/comments/useUpdateComment.hook";
+import { QueryKey, useQueryClient } from "@tanstack/react-query";
+import { CommentsApiResponse } from "@/types/comment";
 
 const formEditSchema = z.object({
   content: z
@@ -55,10 +57,12 @@ export default function SettingComment({
   commentId,
   refetch,
   content,
+  postId,
 }: {
   commentId: string;
   refetch?: () => void;
   content: string;
+  postId: string;
 }) {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
@@ -70,12 +74,14 @@ export default function SettingComment({
         setOpenDeleteDialog={setOpenDeleteDialog}
         commentId={commentId}
         refetch={refetch}
+        postId={postId}
       />
       <EditCommentDialog
         openEditDialog={openEditDialog}
         setOpenEditDialog={setOpenEditDialog}
         commentId={commentId}
         refetch={refetch}
+        postId={postId}
         content={content}
       />
       <DropdownMenu modal={false}>
@@ -109,11 +115,51 @@ const DeleteCommentDialog = ({
   openDeleteDialog,
   setOpenDeleteDialog,
   commentId,
-  refetch,
+  postId,
 }: any) => {
+  const queryClient = useQueryClient();
   const { mutate, isPending } = useDeleteComment({
-    onSuccess: () => {
-      refetch();
+    onSuccess: async (body: any) => {
+      const queryKeys: QueryKey[] = [
+        ["get.detail.post", postId],
+        ["get.comment", postId],
+      ];
+
+      await Promise.all(
+        queryKeys.map((queryKey) => queryClient.cancelQueries({ queryKey }))
+      );
+
+      queryKeys.forEach((queryKey) => {
+        queryClient.setQueryData(queryKey, (oldData: any) => {
+          if (!oldData) return null;
+
+          if (queryKey[0] === "get.detail.post") {
+            return {
+              ...oldData,
+              data: {
+                ...oldData.data,
+                comments: oldData.data.comments?.filter(
+                  (c: any) => c.id !== body.data.id
+                ),
+                _count: {
+                  ...oldData.data._count,
+                  comments: oldData.data._count.comments - 1,
+                },
+              },
+            };
+          }
+
+          if (queryKey[0] === "get.comment") {
+            return {
+              data: oldData.data?.filter((c: any) => c.id !== body.data.id),
+              success: true,
+            };
+          }
+
+          return oldData;
+        });
+      });
+
       setOpenDeleteDialog(false);
       toast({
         title: "Comment deleted",

@@ -1,9 +1,15 @@
 import { baseURL } from "@/lib/db/env";
 import { useMutation } from "@tanstack/react-query";
 
-export const useCreateComment = ({ onSuccess }: any) => {
+export const useCreateComment = ({
+  postId,
+  onSuccess,
+}: {
+  postId: string;
+  onSuccess: (body: any) => void;
+}) => {
   return useMutation({
-    mutationKey: ["get.comment"],
+    mutationKey: ["get.comment", postId],
     mutationFn: async (body: any) => {
       const res = await fetch(`${baseURL}/comment`, {
         method: "POST",

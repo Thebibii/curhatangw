@@ -22,6 +22,17 @@ export async function createPost(content: string, image: string) {
             image: true,
           },
         },
+        likes: {
+          select: {
+            userId: true,
+          },
+        },
+        _count: {
+          select: {
+            likes: true,
+            comments: true,
+          },
+        },
       },
     });
 
@@ -112,7 +123,6 @@ export async function deletePost(postId: string) {
 
     const post = await prisma.post.findUnique({
       where: { id: postId },
-      select: { authorId: true },
     });
 
     if (!post) throw new Error("Post not found");
@@ -122,6 +132,8 @@ export async function deletePost(postId: string) {
     await prisma.post.delete({
       where: { id: postId },
     });
+
+    return { postId: post.id };
   } catch (error) {
     console.error("Failed to delete post:", error);
     return { success: false, error: "Failed to delete post" };

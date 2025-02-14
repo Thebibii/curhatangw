@@ -11,12 +11,13 @@ import LoadingState from "../state/LoadingState";
 import { ScrollArea } from "../ui/scroll-area";
 import { useUserContext } from "@/contexts/UserContext";
 import { useLikePost } from "@/hooks/reactQuery/posts/useLikePost";
-import { useQueryClient } from "@tanstack/react-query";
+import { QueryKey, useQueryClient } from "@tanstack/react-query";
 import { Icons } from "../icons";
 import { filterBadWord } from "@/helper/sensor.helper";
 import SettingComment from "./SettingComment";
 import CommentSkeleton from "../skeleton/CommentSkeleton";
 import EmptyState from "../state/EmptyState";
+import { CommentsApiResponse } from "@/types/comment";
 
 export default function Footer({
   postId,
@@ -43,13 +44,32 @@ export default function Footer({
   } = useGetCommentByPost({ postId });
 
   const { mutate, isPending } = useCreateComment({
-    onSuccess: () => {
-      refetch();
+    postId,
+    onSuccess: async (newComment: CommentsApiResponse) => {
+      const queryKey: QueryKey = ["get.comment", postId];
+
+      await queryClient.cancelQueries({ queryKey });
+
+      queryClient.setQueryData(queryKey, (oldData: CommentsApiResponse) => {
+        const firstPage = oldData?.data;
+
+        if (firstPage) {
+          console.log([...firstPage, newComment.data]);
+
+          return {
+            data: [...firstPage, newComment.data],
+            success: true,
+            ...oldData.data.slice(1),
+          };
+        }
+      });
+
       toast({
         title: "Comment created",
         description: "Your comment has been created successfully",
         duration: 1500,
       });
+      setNewComment("");
       setNewComment("");
     },
   });
@@ -187,6 +207,7 @@ export default function Footer({
                               commentId={comment.id}
                               refetch={refetch}
                               content={comment?.content}
+                              postId={postId}
                             />
                           )}
                         </div>

@@ -14,9 +14,10 @@ import {
 } from "@/components/ui/alert-dialog";
 import { useDeletePost } from "@/hooks/reactQuery/posts/useDeletePost.hook";
 import { toast } from "@/hooks/use-toast";
-import { useQueryClient } from "@tanstack/react-query";
+import { QueryFilters, useQueryClient } from "@tanstack/react-query";
 import { useDeletePhoto } from "@/hooks/useDeletePhoto.hook";
 import { Icons } from "./icons";
+import { PostsInfinite } from "@/types/post";
 
 interface DeleteAlertDialogProps {
   postId: string;
@@ -36,8 +37,23 @@ export function DeleteAlertDialog({
   const { mutate: deletePhoto } = useDeletePhoto();
   const { isPending, mutate, isSuccess } = useDeletePost({
     postId,
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["get.post"] });
+    onSuccess: async (body: any) => {
+      const queryFilter: QueryFilters = {
+        queryKey: ["get.post"],
+      };
+
+      await queryClient.cancelQueries(queryFilter);
+      queryClient.setQueriesData(queryFilter, (oldData: PostsInfinite) => {
+        if (!oldData) return;
+
+        return {
+          pageParams: oldData?.pageParams,
+          pages: oldData?.pages?.map((page: any) => ({
+            nextCursor: page.nextCursor,
+            data: page.data.filter((p: any) => p.id !== body.data.id),
+          })),
+        };
+      });
       toast({
         title: "Post deleted",
         description: "Your post has been deleted successfully",

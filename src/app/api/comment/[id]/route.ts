@@ -24,10 +24,11 @@ export async function DELETE(request: NextRequest, { params }: any) {
   try {
     const { id } = await params;
 
-    await deleteComment(id);
+    const { commentId } = await deleteComment(id);
     return NextResponse.json({
       success: true,
       message: "Your comment has been deleted successfully",
+      data: { id: commentId },
     });
   } catch (error: any) {
     return NextResponse.json(

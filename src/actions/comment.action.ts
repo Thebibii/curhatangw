@@ -9,7 +9,6 @@ export async function createComment(postId: string, content: string) {
 
   const post = await prisma.post.findUnique({
     where: { id: postId },
-    select: { authorId: true },
   });
 
   if (!post) throw new Error("Post not found");
@@ -22,6 +21,15 @@ export async function createComment(postId: string, content: string) {
         content,
         authorId: userId,
         postId,
+      },
+      include: {
+        author: {
+          select: {
+            name: true,
+            username: true,
+            image: true,
+          },
+        },
       },
     });
 
@@ -66,7 +74,7 @@ export async function deleteComment(commentId: string) {
     const userId = await getDbUserId();
     const comment = await prisma.comment.findUnique({
       where: { id: commentId },
-      select: { authorId: true },
+      select: { id: true, authorId: true },
     });
 
     if (!comment) throw new Error("Comment not found");
@@ -74,9 +82,11 @@ export async function deleteComment(commentId: string) {
     if (comment.authorId !== userId)
       throw new Error("Unauthorized - no delete permission");
 
-    await prisma.comment.delete({
+    const commentDeleted = await prisma.comment.delete({
       where: { id: commentId },
+      select: { id: true },
     });
+    return { commentId: commentDeleted.id };
   } catch (error) {
     console.error("Failed to delete post:", error);
     return { success: false, error: "Failed to delete post" };

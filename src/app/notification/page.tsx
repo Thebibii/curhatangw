@@ -35,12 +35,11 @@ export default function Notification() {
               <CardTitle>Notifications</CardTitle>
               <span className="text-sm text-muted-foreground">
                 {notifications?.data?.filter((n: any) => !n.read).length} unread
-                {/* {notifications?.data?.length} unread */}
               </span>
             </div>
           </CardHeader>
           <CardContent className="p-0">
-            <ScrollArea className="h-[calc(100vh-12rem)]">
+            <ScrollArea className="h-[calc(95vh-12rem)]">
               {notifications?.data?.length === 0 ? (
                 <div className="p-4 text-center text-muted-foreground">
                   No notifications yet

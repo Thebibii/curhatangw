@@ -7,11 +7,7 @@ import { Textarea } from "./ui/textarea";
 import { Button } from "./ui/button";
 import { toast } from "@/hooks/use-toast";
 import { useCreatePost } from "@/hooks/reactQuery/posts/useCreatePost";
-import {
-  InfiniteData,
-  QueryFilters,
-  useQueryClient,
-} from "@tanstack/react-query";
+import { QueryFilters, useQueryClient } from "@tanstack/react-query";
 import { useUserContext } from "@/contexts/UserContext";
 import { generateReactHelpers } from "@uploadthing/react";
 import { Icons } from "./icons";
@@ -33,6 +29,11 @@ function CreatePost() {
 
   const { mutate, isPending } = useCreatePost({
     onSuccess: async (newPost: any) => {
+      setContent("");
+      setImageUrl("");
+      setShowImageUpload(false);
+      setFile(null);
+
       const queryFilter: QueryFilters = {
         queryKey: ["get.post"],
       };
@@ -53,10 +54,6 @@ function CreatePost() {
           };
         }
       });
-      setContent("");
-      setImageUrl("");
-      setShowImageUpload(false);
-      setFile(null);
 
       toast({
         title: "Notification",
