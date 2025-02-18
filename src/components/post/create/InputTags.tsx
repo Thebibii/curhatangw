@@ -29,7 +29,10 @@ type Props = {
 export default function InputTags(props: Props) {
   const [openTagSearch, setOpenTagSearch] = useState(false);
   const queryClient = useQueryClient();
-  const { data: tagsResponse, isLoading } = useGetTags();
+  const { data: tagsResponse, isLoading } = useGetTags({
+    tag_ids: [],
+    tag_names: props.tagInput,
+  });
   const filterTags = props.tags.map((tag: Tag) => tag.id);
 
   const filteredTags = tagsResponse?.data?.filter(

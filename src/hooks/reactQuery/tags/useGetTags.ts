@@ -1,15 +1,30 @@
 import { baseURL } from "@/lib/db/env";
 import { useQuery } from "@tanstack/react-query";
 
-export const useGetTags = () => {
+export const useGetTags = ({
+  tag_ids,
+  tag_names,
+}: {
+  tag_ids: string[];
+  tag_names: string;
+}) => {
+  const query = new URLSearchParams({
+    tag_ids: tag_ids.join(","),
+    tag_names,
+  }).toString();
+
   return useQuery({
-    queryKey: ["get.tags"],
+    queryKey: ["get.tags", tag_ids, tag_names],
     queryFn: async () => {
-      const res = await fetch(`${baseURL}/tag`);
+      const res = await fetch(`${baseURL}/tag?${query}`, {
+        method: "GET",
+      });
 
-      const data = await res.json();
+      if (!res.ok) {
+        throw new Error("Failed to fetch tags");
+      }
 
-      return data;
+      return res.json();
     },
   });
 };

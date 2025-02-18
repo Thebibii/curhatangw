@@ -1,7 +1,37 @@
 import prisma from "@/lib/db/prisma";
 
-export const getTags = async () => {
-  const tags = await prisma.tag.findMany();
+export const getTags = async (tag_ids: string[], tag_names: string) => {
+  if (tag_ids?.length > 0) {
+    const tags = await prisma.tag.findMany({
+      take: 5,
+      where: {
+        id: {
+          in: tag_ids?.map((id) => id),
+        },
+      },
+    });
+
+    return tags;
+  }
+
+  if (tag_names?.length > 0) {
+    const tags = await prisma.tag.findMany({
+      take: 5,
+      where: {
+        name: {
+          contains: tag_names,
+          mode: "insensitive",
+        },
+      },
+    });
+
+    return tags;
+  }
+
+  const tags = await prisma.tag.findMany({
+    take: 5,
+  });
+
   return tags;
 };
 

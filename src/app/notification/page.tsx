@@ -55,7 +55,7 @@ export default function Notification() {
                   >
                     <div
                       className={`flex items-start gap-4 p-4  border-b hover:bg-main/25 transition-colors ${
-                        !notification.read ? "bg-main/50" : ""
+                        !notification.read && "bg-secondary/50"
                       }`}
                     >
                       <Avatar className="mt-1">

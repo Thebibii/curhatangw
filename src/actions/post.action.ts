@@ -166,6 +166,7 @@ export async function getUserPosts(username: string) {
             image: true,
           },
         },
+        tags: { select: { tag: { select: { id: true, name: true } } } },
         comments: {
           include: {
             author: {
