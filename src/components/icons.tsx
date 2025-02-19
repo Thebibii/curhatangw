@@ -14,6 +14,7 @@ import {
   LogOutIcon,
   MapPinIcon,
   MessageCircleIcon,
+  MoreHorizontalIcon,
   PlusIcon,
   SendIcon,
   TagsIcon,
@@ -192,4 +193,5 @@ export const Icons = {
   PlusIcon: (props: IconProps) => <PlusIcon {...props} />,
   TagsIcon: (props: IconProps) => <TagsIcon {...props} />,
   XIcon: (props: IconProps) => <XIcon {...props} />,
+  MoreHorizontalIcon: (props: IconProps) => <MoreHorizontalIcon {...props} />,
 };

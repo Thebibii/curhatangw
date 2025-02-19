@@ -1,17 +1,19 @@
 import { useGetRandomUser } from "@/hooks/reactQuery/user/useGetRandomUser";
 import { useUserContext } from "@/contexts/UserContext";
 import Link from "next/link";
-import { Card, CardContent, CardHeader, CardTitle } from "./ui/card";
-import { Avatar, AvatarImage } from "./ui/avatar";
-import FollowAndUnfollow from "./FollowAndUnfollow";
+import { Card, CardContent, CardHeader, CardTitle } from "../ui/card";
+import { Avatar, AvatarImage } from "../ui/avatar";
+import FollowAndUnfollow from "../FollowAndUnfollow";
 
 export default function WhoToFollow() {
   const { user } = useUserContext();
 
   const { data: users } = useGetRandomUser(user?.data?.id);
+  console.log(users);
 
   if (user === undefined) return null;
-  if (users?.length === 0) return null;
+  if (users?.data.length === 0) return null;
+
   return (
     <Card className="bg-bw">
       <CardHeader>
@@ -19,7 +21,7 @@ export default function WhoToFollow() {
       </CardHeader>
       <CardContent>
         <div className="space-y-4">
-          {users?.map((user) => (
+          {users?.data?.map((user: any) => (
             <div
               key={user.id}
               className="flex gap-2 items-center justify-between "

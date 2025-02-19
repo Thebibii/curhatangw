@@ -124,10 +124,32 @@ export async function updateCurrentUser(dataUpdated: any) {
 export async function getRandomUsers() {
   try {
     const userId = await getDbUserId();
-    const postsCount = await prisma.post.count();
-    const skip = Math.floor(Math.random() * postsCount);
 
     if (!userId) return [];
+
+    const totalUsers = await prisma.user.count({
+      where: {
+        AND: [
+          { NOT: { id: userId } },
+          {
+            NOT: {
+              followers: {
+                some: {
+                  followerId: userId,
+                },
+              },
+            },
+          },
+        ],
+      },
+    });
+
+    if (totalUsers === 0) throw new Error("No available users found");
+
+    const skip = Math.min(
+      Math.floor(Math.random() * totalUsers),
+      Math.max(0, totalUsers - 3)
+    );
 
     // get 3 random users exclude ourselves & users that we already follow
     const randomUsers = await prisma.user.findMany({

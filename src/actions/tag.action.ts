@@ -35,6 +35,28 @@ export const getTags = async (tag_ids: string[], tag_names: string) => {
   return tags;
 };
 
+export const getTagsByTrending = async () => {
+  const tags = await prisma.tag.findMany({
+    take: 5,
+    select: {
+      id: true,
+      name: true,
+      _count: {
+        select: {
+          posts: true,
+        },
+      },
+    },
+    orderBy: {
+      posts: {
+        _count: "desc",
+      },
+    },
+  });
+
+  return tags;
+};
+
 export const createTag = async (name: string) => {
   const tag = await prisma.tag.create({ data: { name } });
   return tag;

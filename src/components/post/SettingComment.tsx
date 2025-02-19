@@ -43,6 +43,7 @@ import { useUpdateComment } from "@/hooks/reactQuery/comments/useUpdateComment.h
 import { QueryKey, useQueryClient } from "@tanstack/react-query";
 import { CommentResponse, CommentsApiResponse } from "@/types/comment";
 import { DetailPost } from "@/types/detail-post";
+import { Icons } from "../icons";
 
 const formEditSchema = z.object({
   content: z
@@ -104,7 +105,7 @@ export default function SettingComment({
       />
       <DropdownMenu modal={false}>
         <DropdownMenuTrigger asChild>
-          <MoreHorizontalIcon className="w-4 aspect-square cursor-pointer hover:text-gray-600" />
+          <Icons.MoreHorizontalIcon className="w-4 aspect-square cursor-pointer hover:text-gray-600" />
         </DropdownMenuTrigger>
         <DropdownMenuContent
           side="left"

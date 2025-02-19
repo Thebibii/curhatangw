@@ -4,9 +4,10 @@ import LoadingState from "@/components/state/LoadingState";
 import ObserverPlaceholder from "@/components/skeleton/ObserverPlaceholder";
 import PostCard from "@/components/post/PostCard";
 import SkeletonCard from "@/components/skeleton/SkeletonCard";
-import WhoToFollow from "@/components/WhoToFollow";
+import WhoToFollow from "@/components/sidebar/WhoToFollow";
 import { useUserContext } from "@/contexts/UserContext";
 import { useGetPost } from "@/hooks/reactQuery/posts/useGetPost";
+import WhatsHappening from "@/components/sidebar/WhatsHappening";
 
 export default function Home() {
   const { data, fetchNextPage } = useGetPost({
@@ -42,7 +43,8 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="hidden lg:block lg:col-span-4 sticky top-20">
+      <div className="hidden lg:flex lg:space-y-8 lg:flex-col lg:col-span-4 sticky top-20">
+        <WhatsHappening />
         <WhoToFollow />
       </div>
     </div>
