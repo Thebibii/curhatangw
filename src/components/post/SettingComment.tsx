@@ -44,6 +44,15 @@ import { QueryKey, useQueryClient } from "@tanstack/react-query";
 import { CommentResponse, CommentsApiResponse } from "@/types/comment";
 import { DetailPost } from "@/types/detail-post";
 import { Icons } from "../icons";
+import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
+import { Command, CommandItem, CommandList } from "../ui/command";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "../ui/select";
 
 const formEditSchema = z.object({
   content: z
@@ -85,6 +94,7 @@ export default function SettingComment({
 }: TSettingComment) {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
+  const [openDropdown, setOpenDropdown] = useState(false);
 
   return (
     <>
@@ -103,29 +113,37 @@ export default function SettingComment({
         postId={postId}
         content={content}
       />
-      <DropdownMenu modal={false}>
-        <DropdownMenuTrigger asChild>
+      <Popover open={openDropdown} onOpenChange={setOpenDropdown}>
+        <PopoverTrigger asChild>
           <Icons.MoreHorizontalIcon className="w-4 aspect-square cursor-pointer hover:text-gray-600" />
-        </DropdownMenuTrigger>
-        <DropdownMenuContent
+        </PopoverTrigger>
+        <PopoverContent
+          className="bg-bw p-0 border-none w-[120px] "
           side="left"
-          className="bg-bw z-[1000]"
           align="start"
         >
-          <DropdownMenuItem
-            className="cursor-pointer bg-bw"
-            onClick={() => setOpenEditDialog(true)}
-          >
-            Edit Komen
-          </DropdownMenuItem>
-          <DropdownMenuItem
-            onClick={() => setOpenDeleteDialog(true)}
-            className="cursor-pointer focus:bg-destructive focus:text-bw bg-bw"
-          >
-            Hapus Komen
-          </DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
+          <div className="w-full border-2 border-border px-1 py-1 rounded-base ">
+            <div>
+              <Button
+                onClick={() => setOpenEditDialog(true)}
+                size={"sm"}
+                className="w-full border-0 text-sm hover:bg-[#F1F5F9] focus-visible:outline-0 focus-visible:ring-0  bg-bw"
+                variant="noShadow"
+              >
+                Edit Komen
+              </Button>
+              <Button
+                onClick={() => setOpenDeleteDialog(true)}
+                size={"sm"}
+                className="w-full border-0 text-sm hover:bg-destructive hover:text-bw bg-bw"
+                variant="noShadow"
+              >
+                Hapus Komen
+              </Button>
+            </div>
+          </div>
+        </PopoverContent>
+      </Popover>
     </>
   );
 }

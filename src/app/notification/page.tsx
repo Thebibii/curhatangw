@@ -2,7 +2,7 @@
 
 import { Icons } from "@/components/icons";
 import LoadingState from "@/components/state/LoadingState";
-import { NotificationsSkeleton } from "@/components/skeleton/NotificationCard";
+import { NotificationsSkeleton } from "@/components/skeleton/NotificationSkeleton";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ScrollArea } from "@/components/ui/scroll-area";
@@ -55,7 +55,7 @@ export default function Notification() {
                   >
                     <div
                       className={`flex items-start gap-4 p-4  border-b hover:bg-main/25 transition-colors ${
-                        !notification.read && "bg-secondary/50"
+                        !notification.read && "bg-[#F1F5F9]"
                       }`}
                     >
                       <Avatar className="mt-1">
@@ -84,23 +84,15 @@ export default function Notification() {
                           (notification.type === "LIKE" ||
                             notification.type === "COMMENT") && (
                             <div className="pl-6 space-y-2 ">
-                              <div className="text-sm text-muted-foreground rounded-md p-2 bg-muted/30 mt-2">
-                                <p>{notification.post.content}</p>
+                              <div className="text-sm text-muted-foreground rounded-md  bg-muted/30 ">
                                 {notification.post.image && (
                                   <img
                                     src={notification.post.image}
                                     alt="Post content"
-                                    className="mt-2 rounded-md w-full max-w-[200px] h-auto object-cover"
+                                    className="rounded-md w-full max-w-[200px] h-auto object-cover"
                                   />
                                 )}
                               </div>
-
-                              {notification.type === "COMMENT" &&
-                                notification.comment && (
-                                  <div className="text-sm p-2 bg-accent/50 rounded-md">
-                                    {notification.comment.content}
-                                  </div>
-                                )}
                             </div>
                           )}
 
