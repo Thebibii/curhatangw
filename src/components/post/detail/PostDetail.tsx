@@ -18,6 +18,7 @@ import { SignInButton } from "@clerk/nextjs";
 import { Icons } from "@/components/icons";
 import SettingComment from "../SettingComment";
 import { Input } from "@/components/ui/input";
+import CreateComment from "./CreateComment";
 
 type PostDetailProps = {
   post: any;
@@ -212,16 +213,7 @@ function PostDetail({
             <Avatar className="flex-shrink-0">
               <AvatarImage src={user?.data?.image} />
             </Avatar>
-            <div className="flex items-center grow space-x-2">
-              <Input placeholder="Write a comment..." />
-              <Button
-                size="sm"
-                variant="noShadow"
-                className="flex  items-center gap-2"
-              >
-                <Icons.SendIcon className="size-4" />
-              </Button>
-            </div>
+            <CreateComment postId={post.id} refetch={refetch} />
           </div>
         ) : (
           <div className="flex justify-center p-4 border rounded-lg bg-muted/50">

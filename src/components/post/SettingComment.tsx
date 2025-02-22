@@ -96,17 +96,6 @@ export default function SettingComment({
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(false);
 
-  const handleActionSelect = (value: string) => {
-    switch (value) {
-      case "edit":
-        setOpenEditDialog(true);
-        break;
-      case "delete":
-        setOpenDeleteDialog(true);
-        break;
-    }
-  };
-
   return (
     <>
       <DeleteCommentDialog

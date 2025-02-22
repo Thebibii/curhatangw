@@ -2,53 +2,47 @@ import prisma from "@/lib/db/prisma";
 import { getDbUserId } from "./user.action";
 
 export async function createComment(postId: string, content: string) {
-  const userId = await getDbUserId();
+  try {
+    const userId = await getDbUserId();
+    if (!userId) return { success: false, message: "User not authenticated" };
 
-  if (!userId) return;
-  if (!content) throw new Error("Content is required");
+    if (!content) return { success: false, message: "Content is required" };
 
-  const post = await prisma.post.findUnique({
-    where: { id: postId },
-  });
+    const post = await prisma.post.findUnique({ where: { id: postId } });
 
-  if (!post) throw new Error("Post not found");
+    if (!post) return { success: false, message: "Post not found" };
 
-  // Create comment and notification in a transaction
-  const [comment] = await prisma.$transaction(async (tx) => {
-    // Create comment first
-    const newComment = await tx.comment.create({
-      data: {
-        content,
-        authorId: userId,
-        postId,
-      },
-      include: {
-        author: {
-          select: {
-            name: true,
-            username: true,
-            image: true,
+    // Create comment and notification in a transaction
+    const [comment] = await prisma.$transaction(async (tx) => {
+      const newComment = await tx.comment.create({
+        data: { content, authorId: userId, postId },
+        include: {
+          author: {
+            select: { name: true, username: true, image: true },
           },
         },
-      },
+      });
+
+      if (post.authorId !== userId) {
+        await tx.notification.create({
+          data: {
+            type: "COMMENT",
+            userId: post.authorId,
+            creatorId: userId,
+            postId,
+            commentId: newComment.id,
+          },
+        });
+      }
+
+      return [newComment];
     });
 
-    if (post.authorId !== userId) {
-      await tx.notification.create({
-        data: {
-          type: "COMMENT",
-          userId: post.authorId,
-          creatorId: userId,
-          postId,
-          commentId: newComment.id,
-        },
-      });
-    }
-
-    return [newComment];
-  });
-
-  return comment;
+    return { success: true, data: comment };
+  } catch (error: any) {
+    console.error("Error in createComment:", error);
+    return { success: false, error: error.message || "Something went wrong" };
+  }
 }
 
 export async function getComments(postId: string) {

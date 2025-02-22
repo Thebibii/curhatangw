@@ -65,8 +65,8 @@ export default function Notification() {
                         />
                       </Avatar>
                       <div className="flex-1 space-y-1">
-                        <div className="flex items-center gap-2">
-                          {getNotificationIcon(notification.type)}
+                        <div className="flex items-center gap-2 ">
+                            {getNotificationIcon(notification.type)}
                           <span className="group-hover:underline">
                             <span className="font-medium">
                               {notification.creator.name ??

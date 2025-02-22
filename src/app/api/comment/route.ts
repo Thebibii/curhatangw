@@ -1,22 +1,34 @@
 import { createComment } from "@/actions/comment.action";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(request: NextRequest) {
+export async function POST(request: Request) {
   try {
     const { postId, content } = await request.json();
-    const comment = await createComment(postId, content);
+    if (!postId || !content) {
+      return NextResponse.json(
+        { success: false, message: "Post ID and content are required" },
+        { status: 400 }
+      );
+    }
+
+    const { success, data, message } = await createComment(postId, content);
+
+    if (!success) {
+      return NextResponse.json({ success: false, message }, { status: 400 });
+    }
+
     return NextResponse.json(
       {
         success: true,
         message: "Comment created successfully",
-        data: comment,
+        data,
       },
       { status: 201 }
     );
-  } catch (error) {
-    return NextResponse.json({
-      success: false,
-      error: "Failed to create comment",
-    });
+  } catch (error: any) {
+    return NextResponse.json(
+      { success: false, error: error.message },
+      { status: 500 }
+    );
   }
 }

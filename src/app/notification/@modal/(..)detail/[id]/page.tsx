@@ -14,7 +14,7 @@ export default function DetailModal() {
   const params = useParams<{ id: string }>();
   const router = useRouter();
   const isMobile = useIsMobile();
-  const { data, isLoading } = useGetDetailPost({ postId: params.id });
+  const { data, isLoading, refetch } = useGetDetailPost({ postId: params.id });
 
   if (isMobile) {
     return (
@@ -38,6 +38,7 @@ export default function DetailModal() {
               post={data?.data}
               isLoading={isLoading}
               dbUserId="id"
+              refetch={refetch}
               className="border-none"
             />
           </LoadingState>
@@ -62,7 +63,12 @@ export default function DetailModal() {
           data={data?.data}
           loadingFallback={<SkeletonCard length={1} />}
         >
-          <PostDetail post={data?.data} isLoading={isLoading} dbUserId="id" />
+          <PostDetail
+            post={data?.data}
+            refetch={refetch}
+            isLoading={isLoading}
+            dbUserId="id"
+          />
         </LoadingState>
       </DialogContent>
     </Dialog>
