@@ -45,7 +45,7 @@ import { CommentResponse, CommentsApiResponse } from "@/types/comment";
 import { DetailPost } from "@/types/detail-post";
 import { Icons } from "../icons";
 import { Popover, PopoverContent, PopoverTrigger } from "../ui/popover";
-import { Command, CommandItem, CommandList } from "../ui/command";
+import { Command, CommandGroup, CommandItem, CommandList } from "../ui/command";
 import {
   Select,
   SelectContent,
@@ -96,6 +96,17 @@ export default function SettingComment({
   const [openEditDialog, setOpenEditDialog] = useState(false);
   const [openDropdown, setOpenDropdown] = useState(false);
 
+  const handleActionSelect = (value: string) => {
+    switch (value) {
+      case "edit":
+        setOpenEditDialog(true);
+        break;
+      case "delete":
+        setOpenDeleteDialog(true);
+        break;
+    }
+  };
+
   return (
     <>
       <DeleteCommentDialog
@@ -115,28 +126,44 @@ export default function SettingComment({
       />
       <Popover open={openDropdown} onOpenChange={setOpenDropdown}>
         <PopoverTrigger asChild>
-          <Icons.MoreHorizontalIcon className="w-4 aspect-square cursor-pointer hover:text-gray-600" />
+          <Button
+            variant="neutral"
+            className="h-auto w-auto p-0 hover:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
+            onClick={(e) => e.stopPropagation()}
+          >
+            <Icons.MoreHorizontalIcon className="w-4 aspect-square cursor-pointer hover:text-gray-600" />
+          </Button>
         </PopoverTrigger>
         <PopoverContent
-          className="bg-bw p-0 border-none w-[120px] "
+          className="bg-bw p-0 border-none w-[120px] z-[1000]"
           side="left"
           align="start"
+          forceMount
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
         >
-          <div className="w-full border-2 border-border px-1 py-1 rounded-base ">
-            <div>
+          <div className="w-full border-2 border-border px-1 py-1 rounded-base">
+            <div className="flex flex-col gap-1">
               <Button
-                onClick={() => setOpenEditDialog(true)}
-                size={"sm"}
-                className="w-full border-0 text-sm hover:bg-[#F1F5F9] focus-visible:outline-0 focus-visible:ring-0  bg-bw"
-                variant="noShadow"
+                onClick={() => {
+                  setOpenEditDialog(true);
+                  setOpenDropdown(false);
+                }}
+                size="sm"
+                className="w-full border-0 text-sm hover:bg-[#F1F5F9] focus-visible:bg-[#F1F5F9] focus-visible:outline-none focus-visible:ring-0 bg-bw justify-start font-normal"
+                tabIndex={0}
               >
                 Edit Komen
               </Button>
               <Button
-                onClick={() => setOpenDeleteDialog(true)}
-                size={"sm"}
-                className="w-full border-0 text-sm hover:bg-destructive hover:text-bw bg-bw"
-                variant="noShadow"
+                onClick={() => {
+                  setOpenDeleteDialog(true);
+                  setOpenDropdown(false);
+                }}
+                size="sm"
+                className="w-full border-0 text-sm hover:bg-destructive hover:text-bw focus-visible:bg-destructive focus-visible:text-bw focus-visible:outline-none focus-visible:ring-0 bg-bw justify-start font-normal"
+                tabIndex={0}
               >
                 Hapus Komen
               </Button>
@@ -144,6 +171,30 @@ export default function SettingComment({
           </div>
         </PopoverContent>
       </Popover>
+      {/* <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button
+            variant="neutral"
+            className="h-auto w-auto p-0 hover:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
+          >
+            <Icons.MoreHorizontalIcon className="w-4 aspect-square cursor-pointer hover:text-gray-600" />
+          </Button>
+        </DropdownMenuTrigger>
+        <DropdownMenuContent>
+          <DropdownMenuItem
+            className="cursor-pointer bg-bw"
+            onClick={() => setOpenEditDialog(true)}
+          >
+            Edit Komen
+          </DropdownMenuItem>
+          <DropdownMenuItem
+            onClick={() => setOpenDeleteDialog(true)}
+            className="cursor-pointer focus:bg-destructive focus:text-bw bg-bw"
+          >
+            Hapus Komen
+          </DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu> */}
     </>
   );
 }

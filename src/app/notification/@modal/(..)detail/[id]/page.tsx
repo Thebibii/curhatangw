@@ -15,7 +15,6 @@ export default function DetailModal() {
   const router = useRouter();
   const isMobile = useIsMobile();
   const { data, isLoading } = useGetDetailPost({ postId: params.id });
-  console.log(isMobile);
 
   if (isMobile) {
     return (
