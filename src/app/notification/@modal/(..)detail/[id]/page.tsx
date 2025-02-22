@@ -27,15 +27,20 @@ export default function DetailModal() {
           }
         }}
       >
-        <DrawerTitle>
-          <VisuallyHidden />
-        </DrawerTitle>
-        <DrawerContent>
+        <DrawerContent className="bg-bw ">
+          <DrawerTitle>
+            <VisuallyHidden />
+          </DrawerTitle>
           <LoadingState
             data={data?.data}
             loadingFallback={<SkeletonCard length={1} />}
           >
-            <PostDetail post={data?.data} isLoading={isLoading} dbUserId="id" />
+            <PostDetail
+              post={data?.data}
+              isLoading={isLoading}
+              dbUserId="id"
+              className="border-none"
+            />
           </LoadingState>
         </DrawerContent>
       </Drawer>
@@ -43,7 +48,7 @@ export default function DetailModal() {
   }
   return (
     <Dialog
-      defaultOpen={true}
+      open
       onOpenChange={(open) => {
         if (!open) {
           router.back();

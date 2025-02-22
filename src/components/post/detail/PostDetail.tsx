@@ -25,6 +25,7 @@ type PostDetailProps = {
   username?: string | null;
   isLoading?: boolean;
   refetch?: () => void;
+  className?: string;
 };
 
 function PostDetail({
@@ -33,6 +34,7 @@ function PostDetail({
   username = null,
   isLoading,
   refetch,
+  className,
 }: PostDetailProps) {
   const { user } = useUserContext();
   const [isLiking, setIsLiking] = useState(false);
@@ -52,7 +54,7 @@ function PostDetail({
   };
 
   return (
-    <Card className="overflow-hidden bg-bw w-full">
+    <Card className={`overflow-hidden bg-bw w-full ${className}`}>
       <CardContent className="p-4 sm:p-6 ">
         <div className="space-y-4 ">
           <div className="flex space-x-3 sm:space-x-4 items-center ">
