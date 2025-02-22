@@ -151,6 +151,7 @@ export default function SettingComment({
                   setOpenDropdown(false);
                 }}
                 size="sm"
+                variant="noShadow"
                 className="w-full border-0 text-sm hover:bg-[#F1F5F9] focus-visible:bg-[#F1F5F9] focus-visible:outline-none focus-visible:ring-0 bg-bw justify-start font-normal"
                 tabIndex={0}
               >
@@ -162,6 +163,7 @@ export default function SettingComment({
                   setOpenDropdown(false);
                 }}
                 size="sm"
+                variant="noShadow"
                 className="w-full border-0 text-sm hover:bg-destructive hover:text-bw focus-visible:bg-destructive focus-visible:text-bw focus-visible:outline-none focus-visible:ring-0 bg-bw justify-start font-normal"
                 tabIndex={0}
               >
