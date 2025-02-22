@@ -4,9 +4,11 @@ import { useQuery } from "@tanstack/react-query";
 export const useGetTags = ({
   tag_ids,
   tag_names,
+  isFetch,
 }: {
   tag_ids: string[];
   tag_names: string;
+  isFetch: boolean;
 }) => {
   const query = new URLSearchParams({
     tag_ids: tag_ids.join(","),
@@ -26,5 +28,6 @@ export const useGetTags = ({
 
       return res.json();
     },
+    enabled: !!isFetch,
   });
 };

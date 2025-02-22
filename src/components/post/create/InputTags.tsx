@@ -1,4 +1,5 @@
 import { Icons } from "@/components/icons";
+import LoadingState from "@/components/state/LoadingState";
 import { Button } from "@/components/ui/button";
 import {
   Command,
@@ -32,6 +33,7 @@ export default function InputTags(props: Props) {
   const { data: tagsResponse, isLoading } = useGetTags({
     tag_ids: [],
     tag_names: props.tagInput,
+    isFetch: openTagSearch,
   });
   const filterTags = props.tags.map((tag: Tag) => tag.id);
 
@@ -80,7 +82,7 @@ export default function InputTags(props: Props) {
           </Button>
         </PopoverTrigger>
         <PopoverContent align="start" className="w-full  p-0 border-none">
-          <Command className="bg-bw w-full sm:w-[400px] lg:w-[300px] xl:w-[400px]">
+          <Command className="bg-bw w-full  sm:w-[400px] lg:w-[300px] xl:w-[400px]">
             <CommandInput
               value={props.tagInput}
               onValueChange={(searchTag) => {
@@ -93,8 +95,9 @@ export default function InputTags(props: Props) {
               placeholder="Cari tag..."
               className="h-9"
             />
+
             <CommandList>
-              <CommandEmpty className="p-4 ">
+              <CommandEmpty className={`${isLoading ? "hidden" : "block p-4"}`}>
                 {!isLoading && (
                   <Button
                     onClick={handleCrateNewTag}
@@ -108,22 +111,31 @@ export default function InputTags(props: Props) {
                   </Button>
                 )}
               </CommandEmpty>
-              <CommandGroup
-                className={`${filteredTags?.length === 0 && "p-0"}`}
+              <LoadingState
+                data={!isLoading}
+                loadingFallback={
+                  <div className="py-4">
+                    <Icons.Loader2Icon className="animate-spin size-4 mx-auto " />
+                  </div>
+                }
               >
-                {filteredTags?.map((tag: Tag, idx: number) => (
-                  <CommandItem
-                    value={tag.name}
-                    key={idx}
-                    onSelect={() => {
-                      props.setTags((prevTags) => [...prevTags, tag]);
-                      setOpenTagSearch(false);
-                    }}
-                  >
-                    {tag.name}
-                  </CommandItem>
-                ))}
-              </CommandGroup>
+                <CommandGroup
+                  className={`${filteredTags?.length === 0 && "p-0"}`}
+                >
+                  {filteredTags?.map((tag: Tag, idx: number) => (
+                    <CommandItem
+                      value={tag.name}
+                      key={idx}
+                      onSelect={() => {
+                        props.setTags((prevTags) => [...prevTags, tag]);
+                        setOpenTagSearch(false);
+                      }}
+                    >
+                      {tag.name}
+                    </CommandItem>
+                  ))}
+                </CommandGroup>
+              </LoadingState>
             </CommandList>
           </Command>
         </PopoverContent>

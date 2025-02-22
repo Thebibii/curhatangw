@@ -9,7 +9,6 @@ export default function WhoToFollow() {
   const { user } = useUserContext();
 
   const { data: users } = useGetRandomUser(user?.data?.id);
-  console.log(users);
 
   if (user === undefined) return null;
   if (users?.data.length === 0) return null;
