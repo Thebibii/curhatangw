@@ -5,6 +5,7 @@ import LoadingState from "@/components/state/LoadingState";
 import { useGetTags } from "@/hooks/reactQuery/tags/useGetTags";
 import { usePostByTag } from "@/hooks/reactQuery/tags/usePostByTag";
 import { useSearchParams } from "next/navigation";
+import { Suspense } from "react";
 
 export default function Tag() {
   const searchParams = useSearchParams();
@@ -22,19 +23,21 @@ export default function Tag() {
   });
 
   return (
-    <div>
-      Tag{" "}
-      <span className="mr-2">{data?.data?.map((tag: any) => tag.name)}</span>
-      <div className="space-y-6">
-        <LoadingState
-          data={dataPost?.data}
-          loadingFallback={<SkeletonCard length={5} />}
-        >
-          {dataPost?.data.map((post: any) => (
-            <PostCard post={post} dbUserId="id" key={post.id} />
-          ))}
-        </LoadingState>
+    <Suspense>
+      <div>
+        Tag{" "}
+        <span className="mr-2">{data?.data?.map((tag: any) => tag.name)}</span>
+        <div className="space-y-6">
+          <LoadingState
+            data={dataPost?.data}
+            loadingFallback={<SkeletonCard length={5} />}
+          >
+            {dataPost?.data.map((post: any) => (
+              <PostCard post={post} dbUserId="id" key={post.id} />
+            ))}
+          </LoadingState>
+        </div>
       </div>
-    </div>
+    </Suspense>
   );
 }
