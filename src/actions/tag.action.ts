@@ -80,6 +80,12 @@ export const getPostByTag = async (tag_names: string[] | undefined) => {
             image: true,
           },
         },
+        _count: {
+          select: {
+            likes: true,
+            comments: true,
+          },
+        },
       },
     });
 
