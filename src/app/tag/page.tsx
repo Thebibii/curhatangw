@@ -24,20 +24,18 @@ export default function Tag() {
 
   return (
     <div>
-      Tag{" "}
-      <Suspense>
-        <span className="mr-2">{data?.data?.map((tag: any) => tag.name)}</span>
-        <div className="space-y-6">
-          <LoadingState
-            data={dataPost?.data}
-            loadingFallback={<SkeletonCard length={5} />}
-          >
-            {dataPost?.data.map((post: any) => (
-              <PostCard post={post} dbUserId="id" key={post.id} />
-            ))}
-          </LoadingState>
-        </div>
-      </Suspense>
+      Tag
+      <span className="mr-2">{data?.data?.map((tag: any) => tag.name)}</span>
+      <div className="space-y-6">
+        <LoadingState
+          data={dataPost?.data}
+          loadingFallback={<SkeletonCard length={5} />}
+        >
+          {dataPost?.data.map((post: any) => (
+            <PostCard post={post} dbUserId="id" key={post.id} />
+          ))}
+        </LoadingState>
+      </div>
     </div>
   );
 }
