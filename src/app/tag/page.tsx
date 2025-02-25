@@ -23,9 +23,9 @@ export default function Tag() {
   });
 
   return (
-    <Suspense>
-      <div>
-        Tag{" "}
+    <div>
+      Tag{" "}
+      <Suspense>
         <span className="mr-2">{data?.data?.map((tag: any) => tag.name)}</span>
         <div className="space-y-6">
           <LoadingState
@@ -37,7 +37,7 @@ export default function Tag() {
             ))}
           </LoadingState>
         </div>
-      </div>
-    </Suspense>
+      </Suspense>
+    </div>
   );
 }
