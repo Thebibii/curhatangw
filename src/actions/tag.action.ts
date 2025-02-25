@@ -66,13 +66,13 @@ export const getPostByTag = async (tag_names: string[] | undefined) => {
         tags: {
           some: {
             tag: {
-              name: { in: tag_names }, // Ambil berdasarkan name, bukan ID
+              name: { in: tag_names },
             },
           },
         },
       },
       include: {
-        tags: { include: { tag: true } }, // Opsional: Menyertakan data tag
+        tags: { include: { tag: true } },
         author: {
           select: {
             name: true,
@@ -80,6 +80,7 @@ export const getPostByTag = async (tag_names: string[] | undefined) => {
             image: true,
           },
         },
+        likes: { select: { userId: true } },
         _count: {
           select: {
             likes: true,

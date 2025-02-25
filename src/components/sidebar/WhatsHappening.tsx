@@ -20,7 +20,7 @@ export default function WhatsHappening() {
           <div className="space-y-4 ">
             {data?.data?.map((tag: any) => (
               <div className="flex gap-2 items-start" key={tag.id}>
-                <Link href="#" className="flex-1">
+                <Link href={`/tag?s=${tag.name}`} className="flex-1">
                   <div className="flex flex-col space-y-1.5">
                     <h1 className="font-semibold text-base  leading-none">
                       #{tag.name}

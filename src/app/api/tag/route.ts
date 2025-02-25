@@ -7,7 +7,7 @@ export async function GET(request: NextRequest) {
     const tag_ids =
       searchParams
         .get("tag_ids")
-        ?.split(",")
+        ?.split(" ")
         .filter((id) => id.trim() !== "") || [];
 
     const tag_names = searchParams.get("tag_names") || "";

@@ -7,7 +7,6 @@ export const usePostByTag = ({
 }: {
   tag_names: string[] | undefined;
 }) => {
-  console.log(tag_names, "tag_names");
   const query = new URLSearchParams({
     s: tag_names?.join(" ") ?? "",
   }).toString();
