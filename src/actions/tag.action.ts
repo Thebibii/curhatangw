@@ -5,7 +5,7 @@ export const getTags = async (tag_ids: string[], tag_names: string) => {
     const tags = await prisma.tag.findMany({
       take: 5,
       where: {
-        id: {
+        name: {
           in: tag_ids?.map((id) => id),
         },
       },
@@ -55,6 +55,38 @@ export const getTagsByTrending = async () => {
   });
 
   return tags;
+};
+
+export const getPostByTag = async (tag_names: string[] | undefined) => {
+  try {
+    if (tag_names?.length === 0) return [];
+
+    const posts = await prisma.post.findMany({
+      where: {
+        tags: {
+          some: {
+            tag: {
+              name: { in: tag_names }, // Ambil berdasarkan name, bukan ID
+            },
+          },
+        },
+      },
+      include: {
+        tags: { include: { tag: true } }, // Opsional: Menyertakan data tag
+        author: {
+          select: {
+            name: true,
+            username: true,
+            image: true,
+          },
+        },
+      },
+    });
+
+    return posts;
+  } catch (error: any) {
+    console.log(error.message, "error");
+  }
 };
 
 export const createTag = async (name: string) => {

@@ -67,7 +67,7 @@ function PostCard({ post, dbUserId, username = null }: PostCardProps) {
                 post?.tags?.map(({ tag }: any, idx: number) => (
                   <Link
                     key={idx}
-                    href={`/tag/${tag?.name}`}
+                    href={`/tag?s=${tag?.name}`}
                     className="mr-2 text-sm text-[#386ed3] hover:underline"
                   >
                     {`#${tag?.name}`}

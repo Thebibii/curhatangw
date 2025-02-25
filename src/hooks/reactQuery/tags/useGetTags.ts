@@ -11,7 +11,7 @@ export const useGetTags = ({
   isFetch: boolean;
 }) => {
   const query = new URLSearchParams({
-    tag_ids: tag_ids.join(","),
+    tag_ids: tag_ids?.join(" ") ?? "",
     tag_names,
   }).toString();
 
