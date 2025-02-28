@@ -10,6 +10,11 @@ import { UserProvider } from "@/contexts/UserContext";
 import ProgressProvider from "@/components/provider/progress-provider";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import { ourFileRouter } from "@/helper/uploadthing.helper";
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Curhatan Gw",
+};
 
 export default function RootLayout({
   children,

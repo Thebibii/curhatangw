@@ -1,3 +1,8 @@
+import { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Curhatan Gw | Notifikasi",
+};
 export default function NotificationLayout({
   children,
   modal,
