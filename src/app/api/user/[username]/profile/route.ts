@@ -1,7 +1,10 @@
 import { getProfileByUsername } from "@/actions/profile.action";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest, { params }: any) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ username: string }> }
+) {
   try {
     const { username } = await params;
 

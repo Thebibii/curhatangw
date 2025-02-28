@@ -1,7 +1,10 @@
 import { deletePost } from "@/actions/post.action";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function DELETE(request: NextRequest, { params }: any) {
+export async function DELETE(
+  request: NextRequest,
+  { params }: { params: Promise<{ postId: string }> }
+) {
   try {
     const { postId } = await params;
 

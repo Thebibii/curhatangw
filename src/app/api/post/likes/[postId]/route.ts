@@ -1,7 +1,10 @@
 import { toggleLike } from "@/actions/post.action";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function POST(request: NextRequest, { params }: any) {
+export async function POST(
+  request: NextRequest,
+  { params }: { params: Promise<{ postId: string }> }
+) {
   try {
     const { postId } = await params;
 

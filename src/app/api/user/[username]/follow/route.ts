@@ -1,7 +1,10 @@
 import { isFollowing } from "@/actions/user.action";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest, { params }: any) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ username: string }> }
+) {
   const { username } = await params;
   try {
     const isFollowingUser = await isFollowing(username);

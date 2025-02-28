@@ -1,7 +1,10 @@
 import { getDetailPost } from "@/actions/post.action";
 import { NextRequest, NextResponse } from "next/server";
 
-export async function GET(request: NextRequest, { params }: any) {
+export async function GET(
+  request: NextRequest,
+  { params }: { params: Promise<{ postId: string }> }
+) {
   try {
     const { postId } = await params;
     const post = await getDetailPost(postId);
