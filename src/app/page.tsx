@@ -24,7 +24,7 @@ export default function Home() {
 
         <div className="space-y-6">
           <LoadingState
-            data={data?.pages[0].data}
+            data={data?.pages[0]?.data}
             loadingFallback={<SkeletonCard length={3} />}
           >
             {data?.pages?.map((response: any) => {
@@ -32,14 +32,14 @@ export default function Home() {
                 <PostCard key={_} post={post} dbUserId={user?.data?.id} />
               ));
             })}
+            {!!data?.pages[data?.pages.length - 1]?.nextCursor && (
+              <ObserverPlaceholder
+                callback={() => {
+                  fetchNextPage();
+                }}
+              />
+            )}
           </LoadingState>
-          {!!data?.pages[data?.pages.length - 1]?.nextCursor && (
-            <ObserverPlaceholder
-              callback={() => {
-                fetchNextPage();
-              }}
-            />
-          )}
         </div>
       </div>
 

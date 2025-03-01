@@ -23,7 +23,7 @@ const UnAuthenticatedSidebar = () => (
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <p className="text-center text-muted-foreground mb-4">
+        <p className="text-center mb-4">
           Login to access your profile and connect with others.
         </p>
         <SignInButton mode="modal">
