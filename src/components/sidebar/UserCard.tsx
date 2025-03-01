@@ -13,7 +13,6 @@ import Image from "next/image";
 
 export default function UserCard() {
   const { user } = useUserContext();
-  console.log(user);
 
   return (
     <Card className="bg-bw">
@@ -28,12 +27,11 @@ export default function UserCard() {
               className="flex flex-col items-center justify-center"
             >
               <Avatar className="w-20 h-20 border-2">
-                <Image
+                <AvatarImage
                   src={user?.data?.image}
                   alt="User Avatar"
                   width={80}
                   height={80}
-                  priority
                   className="object-cover rounded-full"
                 />
                 <AvatarFallback>{user?.data?.name?.[0]}</AvatarFallback>
