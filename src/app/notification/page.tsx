@@ -33,7 +33,7 @@ export default function Notification() {
           <CardHeader className="border-b">
             <div className="flex items-center justify-between">
               <CardTitle>Notifications</CardTitle>
-              <span className="text-sm text-muted-foreground">
+              <span className="text-sm ">
                 {notifications?.data?.filter((n: any) => !n.read).length} unread
               </span>
             </div>
@@ -41,9 +41,7 @@ export default function Notification() {
           <CardContent className="p-0">
             <ScrollArea className="h-[calc(95vh-12rem)]">
               {notifications?.data?.length === 0 ? (
-                <div className="p-4 text-center text-muted-foreground">
-                  No notifications yet
-                </div>
+                <div className="p-4 text-center ">No notifications yet</div>
               ) : (
                 notifications?.data?.map((notification: any) => (
                   <NotificationLink
@@ -66,7 +64,7 @@ export default function Notification() {
                       </Avatar>
                       <div className="flex-1 space-y-1">
                         <div className="flex items-center gap-2 ">
-                            {getNotificationIcon(notification.type)}
+                          {getNotificationIcon(notification.type)}
                           <span className="group-hover:underline">
                             <span className="font-medium">
                               {notification.creator.name ??
@@ -84,7 +82,7 @@ export default function Notification() {
                           (notification.type === "LIKE" ||
                             notification.type === "COMMENT") && (
                             <div className="pl-6 space-y-2 ">
-                              <div className="text-sm text-muted-foreground rounded-md  bg-muted/30 ">
+                              <div className="text-sm  rounded-md  bg-muted/30 ">
                                 {notification.post.image && (
                                   <img
                                     src={notification.post.image}
@@ -96,7 +94,7 @@ export default function Notification() {
                             </div>
                           )}
 
-                        <p className="text-sm text-muted-foreground pl-6">
+                        <p className="text-sm  pl-6">
                           {formatDistanceToNow(
                             new Date(notification.createdAt),
                             {

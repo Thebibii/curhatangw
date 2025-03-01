@@ -38,10 +38,8 @@ export default function WhoToFollow() {
                   >
                     {user.name}
                   </Link>
-                  <p className="text-muted-foreground">@{user.username}</p>
-                  <p className="text-muted-foreground">
-                    {user._count.followers} followers
-                  </p>
+                  <p className="">@{user.username}</p>
+                  <p className="">{user._count.followers} followers</p>
                 </div>
               </div>
               <FollowAndUnfollow userId={user.id} />

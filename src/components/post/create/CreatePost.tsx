@@ -165,7 +165,7 @@ function CreatePost() {
                     type="button"
                     variant="neutral"
                     size="sm"
-                    className="text-muted-foreground hover:text-primary"
+                    className=" hover:text-primary"
                     onClick={() => setShowImageUpload(!showImageUpload)}
                     disabled={isPosting}
                   >

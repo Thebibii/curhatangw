@@ -172,7 +172,7 @@ function PostDetail({
               <Button
                 variant="neutral"
                 size="sm"
-                className={`text-muted-foreground gap-2 ${
+                className={` gap-2 ${
                   hasLiked
                     ? "text-red-500 hover:text-red-600"
                     : "hover:text-red-500"
@@ -188,11 +188,7 @@ function PostDetail({
               </Button>
             ) : (
               <SignInButton mode="modal">
-                <Button
-                  variant="neutral"
-                  size="sm"
-                  className="text-muted-foreground gap-2"
-                >
+                <Button variant="neutral" size="sm" className=" gap-2">
                   <Icons.HeartIcon className="size-5" />
                   <span>{optimisticLikes}</span>
                 </Button>
@@ -201,7 +197,7 @@ function PostDetail({
             <Button
               variant="neutral"
               size="sm"
-              className="text-muted-foreground gap-2 hover:text-blue-500"
+              className=" gap-2 hover:text-blue-500"
             >
               <Icons.MessageCircleIcon className="size-5" />
               <span>{post?._count?.comments}</span>

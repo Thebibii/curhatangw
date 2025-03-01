@@ -17,9 +17,7 @@ export default function NotFound() {
               <h1 className="text-2xl font-bold tracking-tight">
                 User not found
               </h1>
-              <p className="text-muted-foreground">
-                The user you're looking for doesn't exist.
-              </p>
+              <p className="">The user you're looking for doesn't exist.</p>
             </div>
 
             {/* ACTION BUTTONS */}

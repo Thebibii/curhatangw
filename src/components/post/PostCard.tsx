@@ -43,7 +43,7 @@ function PostCard({ post, dbUserId, username = null }: PostCardProps) {
                   >
                     {post?.author?.name}
                   </Link>
-                  <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+                  <div className="flex items-center space-x-2 text-sm ">
                     <Link href={`/profile/${post?.author?.username}`}>
                       {post?.author?.username}
                     </Link>

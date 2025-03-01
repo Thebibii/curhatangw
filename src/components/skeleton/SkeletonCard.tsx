@@ -16,7 +16,7 @@ export default function SkeletonCard({ length }: { length: number }) {
                   <div className="flex items-start justify-between">
                     <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-2 truncate">
                       <Skeleton className="w-36 h-4 " />
-                      <div className="flex items-center space-x-2 text-sm text-muted-foreground">
+                      <div className="flex items-center space-x-2 text-sm ">
                         <Skeleton className="w-20 h-4 " />
                         <span>•</span>
                         <Skeleton className="w-20 h-4 " />

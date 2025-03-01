@@ -68,7 +68,7 @@ export function DeleteAlertDialog({
         <Button
           variant="neutral"
           size="sm"
-          className="text-muted-foreground hover:text-red-500 -mr-2"
+          className=" hover:text-red-500 -mr-2"
           disabled={isPending}
         >
           {isPending ? (
