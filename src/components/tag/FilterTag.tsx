@@ -17,7 +17,7 @@ export default function FilterTag({ search }: { search: string | null }) {
     <div className="flex items-center gap-2">
       <Button
         onClick={() => {
-          router.push(`/`);
+          router.back();
         }}
         size="icon"
       >
@@ -38,7 +38,7 @@ export default function FilterTag({ search }: { search: string | null }) {
                   .join(" ");
 
                 if (!updatedTagFilter?.trim()) {
-                  router.push(`/`);
+                  router.back();
                   refetchTag();
                 } else {
                   router.push(`/tag?s=${updatedTagFilter}`);
