@@ -116,11 +116,11 @@ export default function SettingComment({
       <Popover open={openDropdown} onOpenChange={setOpenDropdown}>
         <PopoverTrigger asChild>
           <Button
-            variant="neutral"
-            className="h-auto w-auto p-0 hover:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
+            variant="transparent"
+            className="h-auto w-auto p-0 focus-visible:ring-0 hover:text-main rounded-full  focus-visible:ring-offset-0"
             onClick={(e) => e.stopPropagation()}
           >
-            <Icons.MoreHorizontalIcon className="w-4 aspect-square cursor-pointer hover:text-gray-600" />
+            <Icons.MoreHorizontalIcon className="w-4 aspect-square cursor-pointer" />
           </Button>
         </PopoverTrigger>
         <PopoverContent

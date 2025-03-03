@@ -4,9 +4,9 @@ import { Avatar, AvatarImage } from "../ui/avatar";
 import { AvatarFallback } from "@radix-ui/react-avatar";
 import { formatDistanceToNow } from "date-fns";
 import Footer from "./Footer";
-import { DeleteAlertDialog } from "../DeleteAlertDialog";
 import Image from "next/image";
 import { filterBadWord } from "@/helper/sensor.helper";
+import { DropdownMenuPost } from "../DropdownMenuPost";
 
 type PostCardProps = {
   post: any;
@@ -35,7 +35,7 @@ function PostCard({ post, dbUserId, username = null }: PostCardProps) {
 
             {/* POST HEADER & TEXT CONTENT */}
             <div className="flex-1 min-w-0">
-              <div className="flex items-start justify-between">
+              <div className="flex items-center justify-between">
                 <div className="flex flex-col sm:flex-row sm:items-center sm:space-x-2 truncate">
                   <Link
                     href={`/profile/${post?.author?.username}`}
@@ -56,9 +56,17 @@ function PostCard({ post, dbUserId, username = null }: PostCardProps) {
                   </div>
                 </div>
 
-                {dbUserId === post?.author?.id && (
-                  <DeleteAlertDialog postId={post?.id} imageUrl={post?.image} />
-                )}
+                {/* {dbUserId === post?.author?.id && ( */}
+                <DropdownMenuPost
+                  postId={post?.id}
+                  currentUser={dbUserId}
+                  userId={post?.author?.id}
+                  imageUrl={post?.image}
+                  content={post?.content}
+                  username={post?.author?.username}
+                  isFollowing={post?.isFollowing}
+                />
+                {/* )} */}
               </div>
               <p className="mt-2 text-sm text-foreground break-words">
                 {filterBadWord(post?.content)}

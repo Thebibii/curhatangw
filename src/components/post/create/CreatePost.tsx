@@ -33,7 +33,7 @@ function CreatePost() {
 
   const { mutate, isPending } = useCreatePost({
     onSuccess: async ({ data: newPost }: { data: PostInfinite }) => {
-      queryClient.invalidateQueries({ queryKey: ["get.post"] });
+      queryClient.invalidateQueries({ queryKey: ["get.post"], exact: true });
       setContent("");
       setImageUrl("");
       setShowImageUpload(false);

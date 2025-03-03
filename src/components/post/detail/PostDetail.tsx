@@ -6,7 +6,6 @@ import Image from "next/image";
 import { filterBadWord } from "@/helper/sensor.helper";
 import { Card, CardContent } from "@/components/ui/card";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
-import { DeleteAlertDialog } from "@/components/DeleteAlertDialog";
 import { Button } from "@/components/ui/button";
 import LoadingState from "@/components/state/LoadingState";
 import EmptyState from "@/components/state/EmptyState";
@@ -17,8 +16,8 @@ import { useState } from "react";
 import { SignInButton } from "@clerk/nextjs";
 import { Icons } from "@/components/icons";
 import SettingComment from "../SettingComment";
-import { Input } from "@/components/ui/input";
 import CreateComment from "./CreateComment";
+import { DropdownMenuPost } from "@/components/DropdownMenuPost";
 
 type PostDetailProps = {
   post: any;
@@ -93,7 +92,15 @@ function PostDetail({
                 </div>
 
                 {dbUserId === post?.author?.id && (
-                  <DeleteAlertDialog postId={post?.id} imageUrl={post?.image} />
+                  <DropdownMenuPost
+                    postId={post?.id}
+                    currentUser={dbUserId}
+                    userId={post?.author?.id}
+                    imageUrl={post?.image}
+                    content={post?.content}
+                    username={post?.author?.username}
+                    isFollowing={post?.isFollowing}
+                  />
                 )}
               </div>
             </div>

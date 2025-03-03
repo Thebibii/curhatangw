@@ -208,32 +208,64 @@ export async function toggleFollow(targetUserId: string) {
 
     if (existingFollow) {
       // unfollow
-      await prisma.follows.delete({
-        where: {
-          followerId_followingId: {
-            followerId: userId,
-            followingId: targetUserId,
-          },
-        },
-      });
-    } else {
-      // follow
       await prisma.$transaction([
-        prisma.follows.create({
-          data: {
-            followerId: userId,
-            followingId: targetUserId,
+        prisma.follows.delete({
+          where: {
+            followerId_followingId: {
+              followerId: userId,
+              followingId: targetUserId,
+            },
           },
         }),
 
-        prisma.notification.create({
-          data: {
+        // Hapus notifikasi follow yang terkait saat unfollow
+        prisma.notification.deleteMany({
+          where: {
             type: "FOLLOW",
-            userId: targetUserId, // user being followed
-            creatorId: userId, // user following
+            userId: targetUserId, // user yang di-follow
+            creatorId: userId, // user yang melakukan follow
           },
         }),
       ]);
+    } else {
+      // Check if notification already exists to prevent spam
+      const existingNotification = await prisma.notification.findFirst({
+        where: {
+          type: "FOLLOW",
+          userId: targetUserId,
+          creatorId: userId,
+          read: false,
+        },
+      });
+
+      // follow
+      if (existingNotification) {
+        // Skip creating new notification if one already exists
+        await prisma.follows.create({
+          data: {
+            followerId: userId,
+            followingId: targetUserId,
+          },
+        });
+      } else {
+        // Create both follow and notification if no notification exists
+        await prisma.$transaction([
+          prisma.follows.create({
+            data: {
+              followerId: userId,
+              followingId: targetUserId,
+            },
+          }),
+
+          prisma.notification.create({
+            data: {
+              type: "FOLLOW",
+              userId: targetUserId, // user being followed
+              creatorId: userId, // user following
+            },
+          }),
+        ]);
+      }
     }
 
     return;

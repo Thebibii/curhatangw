@@ -11,38 +11,20 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Separator } from "@/components/ui/separator";
 import { Skeleton } from "@/components/ui/skeleton";
 import { useUserContext } from "@/contexts/UserContext";
-import { useGetIsFollowingUser } from "@/hooks/reactQuery/profile/useGetIsFollowingUser";
 import { useGetUserByName } from "@/hooks/reactQuery/user/useGetUserByName";
 import { SignInButton } from "@clerk/nextjs";
 import { format, formatDate, formatDistanceToNow } from "date-fns";
 import { notFound } from "next/navigation";
 import { useState } from "react";
 
-// type User = Awaited<ReturnType<typeof getProfileByUsername>>;
-// type Posts = Awaited<ReturnType<typeof getUserPosts>>;
-
-// interface ProfilePageClientProps {
-//   user: NonNullable<User>;
-//   posts: Posts;
-//   likedPosts: Posts;
-//   isFollowing: boolean;
-// }
-
-function ProfilePageClient({
-  // isFollowing: initialIsFollowing,
-  // likedPosts,
-  username,
-}: any) {
+function ProfilePageClient({ username }: any) {
   const { user: currentUser } = useUserContext();
-  const { data: user } = useGetUserByName({ username });
+  const { data: user, isPending } = useGetUserByName({ username });
   const [showEditDialog, setShowEditDialog] = useState(false);
-  const { data: isFollowing, isPending } = useGetIsFollowingUser({ username });
 
   if (user?.error) return notFound();
 
   const isOwnProfile = currentUser?.data?.id === user?.data?.id;
-
-  // const formattedDate = format(new Date(user?.data?.createdAt), "MMMM yyyy");
 
   return (
     <div className="max-w-3xl mx-auto">
@@ -136,10 +118,12 @@ function ProfilePageClient({
                     <FollowAndUnfollow
                       userId={user?.data?.id}
                       className="w-full mt-4"
-                      variant={"default"}
+                      variant={`${
+                        user?.data?.isFollowing ? "neutral" : "noShadow"
+                      }`}
                       size={"default"}
                       username={user?.data?.username}
-                      isFollowing={isFollowing}
+                      isFollowing={user?.data?.isFollowing}
                     />
                   </LoadingState>
                 )}

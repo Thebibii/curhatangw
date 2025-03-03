@@ -21,9 +21,10 @@ export default function FollowAndUnfollow({
       queryClient.invalidateQueries({
         queryKey: ["get.is.following", username],
       });
+      queryClient.invalidateQueries({ queryKey: ["get.post"] });
       toast({
         title: "Success",
-        description: isFollowing?.data
+        description: isFollowing
           ? "You have successfully unfollowed this user"
           : "You have successfully followed this user",
         duration: 2000,
@@ -35,7 +36,7 @@ export default function FollowAndUnfollow({
     <>
       <Button
         size={size}
-        variant={isFollowing?.data ? "neutral" : variant}
+        variant={variant}
         onClick={() => mutate({ userId })}
         disabled={isPending}
         className={className}
@@ -43,8 +44,10 @@ export default function FollowAndUnfollow({
       >
         {isPending ? (
           <Icons.Loader2Icon className="size-4 animate-spin" />
-        ) : isFollowing?.data ? (
-          "Unfollow"
+        ) : isFollowing ? (
+          `Unfollow @${username}`
+        ) : username ? (
+          `Follow @${username}`
         ) : (
           "Follow"
         )}

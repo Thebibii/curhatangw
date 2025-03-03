@@ -1,5 +1,6 @@
 import prisma from "@/lib/db/prisma";
 import { getDbUserByUsername, getDbUserId } from "./user.action";
+import { NotificationType } from "@/types/enum";
 
 export async function createPost(content: string, image: string, tags: any) {
   try {
@@ -26,14 +27,14 @@ export async function createPost(content: string, image: string, tags: any) {
               }
             : undefined, // Jika tags kosong, Prisma tidak akan membuat relasi
       },
-      include: {
-        author: {
-          select: { id: true, name: true, username: true, image: true },
-        },
-        likes: { select: { userId: true } },
-        tags: { select: { tag: { select: { id: true, name: true } } } },
-        _count: { select: { comments: true } },
-      },
+      // include: {
+      //   author: {
+      //     select: { id: true, name: true, username: true, image: true },
+      //   },
+      //   likes: { select: { userId: true } },
+      //   tags: { select: { tag: { select: { id: true, name: true } } } },
+      //   _count: { select: { comments: true } },
+      // },
     });
     return post;
   } catch (error) {
@@ -42,7 +43,34 @@ export async function createPost(content: string, image: string, tags: any) {
   }
 }
 
+export async function updatePost(
+  postId: string,
+  content: string,
+  image: string
+  // tags: any
+) {
+  try {
+    const userId = await getDbUserId();
+    if (!userId) throw new Error("Unauthorized");
+    const checkPost = await prisma.post.findFirst({
+      where: { id: postId },
+    });
+
+    if (!checkPost) throw new Error("Post not found");
+
+    const post = await prisma.post.update({
+      where: { id: postId },
+      data: { content, image },
+    });
+    return post;
+  } catch (error) {
+    console.error("Failed to update post:", error);
+    return { success: false, error: "Failed to update post" };
+  }
+}
+
 export async function getPosts(limit: number, cursor?: string | undefined) {
+  const currentUserId = await getDbUserId();
   const posts = await prisma.post.findMany({
     take: limit,
     skip: cursor ? 1 : 0,
@@ -83,9 +111,31 @@ export async function getPosts(limit: number, cursor?: string | undefined) {
     },
   });
 
+  // Menambahkan properti isFollowing untuk setiap post
+  const postsWithFollowStatus = await Promise.all(
+    posts.map(async (post) => {
+      // Memeriksa apakah user saat ini memfollow autho
+      const followRelation = currentUserId
+        ? await prisma.follows.findUnique({
+            where: {
+              followerId_followingId: {
+                followerId: currentUserId,
+                followingId: post.author.id,
+              },
+            },
+          })
+        : null;
+
+      return {
+        ...post,
+        isFollowing: !!followRelation,
+      };
+    })
+  );
+
   const nextCursor = posts.length === limit ? posts[posts.length - 1].id : null;
 
-  return { posts, nextCursor };
+  return { posts: postsWithFollowStatus, nextCursor };
 }
 
 export async function getDetailPost(postId: string) {
@@ -251,7 +301,7 @@ export async function toggleLike(postId: string) {
           ? [
               prisma.notification.create({
                 data: {
-                  type: "LIKE",
+                  type: NotificationType.like,
                   userId: post.authorId, // recipient (post author)
                   creatorId: userId, // person who liked
                   postId,

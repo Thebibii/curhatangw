@@ -1,6 +1,8 @@
 import prisma from "@/lib/db/prisma";
+import { getDbUserId } from "./user.action";
 
 export async function getProfileByUsername(username: string) {
+  const currentUserId = await getDbUserId();
   try {
     const user = await prisma.user.findFirstOrThrow({
       where: { username },
@@ -23,7 +25,21 @@ export async function getProfileByUsername(username: string) {
       },
     });
 
-    return user;
+    const userIsFollow = currentUserId
+      ? await prisma.follows.findUnique({
+          where: {
+            followerId_followingId: {
+              followerId: currentUserId,
+              followingId: user.id,
+            },
+          },
+        })
+      : null;
+
+    return {
+      ...user,
+      isFollowing: !!userIsFollow,
+    };
   } catch (error) {
     console.error("Error fetching profile:", error);
     throw new Error("Failed to fetch profile");

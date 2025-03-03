@@ -18,6 +18,7 @@ import SettingComment from "./SettingComment";
 import CommentSkeleton from "../skeleton/CommentSkeleton";
 import EmptyState from "../state/EmptyState";
 import { CommentsApiResponse } from "@/types/comment";
+import { User } from "@prisma/client";
 
 export default function Footer({
   postId,
@@ -34,6 +35,7 @@ export default function Footer({
   const [isCommenting, setIsCommenting] = useState(false);
   const [isLiking, setIsLiking] = useState(false);
   const [hasLiked, setHasLiked] = useState(false);
+  const [mentionUserIds, setMentionUserIds] = useState<User["id"][]>([]);
 
   const [optimisticLikes, setOptmisticLikes] = useState(count_like);
 
@@ -84,9 +86,9 @@ export default function Footer({
 
   useEffect(() => {
     if (likes && user?.data?.id) {
-      setHasLiked(likes.some((like: any) => like.userId === user?.data?.id));
+      setHasLiked(likes?.some((like: any) => like?.userId === user?.data?.id));
     }
-  }, [likes, user?.data?.id]);
+  }, [likes]);
 
   const handleAddComment = async () => {
     if (!newComment.trim() || isCommenting) return;
@@ -127,7 +129,7 @@ export default function Footer({
           <Button
             variant="neutral"
             size="sm"
-            className={`text-muted-foreground gap-2 ${
+            className={` gap-2 ${
               hasLiked
                 ? "text-red-500 hover:text-red-600"
                 : "hover:text-red-500"
@@ -143,11 +145,7 @@ export default function Footer({
           </Button>
         ) : (
           <SignInButton mode="modal">
-            <Button
-              variant="neutral"
-              size="sm"
-              className="text-muted-foreground gap-2"
-            >
+            <Button variant="neutral" size="sm" className=" gap-2">
               <Icons.HeartIcon className="size-5" />
               <span>{optimisticLikes}</span>
             </Button>
@@ -157,7 +155,7 @@ export default function Footer({
         <Button
           variant="neutral"
           size="sm"
-          className="text-muted-foreground gap-2 hover:text-blue-500"
+          className=" gap-2 hover:text-blue-500"
           onClick={handleToggleComments}
         >
           <Icons.MessageCircleIcon
