@@ -1,7 +1,12 @@
 import prisma from "@/lib/db/prisma";
 import { getDbUserId } from "./user.action";
+import { NotificationType } from "@/types/enum";
 
-export async function createComment(postId: string, content: string) {
+export async function createComment(
+  postId: string,
+  content: string,
+  userIdMention?: string
+) {
   try {
     const userId = await getDbUserId();
     if (!userId) return { success: false, message: "User not authenticated" };
@@ -26,11 +31,23 @@ export async function createComment(postId: string, content: string) {
       if (post.authorId !== userId) {
         await tx.notification.create({
           data: {
-            type: "COMMENT",
+            type: NotificationType.comment,
             userId: post.authorId,
             creatorId: userId,
             postId,
             commentId: newComment.id,
+          },
+        });
+      }
+
+      if (userIdMention) {
+        await tx.notification.create({
+          data: {
+            type: NotificationType.mention,
+            userId: userIdMention,
+            creatorId: userId,
+            postId,
+            commentId: newComment.id, // Use the comment ID here
           },
         });
       }
