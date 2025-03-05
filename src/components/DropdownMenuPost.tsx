@@ -36,6 +36,8 @@ import { useForm } from "react-hook-form";
 import { useEditPost } from "@/hooks/reactQuery/posts/useEditPost.hook";
 import FollowAndUnfollow from "./FollowAndUnfollow";
 import { useUserContext } from "@/contexts/UserContext";
+import { Label } from "./ui/label";
+import { Tag } from "@/types/tag";
 
 type DropdownMenuPost = {
   postId: string;
@@ -226,6 +228,9 @@ const EditPostModal = ({
   const { register, handleSubmit, watch } = useForm({
     defaultValues: { content: content },
   });
+
+  const [tagInput, setTagInput] = useState("");
+  const [tags, setTags] = useState<Tag[]>([]);
   const queryClient = useQueryClient();
 
   const { mutate, isPending } = useEditPost({
@@ -246,19 +251,45 @@ const EditPostModal = ({
   const onSubmit = ({ content }: { content: string }) => {
     mutate({ content });
   };
+
   return (
     <Dialog open={openEditDialog} onOpenChange={setOpenEditDialog}>
-      <DialogContent className="max-w-[425px]">
+      <DialogContent
+        className="max-w-[425px]"
+        onPointerDownOutside={(e) => {
+          // Prevent dialog from closing when clicking on popover
+          const target = e.target as HTMLElement;
+          if (target.closest("[data-popover-content]")) {
+            e.preventDefault();
+          }
+        }}
+      >
         <DialogTitle>Edit Post</DialogTitle>
         <DialogDescription>
           Make changes to your post here. Click save when you're done.
         </DialogDescription>
+
         <form onSubmit={handleSubmit(onSubmit)}>
-          <div className="flex flex-col space-y-2">
-            <Textarea
-              disabled={isPending}
-              {...register("content", { required: true })}
-            />
+          <div className="flex flex-col w-full space-y-4">
+            <div className="flex flex-col space-y-2 ">
+              <Label htmlFor="tags">Tags</Label>
+              <InputTags
+                tags={tags}
+                setTags={setTags}
+                tagInput={tagInput}
+                setTagInput={setTagInput}
+              />
+            </div>
+            <div className="flex flex-col space-y-2">
+              <Label htmlFor="content" className="font-semibold">
+                Message
+              </Label>
+              <Textarea
+                disabled={isPending}
+                placeholder="What's on your mind?"
+                {...register("content", { required: true })}
+              />
+            </div>
             <DialogFooter>
               <Button
                 type="submit"

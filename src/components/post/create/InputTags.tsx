@@ -68,10 +68,15 @@ export default function InputTags(props: Props) {
   };
   return (
     <>
-      <Popover open={openTagSearch} onOpenChange={setOpenTagSearch}>
+      <Popover
+        open={openTagSearch}
+        onOpenChange={setOpenTagSearch}
+        modal={false}
+      >
         <PopoverTrigger asChild className="w-full">
           <Button
             variant="neutral"
+            type="button"
             className="justify-between gap-4"
             onClick={() => {
               setOpenTagSearch(!openTagSearch);
@@ -81,7 +86,12 @@ export default function InputTags(props: Props) {
             <Icons.PlusIcon className="w-4 h-4" />
           </Button>
         </PopoverTrigger>
-        <PopoverContent align="start" className="w-full  p-0 border-none">
+        <PopoverContent
+          align="start"
+          className="w-full  p-0 border-none"
+          avoidCollisions={true}
+          forceMount
+        >
           <Command className="bg-bw w-full  sm:w-[400px] lg:w-[300px] xl:w-[400px]">
             <CommandInput
               value={props.tagInput}

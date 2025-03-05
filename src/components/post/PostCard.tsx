@@ -56,17 +56,17 @@ function PostCard({ post, dbUserId, username = null }: PostCardProps) {
                   </div>
                 </div>
 
-                {/* {dbUserId === post?.author?.id && ( */}
-                <DropdownMenuPost
-                  postId={post?.id}
-                  currentUser={dbUserId}
-                  userId={post?.author?.id}
-                  imageUrl={post?.image}
-                  content={post?.content}
-                  username={post?.author?.username}
-                  isFollowing={post?.isFollowing}
-                />
-                {/* )} */}
+                {dbUserId && (
+                  <DropdownMenuPost
+                    postId={post?.id}
+                    currentUser={dbUserId}
+                    userId={post?.author?.id}
+                    imageUrl={post?.image}
+                    content={post?.content}
+                    username={post?.author?.username}
+                    isFollowing={post?.isFollowing}
+                  />
+                )}
               </div>
               <p className="mt-2 text-sm text-foreground break-words">
                 {filterBadWord(post?.content)}
