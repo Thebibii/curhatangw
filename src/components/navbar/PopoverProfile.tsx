@@ -21,10 +21,11 @@ const PopoverProfile = () => {
   const [open, setOpen] = React.useState(false);
 
   const queryClient = useQueryClient();
-  const handleLogout = () => {
-    signOut({ redirectUrl: "/" });
+  const handleLogout = async () => {
+    await signOut({ redirectUrl: "/" });
     if (isLoaded) {
       queryClient.clear();
+      // queryClient.removeQueries({ queryKey: ["get.user"], exact: true });
     }
   };
 
