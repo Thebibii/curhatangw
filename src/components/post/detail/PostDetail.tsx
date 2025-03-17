@@ -26,7 +26,7 @@ type PostDetailProps = {
   isLoading?: boolean;
   refetch?: () => void;
   className?: string;
-  isOpenModal: boolean;
+  isOpenModal?: boolean;
 };
 
 function PostDetail({
