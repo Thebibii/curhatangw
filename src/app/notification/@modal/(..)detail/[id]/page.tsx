@@ -37,7 +37,7 @@ export default function DetailModal() {
           className="bg-bw "
           forceMount
           onOpenAutoFocus={(e) => e.preventDefault()}
-          onClick={(e) => e.preventDefault()}
+          // onClick={(e) => e.preventDefault()}
         >
           <DrawerTitle>
             <VisuallyHidden />
@@ -68,11 +68,12 @@ export default function DetailModal() {
           router.back();
         }
       }}
+      // modal={false}
     >
       <DialogContent
         className="bg-bw lg:max-w-[65vw]  xl:max-w-[50vw]"
         forceMount
-        onOpenAutoFocus={(e) => e.preventDefault()}
+        // onOpenAutoFocus={(e) => e.preventDefault()}
       >
         <DialogTitle>
           <VisuallyHidden />
@@ -87,6 +88,7 @@ export default function DetailModal() {
             isLoading={isLoading}
             dbUserId={user?.data?.id}
             isOpenModal={openModal}
+            setOpenModal={setOpenModal}
           />
         </LoadingState>
       </DialogContent>

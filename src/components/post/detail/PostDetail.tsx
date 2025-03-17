@@ -27,15 +27,16 @@ type PostDetailProps = {
   refetch?: () => void;
   className?: string;
   isOpenModal?: boolean;
+  setOpenModal?: (value: React.SetStateAction<boolean>) => void;
 };
 
 function PostDetail({
   post,
   dbUserId,
-  username = null,
   isOpenModal,
   isLoading,
   refetch,
+  setOpenModal,
   className,
 }: PostDetailProps) {
   const { user } = useUserContext();
@@ -93,16 +94,18 @@ function PostDetail({
                   </Button>
                 </div>
 
-                {dbUserId === post?.author?.id && (
+                {dbUserId === post?.authorId && (
                   <DropdownMenuPost
                     tags={post?.tags}
                     postId={post?.id}
                     currentUser={dbUserId}
-                    userId={post?.author?.id}
+                    userId={post?.authorId}
                     imageUrl={post?.image}
                     content={post?.content}
                     username={post?.author?.username}
                     isFollowing={post?.isFollowing}
+                    isOpenModal={isOpenModal}
+                    setOpenModal={setOpenModal}
                   />
                 )}
               </div>

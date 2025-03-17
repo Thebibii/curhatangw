@@ -125,7 +125,12 @@ export default function SettingComment({
             <Icons.MoreHorizontalIcon className="w-4 aspect-square cursor-pointer hover:text-gray-600" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent align="start" side="left" className="bg-bw">
+        <DropdownMenuContent
+          align="start"
+          side="left"
+          className="bg-bw"
+          onClick={(e) => e.preventDefault()}
+        >
           <DropdownMenuItem
             className="cursor-pointer bg-bw hover:bg-[#F1F5F9] "
             onClick={(e) => {
@@ -292,7 +297,10 @@ const EditCommentDialog = ({
   }
   return (
     <Dialog open={openEditDialog} onOpenChange={setOpenEditDialog}>
-      <DialogContent className="bg-bw">
+      <DialogContent
+        className="bg-bw"
+        onOpenAutoFocus={(e) => e.preventDefault()}
+      >
         <DialogHeader>
           <DialogTitle>Edit Comment</DialogTitle>
           <DialogDescription>

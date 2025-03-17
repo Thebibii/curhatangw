@@ -38,6 +38,7 @@ import FollowAndUnfollow from "./FollowAndUnfollow";
 import { useUserContext } from "@/contexts/UserContext";
 import { Label } from "./ui/label";
 import { Tag } from "@/types/tag";
+import { useRouter } from "next/navigation";
 
 type DropdownMenuPost = {
   postId: string;
@@ -50,6 +51,8 @@ type DropdownMenuPost = {
   tags: {
     tag: Tag;
   }[];
+  isOpenModal?: boolean;
+  setOpenModal?: (value: React.SetStateAction<boolean>) => void;
 };
 
 type TDeletePost = {
@@ -62,6 +65,7 @@ type TDeletePost = {
   ) => void | undefined;
   imageUrl: string | undefined;
   postId: string;
+  setOpenModal?: (value: React.SetStateAction<boolean>) => void;
 };
 
 type TEditPost = {
@@ -86,13 +90,15 @@ export function DropdownMenuPost({
   currentUser,
   isFollowing,
   tags,
+  isOpenModal,
+  setOpenModal,
 }: DropdownMenuPost) {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
 
   return (
     <Fragment>
-      <DropdownMenu modal={false}>
+      <DropdownMenu modal={isOpenModal ? true : false}>
         <DropdownMenuTrigger asChild>
           <Button
             variant="transparent"
@@ -145,6 +151,7 @@ export function DropdownMenuPost({
         setOpenDeleteDialog={setOpenDeleteDialog}
         imageUrl={imageUrl}
         postId={postId}
+        setOpenModal={setOpenModal}
       />
       <EditPostModal
         openEditDialog={openEditDialog}
@@ -165,14 +172,16 @@ const DeletePostModal = ({
   setOpenDeleteDialog,
   imageUrl,
   postId,
+  setOpenModal,
 }: TDeletePost) => {
   const queryClient = useQueryClient();
-
+  const router = useRouter();
   const { mutate: deletePhoto } = useDeletePhoto();
   const { isPending, mutate, isSuccess } = useDeletePost({
     postId,
     onSuccess: async ({ data: body }: { data: { id: string } }) => {
       queryClient.invalidateQueries({ queryKey: ["get.post"] });
+      queryClient.invalidateQueries({ queryKey: ["get.notifications"] });
       /*   const queryFilter: QueryFilters = { // untuk memperbarui cache
         queryKey: ["get.post"],
       };
@@ -195,6 +204,8 @@ const DeletePostModal = ({
         duration: 1500,
       });
       setOpenDeleteDialog(false);
+      setOpenModal?.(false);
+      router.push("/notification");
     },
   });
 
@@ -240,7 +251,6 @@ const EditPostModal = ({
 
   const [tagInput, setTagInput] = useState("");
   const [tags, setTags] = useState<Tag[]>(oldTags?.map((item) => item.tag));
-  console.log(tags);
 
   const queryClient = useQueryClient();
 
