@@ -69,6 +69,7 @@ type TSettingComment = {
   refetch?: () => void;
   content: string;
   postId: string;
+  isOpenModal?: boolean;
 };
 
 type TModal = {
@@ -91,6 +92,7 @@ export default function SettingComment({
   refetch,
   content,
   postId,
+  isOpenModal,
 }: TSettingComment) {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
@@ -113,79 +115,37 @@ export default function SettingComment({
         postId={postId}
         content={content}
       />
-      <Popover open={openDropdown} onOpenChange={setOpenDropdown}>
-        <PopoverTrigger asChild>
-          <Button
-            variant="transparent"
-            className="h-auto w-auto p-0 focus-visible:ring-0 hover:text-main rounded-full  focus-visible:ring-offset-0"
-            onClick={(e) => e.stopPropagation()}
-          >
-            <Icons.MoreHorizontalIcon className="w-4 aspect-square cursor-pointer" />
-          </Button>
-        </PopoverTrigger>
-        <PopoverContent
-          className="bg-bw p-0 border-none w-[120px] z-[1000]"
-          side="left"
-          align="start"
-          forceMount
-          onClick={(e) => {
-            e.stopPropagation();
-          }}
-        >
-          <div className="w-full border-2 border-border px-1 py-1 rounded-base">
-            <div className="flex flex-col gap-1">
-              <Button
-                onClick={() => {
-                  setOpenEditDialog(true);
-                  setOpenDropdown(false);
-                }}
-                size="sm"
-                variant="noShadow"
-                className="w-full border-0 text-sm hover:bg-[#F1F5F9] focus-visible:bg-[#F1F5F9] focus-visible:outline-none focus-visible:ring-0 bg-bw justify-start font-normal"
-                tabIndex={0}
-              >
-                Edit Komen
-              </Button>
-              <Button
-                onClick={() => {
-                  setOpenDeleteDialog(true);
-                  setOpenDropdown(false);
-                }}
-                size="sm"
-                variant="noShadow"
-                className="w-full border-0 text-sm hover:bg-destructive hover:text-bw focus-visible:bg-destructive focus-visible:text-bw focus-visible:outline-none focus-visible:ring-0 bg-bw justify-start font-normal"
-                tabIndex={0}
-              >
-                Hapus Komen
-              </Button>
-            </div>
-          </div>
-        </PopoverContent>
-      </Popover>
-      {/* <DropdownMenu>
+      <DropdownMenu modal={isOpenModal ? true : false}>
         <DropdownMenuTrigger asChild>
           <Button
-            variant="neutral"
+            variant="transparent"
+            onClick={(e) => e.stopPropagation()}
             className="h-auto w-auto p-0 hover:bg-transparent focus-visible:ring-0 focus-visible:ring-offset-0"
           >
             <Icons.MoreHorizontalIcon className="w-4 aspect-square cursor-pointer hover:text-gray-600" />
           </Button>
         </DropdownMenuTrigger>
-        <DropdownMenuContent>
+        <DropdownMenuContent align="start" side="left" className="bg-bw">
           <DropdownMenuItem
-            className="cursor-pointer bg-bw"
-            onClick={() => setOpenEditDialog(true)}
+            className="cursor-pointer bg-bw hover:bg-[#F1F5F9] "
+            onClick={(e) => {
+              e.stopPropagation();
+              setOpenEditDialog(true);
+            }}
           >
             Edit Komen
           </DropdownMenuItem>
           <DropdownMenuItem
-            onClick={() => setOpenDeleteDialog(true)}
-            className="cursor-pointer focus:bg-destructive focus:text-bw bg-bw"
+            onClick={(e) => {
+              e.stopPropagation();
+              setOpenDeleteDialog(true);
+            }}
+            className="cursor-pointer hover:bg-destructive hover:text-bw bg-bw"
           >
             Hapus Komen
           </DropdownMenuItem>
         </DropdownMenuContent>
-      </DropdownMenu> */}
+      </DropdownMenu>
     </>
   );
 }

@@ -65,6 +65,7 @@ function PostCard({ post, dbUserId, username = null }: PostCardProps) {
                     content={post?.content}
                     username={post?.author?.username}
                     isFollowing={post?.isFollowing}
+                    tags={post?.tags}
                   />
                 )}
               </div>

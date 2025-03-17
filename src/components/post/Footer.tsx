@@ -26,6 +26,7 @@ export default function Footer({
   count_like,
   likes,
   username,
+  isOpenModal,
 }: any) {
   const { user } = useUserContext();
   const queryClient = useQueryClient();

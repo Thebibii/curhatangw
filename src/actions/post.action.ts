@@ -46,22 +46,49 @@ export async function createPost(content: string, image: string, tags: any) {
 export async function updatePost(
   postId: string,
   content: string,
-  image: string
-  // tags: any
+  image: string,
+  tags: any
 ) {
   try {
     const userId = await getDbUserId();
     if (!userId) throw new Error("Unauthorized");
+
     const checkPost = await prisma.post.findFirst({
       where: { id: postId },
     });
 
     if (!checkPost) throw new Error("Post not found");
 
-    const post = await prisma.post.update({
-      where: { id: postId },
-      data: { content, image },
+    const post = await prisma.$transaction(async (tx) => {
+      // Update data post
+      const updatedPost = await tx.post.update({
+        where: { id: postId },
+        data: {
+          content,
+          image,
+        },
+      });
+
+      // Hapus semua tag yang berhubungan dengan post ini
+      await tx.postTag.deleteMany({
+        where: { postId: postId },
+      });
+
+      // Jika ada tag baru, tambahkan kembali ke tabel pivot
+      if (tags.length > 0) {
+        const tagsOnPost = tags.map((tag: any) => ({
+          tagId: tag.id,
+          postId: postId,
+        }));
+
+        await tx.postTag.createMany({
+          data: tagsOnPost,
+        });
+      }
+
+      return updatedPost;
     });
+
     return post;
   } catch (error) {
     console.error("Failed to update post:", error);

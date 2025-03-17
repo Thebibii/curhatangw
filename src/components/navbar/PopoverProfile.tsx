@@ -24,8 +24,7 @@ const PopoverProfile = () => {
   const handleLogout = async () => {
     await signOut({ redirectUrl: "/" });
     if (isLoaded) {
-      queryClient.clear();
-      // queryClient.removeQueries({ queryKey: ["get.user"], exact: true });
+      queryClient.removeQueries({ queryKey: ["get.user"] });
     }
   };
 

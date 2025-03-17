@@ -52,7 +52,7 @@ export default function CreateComment({ postId, refetch }: TProps) {
       <Input
         placeholder="Write a comment..."
         disabled={isPending}
-        autoFocus
+        // autoFocus
         {...register("comment", { required: true })}
       />
       <Button

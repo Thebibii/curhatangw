@@ -25,9 +25,12 @@ type Props = {
   setTags: (value: React.SetStateAction<Tag[]>) => void;
   tagInput: string;
   setTagInput: (value: React.SetStateAction<string>) => void;
+  isModalEdit?: boolean;
 };
 
 export default function InputTags(props: Props) {
+  // console.log(props.tags);
+
   const [openTagSearch, setOpenTagSearch] = useState(false);
   const queryClient = useQueryClient();
   const { data: tagsResponse, isLoading } = useGetTags({
@@ -71,7 +74,7 @@ export default function InputTags(props: Props) {
       <Popover
         open={openTagSearch}
         onOpenChange={setOpenTagSearch}
-        modal={false}
+        modal={props.isModalEdit ? true : false}
       >
         <PopoverTrigger asChild className="w-full">
           <Button
@@ -96,7 +99,7 @@ export default function InputTags(props: Props) {
             <CommandInput
               value={props.tagInput}
               onValueChange={(searchTag) => {
-                const sanitizedTag = searchTag.replace(/\s/g, ""); // Menghapus spasi
+                const sanitizedTag = searchTag.replace(/\s/g, "");
 
                 if (!sanitizedTag.includes("#")) {
                   props.setTagInput(sanitizedTag);
@@ -151,7 +154,8 @@ export default function InputTags(props: Props) {
         </PopoverContent>
       </Popover>
       <div className="flex flex-wrap items-center gap-2 max-w-xs">
-        {props.tags.map((tag: Tag, idx: number) => (
+        {props.tags?.map((tag, idx: number) => (
+          // console.log(tag),
           <Button
             key={idx}
             variant="neutral"

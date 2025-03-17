@@ -47,6 +47,9 @@ type DropdownMenuPost = {
   username: string;
   isFollowing: boolean;
   currentUser: string;
+  tags: {
+    tag: Tag;
+  }[];
 };
 
 type TDeletePost = {
@@ -69,6 +72,9 @@ type TEditPost = {
   setOpenEditDialog: (value: React.SetStateAction<boolean>) => void | undefined;
   imageUrl: string | undefined;
   postId: string;
+  oldTags: {
+    tag: Tag;
+  }[];
 };
 
 export function DropdownMenuPost({
@@ -79,6 +85,7 @@ export function DropdownMenuPost({
   content,
   currentUser,
   isFollowing,
+  tags,
 }: DropdownMenuPost) {
   const [openDeleteDialog, setOpenDeleteDialog] = useState(false);
   const [openEditDialog, setOpenEditDialog] = useState(false);
@@ -145,6 +152,7 @@ export function DropdownMenuPost({
         imageUrl={imageUrl}
         postId={postId}
         content={content}
+        oldTags={tags}
       />
     </Fragment>
   );
@@ -224,46 +232,41 @@ const EditPostModal = ({
   setOpenEditDialog,
   postId,
   content,
+  oldTags,
 }: TEditPost) => {
   const { register, handleSubmit, watch } = useForm({
     defaultValues: { content: content },
   });
 
   const [tagInput, setTagInput] = useState("");
-  const [tags, setTags] = useState<Tag[]>([]);
+  const [tags, setTags] = useState<Tag[]>(oldTags?.map((item) => item.tag));
+  console.log(tags);
+
   const queryClient = useQueryClient();
 
   const { mutate, isPending } = useEditPost({
     postId,
     onSuccess: () => {
+      setOpenEditDialog(false);
+      setTags([]);
       queryClient.invalidateQueries({ queryKey: ["get.post"] });
       toast({
         title: "Post deleted",
         description: "Your post has been updated successfully",
         duration: 1500,
       });
-      setOpenEditDialog(false);
     },
   });
 
   const textContent = watch("content");
 
   const onSubmit = ({ content }: { content: string }) => {
-    mutate({ content });
+    mutate({ content, tags });
   };
 
   return (
     <Dialog open={openEditDialog} onOpenChange={setOpenEditDialog}>
-      <DialogContent
-        className="max-w-[425px]"
-        onPointerDownOutside={(e) => {
-          // Prevent dialog from closing when clicking on popover
-          const target = e.target as HTMLElement;
-          if (target.closest("[data-popover-content]")) {
-            e.preventDefault();
-          }
-        }}
-      >
+      <DialogContent className="max-w-[425px]">
         <DialogTitle>Edit Post</DialogTitle>
         <DialogDescription>
           Make changes to your post here. Click save when you're done.
@@ -272,9 +275,10 @@ const EditPostModal = ({
         <form onSubmit={handleSubmit(onSubmit)}>
           <div className="flex flex-col w-full space-y-4">
             <div className="flex flex-col space-y-2 ">
-              <Label htmlFor="tags">Tags</Label>
+              <Label>Tags</Label>
               <InputTags
                 tags={tags}
+                isModalEdit={openEditDialog}
                 setTags={setTags}
                 tagInput={tagInput}
                 setTagInput={setTagInput}
@@ -286,6 +290,7 @@ const EditPostModal = ({
               </Label>
               <Textarea
                 disabled={isPending}
+                id="content"
                 placeholder="What's on your mind?"
                 {...register("content", { required: true })}
               />

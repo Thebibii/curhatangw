@@ -26,12 +26,14 @@ type PostDetailProps = {
   isLoading?: boolean;
   refetch?: () => void;
   className?: string;
+  isOpenModal: boolean;
 };
 
 function PostDetail({
   post,
   dbUserId,
   username = null,
+  isOpenModal,
   isLoading,
   refetch,
   className,
@@ -93,6 +95,7 @@ function PostDetail({
 
                 {dbUserId === post?.author?.id && (
                   <DropdownMenuPost
+                    tags={post?.tags}
                     postId={post?.id}
                     currentUser={dbUserId}
                     userId={post?.author?.id}
@@ -106,7 +109,7 @@ function PostDetail({
             </div>
           </div>
 
-          <ScrollArea className="border-y h-[50vh]">
+          <ScrollArea className="border-y w-full h-[50vh]">
             <div className="space-y-4 py-2  pr-6">
               <LoadingState
                 data={isLoading === false}
@@ -161,10 +164,11 @@ function PostDetail({
                               refetch={refetch}
                               content={comment.content}
                               postId={post.id}
+                              isOpenModal={isOpenModal}
                             />
                           )}
                         </div>
-                        <p className="text-sm break-words">
+                        <p className="text-sm text-wrap break-words">
                           {filterBadWord(comment.content)}
                         </p>
                       </div>

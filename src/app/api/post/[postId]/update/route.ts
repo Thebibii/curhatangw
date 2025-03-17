@@ -8,7 +8,7 @@ export async function PATCH(
   const { postId } = await params;
   try {
     const { content, image, tags } = await request.json();
-    const post = await updatePost(postId, content, image);
+    const post = await updatePost(postId, content, image, tags);
     return NextResponse.json(
       {
         success: true,

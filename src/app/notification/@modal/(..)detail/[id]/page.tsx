@@ -9,24 +9,27 @@ import { useParams } from "next/navigation";
 import PostDetail from "@/components/post/detail/PostDetail";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer";
+import { useState } from "react";
 
 export default function DetailModal() {
   const params = useParams<{ id: string }>();
   const router = useRouter();
   const isMobile = useIsMobile();
+  const [openModal, setOpenModal] = useState(true);
   const { data, isLoading, refetch } = useGetDetailPost({ postId: params.id });
 
   if (isMobile) {
     return (
       <Drawer
-        open
+        defaultOpen={openModal}
         onOpenChange={(open) => {
           if (!open) {
+            setOpenModal(false);
             router.back();
           }
         }}
       >
-        <DrawerContent className="bg-bw ">
+        <DrawerContent className="bg-bw " forceMount>
           <DrawerTitle>
             <VisuallyHidden />
           </DrawerTitle>
@@ -34,13 +37,16 @@ export default function DetailModal() {
             data={data?.data}
             loadingFallback={<SkeletonCard length={1} />}
           >
-            <PostDetail
-              post={data?.data}
-              isLoading={isLoading}
-              dbUserId="id"
-              refetch={refetch}
-              className="border-none"
-            />
+            <div tabIndex={-1}>
+              <PostDetail
+                post={data?.data}
+                isLoading={isLoading}
+                dbUserId="id"
+                refetch={refetch}
+                isOpenModal={openModal}
+                className="border-none"
+              />
+            </div>
           </LoadingState>
         </DrawerContent>
       </Drawer>
@@ -48,14 +54,18 @@ export default function DetailModal() {
   }
   return (
     <Dialog
-      open
+      open={openModal}
       onOpenChange={(open) => {
         if (!open) {
+          setOpenModal(false);
           router.back();
         }
       }}
     >
-      <DialogContent className="bg-bw lg:max-w-[65vw]  xl:max-w-[50vw]">
+      <DialogContent
+        className="bg-bw lg:max-w-[65vw]  xl:max-w-[50vw]"
+        forceMount
+      >
         <DialogTitle>
           <VisuallyHidden />
         </DialogTitle>
@@ -63,12 +73,15 @@ export default function DetailModal() {
           data={data?.data}
           loadingFallback={<SkeletonCard length={1} />}
         >
-          <PostDetail
-            post={data?.data}
-            refetch={refetch}
-            isLoading={isLoading}
-            dbUserId="id"
-          />
+          <div tabIndex={-1}>
+            <PostDetail
+              post={data?.data}
+              refetch={refetch}
+              isLoading={isLoading}
+              dbUserId="id"
+              isOpenModal={openModal}
+            />
+          </div>
         </LoadingState>
       </DialogContent>
     </Dialog>

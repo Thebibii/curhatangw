@@ -1,4 +1,5 @@
 import { axiosInstance, baseURL } from "@/lib/db/env";
+import { Tag } from "@/types/tag";
 import { useMutation } from "@tanstack/react-query";
 
 type TEditPost = {
@@ -9,6 +10,7 @@ type TEditPost = {
 type EditPostInput = {
   content: string;
   image?: string | null;
+  tags?: Tag[];
 };
 
 export const useEditPost = ({ postId, onSuccess }: TEditPost) => {
@@ -19,6 +21,8 @@ export const useEditPost = ({ postId, onSuccess }: TEditPost) => {
         method: "PATCH",
         body: JSON.stringify({
           content: body.content,
+          image: body.image,
+          tags: body.tags,
         }),
       });
       const data = await res.json();
