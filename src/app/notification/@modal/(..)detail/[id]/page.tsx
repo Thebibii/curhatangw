@@ -10,26 +10,35 @@ import PostDetail from "@/components/post/detail/PostDetail";
 import { useIsMobile } from "@/hooks/use-mobile";
 import { Drawer, DrawerContent, DrawerTitle } from "@/components/ui/drawer";
 import { useState } from "react";
+import { useUserContext } from "@/contexts/UserContext";
 
 export default function DetailModal() {
   const params = useParams<{ id: string }>();
   const router = useRouter();
   const isMobile = useIsMobile();
+  const { user } = useUserContext();
   const [openModal, setOpenModal] = useState(true);
+  const [openDrawer, setOpenDrawer] = useState(true);
   const { data, isLoading, refetch } = useGetDetailPost({ postId: params.id });
 
   if (isMobile) {
     return (
       <Drawer
-        defaultOpen={openModal}
+        open={openDrawer}
         onOpenChange={(open) => {
           if (!open) {
-            setOpenModal(false);
+            setOpenDrawer(false);
             router.back();
           }
         }}
+        // autoFocus={openDrawer}
       >
-        <DrawerContent className="bg-bw " forceMount>
+        <DrawerContent
+          className="bg-bw "
+          forceMount
+          onOpenAutoFocus={(e) => e.preventDefault()}
+          onClick={(e) => e.preventDefault()}
+        >
           <DrawerTitle>
             <VisuallyHidden />
           </DrawerTitle>
@@ -37,16 +46,14 @@ export default function DetailModal() {
             data={data?.data}
             loadingFallback={<SkeletonCard length={1} />}
           >
-            <div tabIndex={-1}>
-              <PostDetail
-                post={data?.data}
-                isLoading={isLoading}
-                dbUserId="id"
-                refetch={refetch}
-                isOpenModal={openModal}
-                className="border-none"
-              />
-            </div>
+            <PostDetail
+              post={data?.data}
+              isLoading={isLoading}
+              dbUserId={user?.data?.id}
+              refetch={refetch}
+              isOpenModal={openDrawer}
+              className="border-none"
+            />
           </LoadingState>
         </DrawerContent>
       </Drawer>
@@ -56,7 +63,7 @@ export default function DetailModal() {
     <Dialog
       open={openModal}
       onOpenChange={(open) => {
-        if (!open) {
+        if (!open && openModal) {
           setOpenModal(false);
           router.back();
         }
@@ -65,6 +72,7 @@ export default function DetailModal() {
       <DialogContent
         className="bg-bw lg:max-w-[65vw]  xl:max-w-[50vw]"
         forceMount
+        onOpenAutoFocus={(e) => e.preventDefault()}
       >
         <DialogTitle>
           <VisuallyHidden />
@@ -73,15 +81,13 @@ export default function DetailModal() {
           data={data?.data}
           loadingFallback={<SkeletonCard length={1} />}
         >
-          <div tabIndex={-1}>
-            <PostDetail
-              post={data?.data}
-              refetch={refetch}
-              isLoading={isLoading}
-              dbUserId="id"
-              isOpenModal={openModal}
-            />
-          </div>
+          <PostDetail
+            post={data?.data}
+            refetch={refetch}
+            isLoading={isLoading}
+            dbUserId={user?.data?.id}
+            isOpenModal={openModal}
+          />
         </LoadingState>
       </DialogContent>
     </Dialog>
