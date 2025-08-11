@@ -1,5 +1,4 @@
 name: Ping Supabase to Prevent Pausing
-
 on:
   schedule:
     - cron: "0 9 * * 1,4" # Runs at 9:00 AM UTC every Monday and Thursday
@@ -8,7 +7,6 @@ on:
 jobs:
   ping:
     runs-on: ubuntu-latest
-
     steps:
       # Step 1: Checkout the repository
       - name: Checkout repository
@@ -18,40 +16,92 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20" # Use Node.js 18
+          node-version: "20"
 
       # Step 3: Install Supabase Client
       - name: Install Supabase Client
-        run: npm install @supabase/supabase-js --force
+        run: npm install @supabase/supabase-js
 
-      # Step 4: Ping Supabase
+      # Step 4: Ping Supabase with better error handling
       - name: Ping Supabase
         env:
-          SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }} # Supabase project URL
-          SUPABASE_KEY: ${{ secrets.NEXT_SERVICE_ROLE_KEY }} # Supabase service role key
+          SUPABASE_URL: ${{ secrets.NEXT_PUBLIC_SUPABASE_URL }}
+          SUPABASE_KEY: ${{ secrets.NEXT_SERVICE_ROLE_KEY }}
         run: |
           node -e "
           (async () => {
             try {
-              // Debugging: Log environment variables (optional)
+              // Validate environment variables
+              if (!process.env.SUPABASE_URL || !process.env.SUPABASE_KEY) {
+                throw new Error('Missing SUPABASE_URL or SUPABASE_KEY environment variables');
+              }
+              
               console.log('Supabase URL:', process.env.SUPABASE_URL);
-              console.log('Supabase Key:', process.env.SUPABASE_KEY);
-
+              console.log('Key starts with:', process.env.SUPABASE_KEY.substring(0, 20) + '...');
+              
               // Import Supabase client
               const { createClient } = require('@supabase/supabase-js');
-              const supabase = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_KEY);
-
-              // Ping Supabase by querying a table (e.g., 'songs')
-              const { data, error } = await supabase.from('Post').select('*').limit(10);
-
-              // Handle errors
-              if (error) throw error;
-
-              // Log success
-              console.log('Ping successful:', data);
+              
+              // Create client with service role key
+              const supabase = createClient(
+                process.env.SUPABASE_URL, 
+                process.env.SUPABASE_KEY,
+                {
+                  auth: {
+                    autoRefreshToken: false,
+                    persistSession: false
+                  }
+                }
+              );
+              
+              // Try multiple ping methods
+              console.log('Attempting to ping Supabase...');
+              
+              // Method 1: Try a simple health check first
+              try {
+                const { data: healthData, error: healthError } = await supabase
+                  .from('Post')
+                  .select('count', { count: 'exact', head: true });
+                  
+                if (healthError) {
+                  console.log('Health check failed:', healthError.message);
+                  
+                  // Method 2: Try with RPC call if available
+                  try {
+                    const { data: rpcData, error: rpcError } = await supabase.rpc('ping');
+                    if (rpcError) throw rpcError;
+                    console.log('RPC ping successful');
+                  } catch (rpcErr) {
+                    // Method 3: Try accessing auth users (service role should have access)
+                    const { data: authData, error: authError } = await supabase.auth.admin.listUsers();
+                    if (authError) throw authError;
+                    console.log('Auth admin access successful - service role working');
+                  }
+                } else {
+                  console.log('Post table ping successful - count:', healthData);
+                }
+                
+              } catch (tableError) {
+                console.log('Table access failed, trying auth admin access...');
+                const { data: authData, error: authError } = await supabase.auth.admin.listUsers();
+                if (authError) throw authError;
+                console.log('Auth admin ping successful - Supabase is accessible');
+              }
+              
+              console.log('✅ Supabase ping completed successfully');
+              
             } catch (err) {
-              // Log and exit with error
-              console.error('Error pinging Supabase:', err.message);
+              console.error('❌ Error pinging Supabase:', err.message);
+              console.error('Full error:', err);
+              
+              // Provide helpful debugging info
+              if (err.message.includes('permission denied')) {
+                console.error('🔍 Permission denied - Check:');
+                console.error('1. Are you using the SERVICE ROLE key (not anon key)?');
+                console.error('2. Is RLS enabled on the table? Consider disabling for service role.');
+                console.error('3. Does the table exist and is accessible?');
+              }
+              
               process.exit(1);
             }
           })();
